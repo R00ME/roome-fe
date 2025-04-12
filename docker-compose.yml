@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  react:
+    container_name: react
+    build: ./
+    ports:
+      - "5137:5137"
+    volumes:
+      - /react:/image
+    restart: on-failure
