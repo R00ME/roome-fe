@@ -1,12 +1,12 @@
 FROM node:18
 
 # pnpm 설치
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /react
 
 COPY . .
 
-RUN pnpm install
+RUN npm install
 
-CMD ["pnpm", "run", "dev", "--", "--host"]
+CMD ["npm", "run", "dev", "--", "--host"]
