@@ -5,6 +5,8 @@ FROM node:18
 
 WORKDIR /react
 
+COPY .env .env
+
 COPY . .
 
 RUN npm install
