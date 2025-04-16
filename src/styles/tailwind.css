@@ -120,4 +120,18 @@
       transform: translateX(20px);
     }
   }
+
+  .floating-animation {
+    animation: float 2.5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) scale(1) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-30px) scale(1.1) rotate(5deg);
+    }
+  }
 }
