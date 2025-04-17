@@ -6,7 +6,7 @@ import flowerIcon from '@/assets/onboarding/flower-icon.png';
 import bookIcon from '@/assets/onboarding/book-icon.png';
 import musicIcon from '@/assets/onboarding/music-icon.png';
 import FloatingIcon from './FloatingIcon';
-import FeatureCards from './FeatureCards';
+import FeatureCards from '../FeatureCards';
 
 const HeroSection = () => {
   return (
