@@ -20,7 +20,7 @@ const SectionTitle = ({
   descriptionClassName
 }: SectionTitleProps) => {
   return (
-    <div className={twMerge('flex flex-col items-center text-center', className)}>
+    <div className={twMerge('flex flex-col items-center text-center py-8', className)}>
       <h2 className="flex flex-col gap-2">
         <span className={twMerge(
           'text-5xl font-bold',
