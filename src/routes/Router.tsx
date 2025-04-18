@@ -17,6 +17,7 @@ import PaymentPage from '@pages/payment/PaymentPage';
 import PaymentSuccessPage from '@pages/payment/PaymentSuccessPage';
 import PaymentFailPage from '@pages/payment/PaymentFailPage';
 import RefundPage from '@pages/payment/RefundPage';
+import OnboardingPage from '@pages/onboarding/OnboardingPage';
 
 const Router = () => {
   return (
@@ -98,6 +99,10 @@ const Router = () => {
       <Route
         path='/payment/fail'
         element={<PaymentFailPage />}
+      />
+      <Route
+        path='/onboarding'
+        element={<OnboardingPage />}
       />
     </Routes>
   );
