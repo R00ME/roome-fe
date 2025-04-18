@@ -9,14 +9,23 @@ interface OverviewImageSlideProps {
   currentIndex: number;
 }
 
+import { motion, AnimatePresence } from 'framer-motion';
+
 const OverviewImageSlide = ({ currentIndex }: OverviewImageSlideProps) => {
   return (
     <div className='relative aspect-[1093/706] rounded-3xl overflow-hidden z-1'>
-      <img
-        src={previewImages[currentIndex]}
-        alt='기능 미리보기'
-        className='w-full h-full object-cover'
-      />
+      <AnimatePresence mode='wait'>
+        <motion.img
+          key={currentIndex} // 키가 변경될 때마다 애니메이션 트리거
+          src={previewImages[currentIndex]}
+          alt='기능 미리보기'
+          className='w-full h-full object-contain'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        />
+      </AnimatePresence>
     </div>
   );
 };

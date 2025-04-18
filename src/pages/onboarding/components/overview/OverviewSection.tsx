@@ -53,11 +53,13 @@ const OverviewSection = () => {
           onIndexChange={setCurrentIndex}
         />
         {/* 설명 카드 */}
-        <div className='absolute bottom-8 left-0 z-2 -translate-x-1/4 translate-y-1/4'>
+        <div className='absolute bottom-8 left-0 z-2'>
           <FeatureCards
-            className='text-[#08275F] w-[30vw]'
+            key={currentIndex}
+            className='text-[#08275F] w-[30vw] transform -translate-x-1/4 translate-y-1/4'
             title={features[currentIndex].title}
             description={features[currentIndex].description}
+            withAnimation
           />
         </div>
       </div>

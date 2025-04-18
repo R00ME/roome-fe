@@ -12,7 +12,7 @@ const FeatureIndex = ({
   onIndexChange,
 }: FeatureIndexProps) => {
   return (
-    <div className='absolute right-0 translate-x-[60%] top-4 flex flex-col gap-2'>
+    <div className='absolute right-0 translate-x-1/2 top-8 flex flex-col gap-2'>
       {features.map((feature, index) => (
         <button
           key={feature}

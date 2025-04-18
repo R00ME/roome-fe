@@ -15,7 +15,7 @@ const FloatingIcon = ({
   alt,
   position,
   delay = '0s',
-  aspect = 'aspect-square',  // 기본값 1:1
+  aspect = 'aspect-square', // 기본값 1:1
   size,
   className,
 }: FloatingIconProps) => {
@@ -35,6 +35,5 @@ const FloatingIcon = ({
     />
   );
 };
-
 
 export default FloatingIcon;
