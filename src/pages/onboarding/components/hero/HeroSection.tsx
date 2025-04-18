@@ -48,7 +48,7 @@ const HeroSection = () => {
       <SectionTitle
         upperTitle='취향이 통하는'
         lowerTitle='사람들과의 특별한 만남'
-        description='내 취향의 책과 음악을 기록하면 취향이 맞는 다른 사용자를 추천해요'
+        description='책과 음악으로 만나는 커넥션, 취향이 닮은 사람들을 추천해드릴게요'
       />
 
       <div className='flex justify-center gap-4 px-6 max-w-[1100px] mx-auto'>

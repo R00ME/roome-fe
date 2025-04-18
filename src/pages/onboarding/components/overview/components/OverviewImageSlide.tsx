@@ -1,7 +1,7 @@
 import preview1 from '@/assets/onboarding/preview-image-1.png';
-import preview2 from '@/assets/onboarding/preview-image-1.png';
-import preview3 from '@/assets/onboarding/preview-image-1.png';
-import preview4 from '@/assets/onboarding/preview-image-1.png';
+import preview2 from '@/assets/onboarding/preview-image-2.png';
+import preview3 from '@/assets/onboarding/preview-image-3.png';
+import preview4 from '@/assets/onboarding/preview-image-4.png';
 
 const previewImages = [preview1, preview2, preview3, preview4];
 
