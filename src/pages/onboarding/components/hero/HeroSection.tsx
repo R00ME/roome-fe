@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import heroBackground from '@/assets/onboarding/page-background-image.png';
 import SectionTitle from '../SectionTitle';
 import CtaButton from '../CtaButton';
@@ -9,6 +11,16 @@ import FloatingIcon from './FloatingIcon';
 import FeatureCards from '../FeatureCards';
 
 const HeroSection = () => {
+  useEffect(() => {
+    // 히어로 섹션 이미지 프리로드
+    const preloadImages = [heroBackground, flowerIcon, bookIcon, musicIcon];
+
+    preloadImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   return (
     <section
       className='w-full flex flex-col gap-10 bg-cover bg-center bg-no-repeat aspect-[1920/2160] p-20'
