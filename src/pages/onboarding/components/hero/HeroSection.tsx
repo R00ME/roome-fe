@@ -10,6 +10,21 @@ import musicIcon from '@/assets/onboarding/music-icon.png';
 import FloatingIcon from './FloatingIcon';
 import FeatureCards from '../FeatureCards';
 
+const heroFeatures = [
+  {
+    title: '취향 알고리즘',
+    description: '나와 취향 키워드가 비슷한 유저를 "취향 알고리즘"을 통해 매칭',
+  },
+  {
+    title: '방명록',
+    description: '서로의 공간에 남기는 진심 어린 메시지로 교감하는 소통 공간',
+  },
+  {
+    title: '하우스 메이트',
+    description: '취향이 비슷한 메이트와 함께 만들어가는 특별한 디지털 하우스',
+  },
+];
+
 const HeroSection = () => {
   useEffect(() => {
     // 히어로 섹션 이미지 프리로드
@@ -44,7 +59,7 @@ const HeroSection = () => {
         <FloatingIcon
           src={bookIcon}
           alt='책 아이콘'
-          position='top-[15vw] left-[15vw] sm:top-[25vw] sm:left-[6vw] md:top-[20vw] md:left-[10vw]'
+          position='top-[15vw] left-[-5vw] lg:left-[15vw] sm:top-[25vw] sm:left-[6vw] md:top-[20vw] md:left-[15vw]'
           size='w-[9vw]'
           delay='0.3s'
         />
@@ -63,19 +78,16 @@ const HeroSection = () => {
         description='책과 음악으로 만나는 커넥션, 취향이 닮은 사람들을 추천해드릴게요'
       />
 
-      <div className='flex justify-center gap-4 px-6 max-w-[1100px] mx-auto'>
-        <FeatureCards
-          title='취향 알고리즘'
-          description='나와 취향 키워드가 비슷한 유저를 "취향 알고리즘"을 통해 매칭'
-        />
-        <FeatureCards
-          title='방명록'
-          description='서로의 공간에 남기는 진심 어린 메시지로 교감하는 소통 공간'
-        />
-        <FeatureCards
-          title='하우스메이트'
-          description='취향이 비슷한 메이트와 함께 만들어가는 특별한 디지털 하우스'
-        />
+      <div className='flex justify-center gap-4 px-6 max-w-[1100px] mx-auto max-sm:flex-col max-sm:gap-8'>
+        {heroFeatures.map((feature) => (
+          <FeatureCards
+            key={feature.title}
+            title={feature.title}
+            description={feature.description}
+            titleClassName='max-sm:text-2xl sm:text-xl md:text-2xl lg:text-3xl text-center break-keep'
+            descriptionClassName='text-sm max-sm:text-base sm:text-sm md:text-base lg:text-lg text-center break-keep'
+          />
+        ))}
       </div>
     </section>
   );

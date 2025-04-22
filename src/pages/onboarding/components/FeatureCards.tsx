@@ -6,6 +6,8 @@ interface FeatureCardsProps {
   title: string;
   description: string;
   className?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
   withAnimation?: boolean;
 }
 
@@ -13,6 +15,8 @@ const FeatureCards = ({
   title,
   description,
   className,
+  titleClassName,
+  descriptionClassName,
   withAnimation = false,
 }: FeatureCardsProps) => {
   const baseClassName = twMerge(
@@ -32,16 +36,40 @@ const FeatureCards = ({
           damping: 20,
           duration: 0.6,
         }}>
-        <h3 className='text-3xl font-medium relative'>{title}</h3>
-        <p className='text-lg text-center'>{description}</p>
+        <h3
+          className={twMerge(
+            'text-xl sm:text-2xl md:text-3xl font-medium relative',
+            titleClassName,
+          )}>
+          {title}
+        </h3>
+        <p
+          className={twMerge(
+            'text-base sm:text-lg text-center',
+            descriptionClassName,
+          )}>
+          {description}
+        </p>
       </motion.div>
     );
   }
 
   return (
     <div className={baseClassName}>
-      <h3 className='text-3xl font-medium relative'>{title}</h3>
-      <p className='text-lg text-center'>{description}</p>
+      <h3
+        className={twMerge(
+          'text-xl sm:text-2xl md:text-3xl font-medium relative',
+          titleClassName,
+        )}>
+        {title}
+      </h3>
+      <p
+        className={twMerge(
+          'text-base sm:text-lg text-center',
+          descriptionClassName,
+        )}>
+        {description}
+      </p>
     </div>
   );
 };

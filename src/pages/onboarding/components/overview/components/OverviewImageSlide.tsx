@@ -13,13 +13,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const OverviewImageSlide = ({ currentIndex }: OverviewImageSlideProps) => {
   return (
-    <div className='relative aspect-[1093/706] rounded-3xl overflow-hidden z-1'>
+    <div className='relative aspect-[1200/706] rounded-3xl overflow-hidden z-1 pointer-events-none'>
       <AnimatePresence mode='wait'>
         <motion.img
           key={currentIndex} // 키가 변경될 때마다 애니메이션 트리거
           src={previewImages[currentIndex]}
           alt='기능 미리보기'
-          className='w-full h-full object-contain'
+          className='w-full h-full object-contain select-none pointer-events-none'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

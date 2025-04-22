@@ -8,8 +8,7 @@ const FooterBrandInfo = () => {
         <img
           src={logo}
           alt='RoomE'
-          width={240}
-          className='opacity-80 hover:opacity-100 duration-300'
+          className='opacity-80 hover:opacity-100 duration-300 w-60 max-sm:w-40'
         />
       </Link>
       <p className='text-sm flex items-center gap-4'>

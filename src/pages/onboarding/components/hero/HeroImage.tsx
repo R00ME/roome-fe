@@ -5,7 +5,7 @@ const HeroImage = () => {
     <img
       src={heroImage}
       alt='hero-image'
-      className='w-full aspect-[16/9] object-contain'
+      className='w-full object-contain max-lg:aspect-square lg:aspect-[16/9] transition-all duration-300'
     />
   );
 };
