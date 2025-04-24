@@ -1,8 +1,14 @@
 @import 'tailwindcss';
+/* @import url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff'); */
 
 @theme {
   /* 폰트 패밀리 */
   --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Helvetica, 'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕',
+    'Malgun Gothic';
+
+  --font-jalnan: 'JalnanOTF00', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Helvetica, 'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Sans KR', 'Apple SD Gothic Neo', '맑은 고딕',
     'Malgun Gothic';
@@ -98,6 +104,13 @@
     animation: drag 2s ease-in-out infinite;
   }
 
+  /* 링크 호버 애니메이션 */
+  .link-hover {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px]
+    after:bg-current after:origin-left after:scale-x-0 hover:after:scale-x-100
+    after:transition-transform after:duration-300;
+  }
+
   @keyframes drag {
     0%,
     100% {
@@ -105,6 +118,20 @@
     }
     50% {
       transform: translateX(20px);
+    }
+  }
+
+  .floating-animation {
+    animation: float 2.5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) scale(1) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-30px) scale(1.1) rotate(5deg);
     }
   }
 }
