@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PreviewTitle from './components/PreviewTitle';
-import OverviewImageSlide from './components/OverviewImageSlide';
-import FeatureIndex from './components/FeatureIndex';
-import FeatureCards from '../FeatureCards';
+import MobileFeatureCarousel from './components/MobileFeatureCarousel';
+import DesktopFeatureShowcase from './components/DesktopFeatureShowcase';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import '@styles/OverviewSection.css';
 
-const features = [
+const features: Feature[] = [
   {
     id: 1,
     tag: '테마 설정',
@@ -15,7 +18,7 @@ const features = [
   {
     id: 2,
     tag: '도서 기록',
-    title: '나만의 독서 기록, 특별한 순간',
+    title: '나만의 기록, 특별한 순간',
     description:
       '읽은 책에 대한 감상과 생각을 자유롭게 기록해보세요\n나의 취향을 담은 독서 일기가 쌓여갑니다',
   },
@@ -37,32 +40,37 @@ const features = [
 
 const OverviewSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isWideScreen, setIsWideScreen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideScreen(window.innerWidth >= 1200);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <section className='bg-gradient-to-b from-[#F4F8FF] from-0% to-[#D3E1FC] to-100% py-22'>
       <PreviewTitle />
-      <div className='relative w-full max-w-[1100px] mx-auto'>
-        {' '}
-        {/* 컨테이너 추가 */}
-        <OverviewImageSlide currentIndex={currentIndex} />
-        {/* 우측 태그 */}
-        <FeatureIndex
-          features={features.map((f) => f.tag)}
-          currentIndex={currentIndex}
-          onIndexChange={setCurrentIndex}
-        />
-        {/* 설명 카드 */}
-        <div className='absolute bottom-8 left-0 z-2'>
-          <FeatureCards
-            key={currentIndex}
-            className='text-[#08275F] w-auto min-w-[130px] max-w-[400px] sm:max-w-[280px] sm:px-8 py-6 md:max-w-[340px] md:p-8 lg:max-w-[400px] transform lg:-translate-x-1/8 lg:translate-y-1/4 md:translate-y-1/5 md:translate-x-1/8 item-middle sm:translate-x-1/10 sm:translate-y-1/2 max-sm:translate-x-1/10 max-sm:translate-y-1/2 max-sm:w-[260px] max-sm:px-4 max-sm:rounded-2xl'
-            titleClassName='text-xl max-sm:text-lg sm:text-1.5xl md:text-2.5xl lg:text-3.5xl'
-            descriptionClassName='text-sm max-sm:text-xs sm:text-sm md:text-base lg:text-lg'
-            title={features[currentIndex].title}
-            description={features[currentIndex].description}
-            withAnimation
+      <div className='relative w-full max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8'>
+        {!isWideScreen ? (
+          <MobileFeatureCarousel
+            features={features}
+            onSlideChange={setCurrentIndex}
           />
-        </div>
+        ) : (
+          <DesktopFeatureShowcase
+            features={features}
+            currentIndex={currentIndex}
+            onIndexChange={setCurrentIndex}
+          />
+        )}
       </div>
     </section>
   );

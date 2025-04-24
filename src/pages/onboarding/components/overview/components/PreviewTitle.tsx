@@ -2,7 +2,7 @@ import gooroomeIcon from '@/assets/onboarding/goorooome-icon.png';
 
 const PreviewTitle = () => {
   return (
-    <div className='flex flex-col items-center justify-center text-[#4983EF] mb-10'>
+    <div className='flex flex-col items-center justify-center text-[#4983EF] mb-10 relative z-10'>
       <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold flex items-center gap-2 mb-4'>
         <img
           src={gooroomeIcon}
