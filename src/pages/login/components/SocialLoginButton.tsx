@@ -15,7 +15,7 @@ export default function SocialLoginButton({
       onMouseLeave={() => setIsHover(false)}
       className={`
         ${className} flex items-center rounded-[40px] px-15 py-3 md:px-20 md:py-3.5 
-        h-full shadow-logo cursor-pointer md:min-w-[312px]
+        h-full shadow-logo cursor-pointer md:min-w-[312px] transition-colors duration-300 ease-in-out
       `}>
       <div className='w-full min-w-[109px] flex items-center gap-2 md:gap-3.5'>
         <img
