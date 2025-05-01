@@ -167,7 +167,7 @@ const Header = () => {
 
   return (
     <>
-      <header className='fixed top-0 z-50 items-start py-10 w-full pointer-events-none px-21 item-between'>
+      <header className='fixed top-0 z-50 items-start py-10 max-sm:px-10 w-full pointer-events-none px-21 item-between'>
         {/* 로고 */}
         <h1 className='pointer-events-auto'>
           <Link to='/'>
