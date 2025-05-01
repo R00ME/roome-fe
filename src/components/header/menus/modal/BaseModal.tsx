@@ -75,7 +75,7 @@ export const BaseModal = ({
             ease: 'easeOut',
           }}>
           <motion.div
-            className='w-full h-full'
+            className='w-full h-full rounded-2xl'
             initial={{ backdropFilter: 'blur(0px)' }}
             animate={{ backdropFilter: 'blur(8px)' }}
             transition={{ duration: 0.3 }}>
