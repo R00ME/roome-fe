@@ -38,7 +38,7 @@ const HeroSection = () => {
 
   return (
     <section
-      className='w-full flex flex-col gap-10 bg-cover bg-center bg-no-repeat aspect-[1920/2160] p-20'
+      className='w-full flex flex-col gap-10 bg-cover bg-center bg-no-repeat aspect-[1920/2160] p-20 font-jalnan2'
       style={{ backgroundImage: `url(${heroBackground})` }}>
       <SectionTitle
         upperTitle='나만의 디지털 공간을'

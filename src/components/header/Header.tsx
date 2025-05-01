@@ -27,24 +27,20 @@ const Header = () => {
   const showToast = useToastStore((state) => state.showToast);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isMenuOpen &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        setIsMenuOpen(false);
-      }
-    };
+    // 1. 이벤트 리스너 설정
+    const eventListeners = new Map([
+      ['mousedown', handleClickOutside],
+      ['newNotification', handleNewNotification],
+      ['websocketConnected', () => setIsConnecting(false)],
+      ['websocketDisconnected', () => setIsConnecting(true)],
+    ]);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isMenuOpen]);
+    // 이벤트 리스너 등록
+    eventListeners.forEach((handler, event) => {
+      window.addEventListener(event, handler as EventListener);
+    });
 
-  // 초기 알림 상태 확인
-  useEffect(() => {
+    // 2. 초기 알림 상태 확인
     const checkUnreadNotifications = async () => {
       const user = useUserStore.getState().user;
       if (!user) return;
@@ -54,67 +50,63 @@ const Header = () => {
           user.userId,
           undefined,
           20,
-          false, // 읽지 않은 알림만 조회
+          false,
         );
-        // // console.log('읽지 않은 알림:', response.notifications);
         setHasUnreadNotifications(response.notifications.length > 0);
       } catch (error) {
         console.error('알림 상태 확인 실패:', error);
       }
     };
 
-    checkUnreadNotifications();
-  }, [isNotificationModalOpen]); // 모달이 닫힐 때마다 알림 상태 다시 체크
-
-  useEffect(() => {
-    const handleNewNotification = (event: CustomEvent) => {
-      // // console.log('새 알림 수신:', event.detail);
-      setHasUnreadNotifications(true);
-      setIsNewNotification(true);
-
-      // 토스트 메시지 추가
-      showToast('새로운 알림이 있습니다', 'success');
-    };
-
-    window.addEventListener(
-      'newNotification',
-      handleNewNotification as EventListener,
-    );
-    return () => {
-      window.removeEventListener(
-        'newNotification',
-        handleNewNotification as EventListener,
-      );
-    };
-  }, [showToast]);
-
-  // 웹소켓 연결 시도
-  useEffect(() => {
+    // 3. 웹소켓 연결
     const connectWebSocket = async () => {
       const token = getCookie('accessToken');
       if (!token) {
-        // console.error('웹소켓 연결 실패: 토큰이 없음');
+        console.log('웹소켓 연결 실패: 토큰이 없음');
+        setIsConnecting(false);
         return;
       }
 
-      // // console.log('웹소켓 연결 시도 전 토큰 확인:', token);
+      console.log('웹소켓 연결 시도 시작');
+      setIsConnecting(true);
 
       try {
         await webSocketService.connect();
       } catch (error) {
-        // console.error('웹소켓 연결 실패:', error);
+        console.log('웹소켓 연결 실패:', error);
         showToast('알림 서비스 연결에 실패했습니다.', 'error');
-      } finally {
         setIsConnecting(false);
       }
     };
 
+    // 초기화 실행
+    checkUnreadNotifications();
     connectWebSocket();
 
+    // 클린업 함수
     return () => {
+      eventListeners.forEach((handler, event) => {
+        window.removeEventListener(event, handler as EventListener);
+      });
       webSocketService.disconnect();
     };
   }, []); // 컴포넌트 마운트 시 한 번만 실행
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      isMenuOpen &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target as Node)
+    ) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  const handleNewNotification = () => {
+    setHasUnreadNotifications(true);
+    setIsNewNotification(true);
+    showToast('새로운 알림이 있습니다', 'success');
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -125,10 +117,13 @@ const Header = () => {
   };
 
   const toggleNotificationModal = () => {
+    if (isConnecting) {
+      showToast('알림 서비스에 연결 중입니다. 잠시만 기다려주세요.', 'info');
+      return;
+    }
     setIsNotificationModalOpen(!isNotificationModalOpen);
     if (!isNotificationModalOpen) {
-      // 모달을 열 때
-      setIsNewNotification(false); // 깜빡임 애니메이션 중지
+      setIsNewNotification(false);
     }
   };
 
@@ -147,10 +142,6 @@ const Header = () => {
             alt='알림'
             className='w-8 h-8 opacity-50' // 연결 중일 때 흐리게 표시
           />
-          <div className='flex absolute inset-0 justify-center items-center'>
-            {/* 로딩 스피너나 다른 로딩 표시 */}
-            <div className='w-4 h-4 rounded-full border-2 border-gray-300 animate-spin border-t-blue-500' />
-          </div>
         </div>
       );
     }
@@ -176,7 +167,7 @@ const Header = () => {
 
   return (
     <>
-      <header className='fixed top-0 z-50 items-start py-10 w-full pointer-events-none px-21 item-between'>
+      <header className='fixed top-0 z-50 items-start py-10 max-sm:px-10 w-full pointer-events-none px-21 item-between'>
         {/* 로고 */}
         <h1 className='pointer-events-auto'>
           <Link to='/'>
@@ -193,8 +184,7 @@ const Header = () => {
             type='button'
             aria-label='알림'
             onClick={toggleNotificationModal}
-            className='relative cursor-pointer'
-            disabled={isConnecting}>
+            className='relative cursor-pointer'>
             {renderNotificationIcon()}
             <div className='absolute top-[2.5px] right-[5.7px]'>
               {/* 기본 알림 점 */}

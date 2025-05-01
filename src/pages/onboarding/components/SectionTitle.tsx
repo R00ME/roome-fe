@@ -10,18 +10,22 @@ interface SectionTitleProps {
   descriptionClassName?: string;
 }
 
-const SectionTitle = ({ 
+const SectionTitle = ({
   upperTitle,
   lowerTitle,
   description,
   className,
   upperTitleClassName,
   lowerTitleClassName,
-  descriptionClassName
+  descriptionClassName,
 }: SectionTitleProps) => {
   return (
-    <div className={twMerge('flex flex-col items-center text-center py-8', className)}>
-      <h2 className="flex flex-col gap-2">
+    <div
+      className={twMerge(
+        'flex flex-col items-center text-center py-8',
+        className,
+      )}>
+      <h2 className='flex flex-col gap-2 font-[var(--font-jalnan)]'>
         <span
           className={twMerge(
             'text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl transition-all duration-300',
@@ -52,6 +56,5 @@ const SectionTitle = ({
     </div>
   );
 };
-
 
 export default SectionTitle;
