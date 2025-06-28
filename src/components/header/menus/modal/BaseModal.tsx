@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useModalPosition } from '../hooks/useModalPosition';
 import { useClickOutside } from '../../../../hooks/useClickOutside';
+import { useWindowSize } from '../../../../hooks/useWindowSize';
 import { CloseButton } from './CloseButton';
 
 interface BaseModalProps {
@@ -41,7 +42,9 @@ export const BaseModal = ({
 }: BaseModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const { modalPosition } = useModalPosition({ buttonRef, isOpen });
+  const { width } = useWindowSize();
   const theme = getModalTheme(modalType);
+  const isMobile = width <= 640;
 
   useClickOutside({
     modalRef,
@@ -54,28 +57,30 @@ export const BaseModal = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className='fixed z-50'
+          ref={modalRef}
+          className={`fixed z-50 w-[420px] h-[80vh] max-sm:w-full max-sm:h-full max-sm:right-0 max-sm:top-0 p-3 border-2 border-white bg-white/30 backdrop-blur-lg rounded-3xl overflow-hidden ${className}`}
+          style={{
+            right: isMobile ? undefined : modalPosition,
+            top: isMobile
+              ? undefined
+              : modalType === 'housemate'
+              ? '80px'
+              : '40px',
+          }}
           initial={{ opacity: 0, scale: 0.95, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           exit={{ opacity: 0, scale: 0.95, x: 20 }}
           transition={{
             duration: 0.2,
             ease: 'easeOut',
-          }}
-          style={{
-            width: '420px',
-            height: '80vh',
-            right: modalPosition,
-            top: modalType === 'housemate' ? '80px' : '40px',
           }}>
           <motion.div
-            ref={modalRef}
-            className={`w-full h-full p-3 border-2 border-white bg-white/30 backdrop-blur-lg rounded-3xl overflow-hidden ${className}`}
+            className='w-full h-full rounded-2xl'
             initial={{ backdropFilter: 'blur(0px)' }}
             animate={{ backdropFilter: 'blur(8px)' }}
             transition={{ duration: 0.3 }}>
             <div
-              className={`w-full h-full ${theme.bgColor} p-9 rounded-2xl overflow-hidden`}>
+              className={`w-full h-full ${theme.bgColor} p-9 rounded-2xl overflow-hidden max-[376px]:p-6`}>
               <CloseButton onClose={onClose} />
               <h2 className={`text-2xl font-bold ${theme.titleColor} mb-6`}>
                 {title}

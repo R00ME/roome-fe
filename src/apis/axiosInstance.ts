@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
       } catch (error) {
         // 리프레시 토큰이 만료된 경우
         console.error('🚨 Refresh Token이 만료되었습니다. 다시 로그인하세요.');
-        window.location.href = '/login';
+        // window.location.href = '/login';
         initStatus();
         return Promise.reject(error);
       }

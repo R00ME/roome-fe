@@ -157,19 +157,23 @@ export class WebSocketService {
   }
 
   private handleConnect(): void {
-    // // console.log('웹소켓 연결 성공');
+    console.log('웹소켓 연결 성공');
     this.connectionStatus = 'CONNECTED';
     this.reconnectAttempts = 0;
     this.setupSubscriptions();
     this.sendUserStatus('ONLINE');
+    // Header 컴포넌트에 연결 상태 변경을 알림
+    window.dispatchEvent(new CustomEvent('websocketConnected'));
   }
 
   private handleDisconnect(): void {
-    // // console.log('웹소켓 연결 해제');
+    console.log('웹소켓 연결 해제');
     if (!this.isManualLogout) {
       this.handleConnectionError();
     }
     this.connectionStatus = 'DISCONNECTED';
+    // Header 컴포넌트에 연결 해제 상태 변경을 알림
+    window.dispatchEvent(new CustomEvent('websocketDisconnected'));
   }
 
   private handleStompError(frame: any): void {

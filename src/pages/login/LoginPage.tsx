@@ -1,31 +1,34 @@
-import { useState } from 'react';
+import login_logo from '@assets/login/login-logo.svg';
 import background_img from '@assets/roome-background-img.png';
-import SocialTab from './components/SocialTab';
-import AgreeTab from './components/AgreeTab';
-import { agreeItems } from '@constants/login';
+import SocialLogin from './components/SocialLogin';
 
 export default function LoginPage() {
-  const [agreement, setAgreement] = useState<Agreement[]>(agreeItems);
-
-  const handleChangeAgreement = (item: Agreement[]) => {
-    setAgreement(item);
-  };
-
   return (
     <div
       style={{ backgroundImage: `url(${background_img})` }}
-      className={`bg-cover bg-center bg-no-repeat h-screen item-middle `}>
+      className={`
+        bg-cover bg-center bg-no-repeat min-h-screen 
+        flex items-center justify-center md:py-40 md:px-30 py-20 px-8
+      `}>
       <div
-        className='w-full h-[650px]  max-w-[1134px] p-4.5 rounded-[36px] border-2 border-[#FCF7FD] bg-[#FCF7FD33]   backdrop-blur-lg
-       shadow-[inset_0px_0px_40px_10px_rgba(152,200,228,0.30),_0px_10px_20px_0px_rgba(62,80,125,0.20)]'>
-        {agreement[0].isChecked && agreement[1].isChecked ? (
-          <SocialTab />
-        ) : (
-          <AgreeTab
-            agreement={agreement}
-            onChangeAgreement={handleChangeAgreement}
+        className={`
+          h-full w-full p-2 md:p-4.5 md:rounded-4xl rounded-3xl min-w-[315px] max-w-[1200px]
+          border-2 border-[#FCF7FD] bg-[#FCF7FD33] backdrop-blur-lg 
+          `}>
+        {/* 로그인 박스 */}
+        <div
+          className={`
+          flex flex-col items-center justify-center md:rounded-3xl rounded-2xl gap-12 md:gap-10
+          w-full h-full bg-[#FCF7FD66] backdrop-blur-lg 
+          px-20 pt-30 pb-20 lg:py-40 lg:px-20
+          `}>
+          <img
+            className='w-40 md:w-60 lg:w-80 h-auto'
+            src={login_logo}
+            alt='RoomE'
           />
-        )}
+          <SocialLogin/>
+        </div>
       </div>
     </div>
   );
