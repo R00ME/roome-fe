@@ -50,7 +50,7 @@ export const fetchUserInfo = async (accessToken: string) => {
 
 export const refreshAccessTokenAPI = async () => {
   try {
-    const response = await axiosInstance.post(`/${API_URL}/auth/token/refresh`);
+    const response = await axiosInstance.post(`/auth/token/refresh`);
 
     const accessToken =
       response.headers['authorization'] || response.headers['Authorization'];
@@ -72,7 +72,7 @@ export const refreshAccessTokenAPI = async () => {
 
 export const logoutAPI = async () => {
   try {
-    await axiosInstance.post(`/${API_URL}/auth/logout`);
+    await axiosInstance.post(`/auth/logout`);
 
     useAuthStore.getState().clearAccessToken?.();
     useUserStore.getState().clearUser?.();
