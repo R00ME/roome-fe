@@ -10,7 +10,6 @@ import CdRackPage from '@pages/cdrack/CdRackPage';
 import RoomPage from '../pages/room/RoomPage';
 import ProfileCardPage from '@pages/profile-card/ProfileCardPage';
 import ProfileCardEditPage from '@pages/profile-card-edit/ProfileCardEditPage';
-import Redirection from '@pages/login/components/Redirection';
 import EventPage from '@pages/event/EventPage';
 import PointPage from '@pages/point/PointPage';
 // import PaymentPage from '@pages/payment/PaymentPage';
@@ -18,13 +17,14 @@ import PointPage from '@pages/point/PointPage';
 // import PaymentFailPage from '@pages/payment/PaymentFailPage';
 // import RefundPage from '@pages/payment/RefundPage';
 import OnboardingPage from '@pages/onboarding/OnboardingPage';
+import OAuthCallback from '../pages/login/components/OAuthCallback';
 
 const Router = () => {
   return (
     <Routes>
       <Route
         path='/login/callback'
-        element={<Redirection />}
+        element={<OAuthCallback />}
       />
       {/* 헤더가 필요한 페이지 */}
       <Route element={<BaseLayout hasHeader={true} />}>

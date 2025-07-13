@@ -10,6 +10,7 @@ interface User {
 interface UserStore {
   user: User | null;
   setUser: (user: User) => void;
+  clearUser: () => void;
 }
 
 export const useUserStore = create(
@@ -17,6 +18,7 @@ export const useUserStore = create(
     (set) => ({
       user: null,
       setUser: (user) => set({ user: user }),
+      clearUser: () => set({ user: null }),
     }),
     {
       name: 'user-storage',

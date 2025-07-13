@@ -1,7 +1,7 @@
 import { Client, Message, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useUserStore } from '@/store/useUserStore';
-import { getCookie } from '@/utils/cookie';
+import { useAuthStore } from '../store/useAuthStore';
 
 type ConnectionStatus = 'CONNECTED' | 'CONNECTING' | 'DISCONNECTED';
 type UserStatus = 'ONLINE' | 'OFFLINE' | 'AWAY';
@@ -127,7 +127,7 @@ export class WebSocketService {
       return;
     }
 
-    const token = getCookie('accessToken');
+    const token = useAuthStore.getState().accessToken;
     if (!token) {
       // console.error('웹소켓 연결 실패: 토큰이 없음');
       return;
@@ -143,8 +143,10 @@ export class WebSocketService {
   }
 
   private async initializeClient(token: string): Promise<void> {
+    const WS_URL = import.meta.env.VITE_API_URL.replace(/^http/, 'ws') + '/ws';
+
     this.client = new Client({
-      webSocketFactory: () => new SockJS(`${import.meta.env.VITE_API_URL}/ws`),
+      webSocketFactory: () => new SockJS(WS_URL),
       connectHeaders: { Authorization: `Bearer ${token}` },
       onConnect: this.handleConnect.bind(this),
       onDisconnect: this.handleDisconnect.bind(this),
