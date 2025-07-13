@@ -20,7 +20,6 @@ export default function SocialLogin() {
   };
 
   const handleGoogleLogin = () => {
-    console.log('[DEBUG] handleGoogleLogin 호출됨');
     window.location.replace(
       `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`,
     );

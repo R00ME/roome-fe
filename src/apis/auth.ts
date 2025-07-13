@@ -8,7 +8,7 @@ const API_URL = 'api';
 
 export const getToken = async (tempCode: string): Promise<string> => {
   try {
-    const response = await axiosInstance.post(`/${API_URL}/auth/token/temp`, {
+    const response = await axiosInstance.post(`/auth/token/temp`, {
       tempCode: tempCode,
     });
 

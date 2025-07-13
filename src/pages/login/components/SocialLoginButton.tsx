@@ -8,7 +8,6 @@ export default function SocialLoginButton({
   socialName,
 }) {
   const [isHover, setIsHover] = useState(false);
-  console.log('[DEBUG] handleSocialLogin 전달됨:', handleSocialLogin);
   return (
     <button
       onClick={handleSocialLogin}

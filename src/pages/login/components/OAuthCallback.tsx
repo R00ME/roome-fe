@@ -5,7 +5,6 @@ import { useAuthStore } from '../../../store/useAuthStore';
 import { getToken } from '../../../apis/auth';
 
 export default function OAuthCallback() {
-  console.log('[OAuthCallback] 렌더링됨');
   const location = useLocation();
   const navigate = useNavigate();
   const setAccessToken = useAuthStore(state => state.setAccessToken);
