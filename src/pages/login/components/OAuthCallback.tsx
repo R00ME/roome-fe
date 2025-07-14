@@ -11,7 +11,6 @@ export default function OAuthCallback() {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    console.log(`추출: ${queryParams}`);
     const tempCode = queryParams.get('temp_code');
 
     if(!tempCode){
