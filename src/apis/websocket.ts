@@ -143,7 +143,7 @@ export class WebSocketService {
   }
 
   private async initializeClient(token: string): Promise<void> {
-    const WS_URL = import.meta.env.VITE_API_URL.replace(/^http/, 'ws') + '/ws';
+    const WS_URL = import.meta.env.VITE_API_URL + '/ws';
 
     this.client = new Client({
       webSocketFactory: () => new SockJS(WS_URL),
@@ -178,12 +178,12 @@ export class WebSocketService {
     window.dispatchEvent(new CustomEvent('websocketDisconnected'));
   }
 
-  private handleStompError(frame: any): void {
+  private handleStompError(frame: unknown): void {
     console.error('Stomp 에러:', frame);
     this.handleConnectionError();
   }
 
-  private handleWebSocketError(event: Event): void {
+  private handleWebSocketError(): void {
     // console.error('웹소켓 에러:', event);
     this.handleConnectionError();
   }
