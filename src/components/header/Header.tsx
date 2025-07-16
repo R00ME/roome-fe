@@ -12,7 +12,6 @@ import { notificationAPI } from '../../apis/notification';
 import { useUserStore } from '@/store/useUserStore';
 import { useToastStore } from '@/store/useToastStore';
 import { webSocketService } from '@/apis/websocket';
-import { getCookie } from '@/utils/cookie';
 import { useAuthStore } from '../../store/useAuthStore';
 
 const Header = () => {
