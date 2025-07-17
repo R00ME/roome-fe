@@ -12,6 +12,7 @@ export default function MainPage() {
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const hasShownGuide = useRef(false);
   const user = useUserStore((state) => state.user);
+  console.log(`user:`, user)
 
   const handleLoadingComplete = useCallback(() => {
     if (!hasShownGuide.current) {
