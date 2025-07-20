@@ -36,7 +36,6 @@ export const fetchUserInfo = async (accessToken: string) => {
     });
 
     const user = res.data.user;
-    console.log('✅ 유저 정보:', user);
 
     useUserStore.getState().setUser(user);
     webSocketService.handleLogin();
