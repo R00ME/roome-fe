@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Loading from '../../../components/Loading'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { getToken } from '../../../apis/auth';
+import { fetchUserInfo, getToken } from '../../../apis/auth';
 
 export default function OAuthCallback() {
   const location = useLocation();
@@ -21,8 +21,9 @@ export default function OAuthCallback() {
 
     (async () => {
       try{
-        const token = await getToken(tempCode);
-        setAccessToken(token);
+        const accessToken = await getToken(tempCode);
+        setAccessToken(accessToken);
+        await fetchUserInfo(accessToken);
         navigate('/');
       } catch (error){
         console.error('엑세스 토큰 처리 실패:', error);

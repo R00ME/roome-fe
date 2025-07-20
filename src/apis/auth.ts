@@ -8,7 +8,7 @@ const API_URL = 'api';
 
 export const getToken = async (tempCode: string): Promise<string> => {
   try {
-    const response = await axiosInstance.post(`/auth/token/temp`, {
+    const response = await axiosInstance.post(`/${API_URL}/auth/token/temp`, {
       tempCode: tempCode,
     });
 
@@ -29,28 +29,27 @@ export const getToken = async (tempCode: string): Promise<string> => {
 
 export const fetchUserInfo = async (accessToken: string) => {
   try {
-    const { data: user } = await axiosInstance.get(`/${API_URL}/auth/user`, {
+    const res = await axiosInstance.get(`/${API_URL}/auth/user`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
 
+    const user = res.data.user;
+
     useUserStore.getState().setUser(user);
-
-    useAuthStore.getState().setAccessToken(accessToken);
-
     webSocketService.handleLogin();
 
     return user;
   } catch (error) {
-    console.error('🚨 사용자 정보 요청 실패:', error);
+    console.error('🚨 사용자 정보 요청 실패:', error?.response?.data);
     throw error;
   }
 };
 
 export const refreshAccessTokenAPI = async () => {
   try {
-    const response = await axiosInstance.post(`/auth/token/refresh`);
+    const response = await axiosInstance.post(`/${API_URL}/auth/token/refresh`);
 
     const accessToken =
       response.headers['authorization'] || response.headers['Authorization'];
@@ -72,7 +71,7 @@ export const refreshAccessTokenAPI = async () => {
 
 export const logoutAPI = async () => {
   try {
-    await axiosInstance.post(`/auth/logout`);
+    await axiosInstance.post(`/${API_URL}/auth/logout`);
 
     useAuthStore.getState().clearAccessToken?.();
     useUserStore.getState().clearUser?.();
