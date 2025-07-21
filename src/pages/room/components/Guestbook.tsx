@@ -7,23 +7,32 @@ import Pagination from '../../../components/Pagination';
 import GuestbookMessage from '@pages/room/components/GuestbookMessage';
 import GusetbookInput from '@pages/room/components/GusetbookInput';
 
-export default function Guestbook({ onClose, ownerName, ownerId }: GuestbookProps) {
+export default function Guestbook({
+  onClose,
+  ownerName,
+  ownerId,
+}: GuestbookProps) {
   const { showToast } = useToastStore();
-  const [guestbookData, setGuestbookData] = useState<GuestbookMessageType[]>([]);
+  const [guestbookData, setGuestbookData] = useState<GuestbookMessageType[]>(
+    [],
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const user = useUserStore((state) => state.user);
 
-  const fetchGuestbookData = useCallback(async (page: number) => {
-    try {
-      const response = await guestbookAPI.getGuestbook(ownerId, page, 2);
-      setGuestbookData(response.guestbook || []);
-      setTotalPage(response.pagination?.totalPages);
-    } catch (error) {
-      console.error('방명록 조회 중 오류:', error);
-      setGuestbookData([]);
-    }
-  }, [ownerId]); 
+  const fetchGuestbookData = useCallback(
+    async (page: number) => {
+      try {
+        const response = await guestbookAPI.getGuestbook(ownerId, page, 2);
+        setGuestbookData(response.guestbook || []);
+        setTotalPage(response.pagination?.totalPages);
+      } catch (error) {
+        console.error('방명록 조회 중 오류:', error);
+        setGuestbookData([]);
+      }
+    },
+    [ownerId],
+  );
 
   useEffect(() => {
     fetchGuestbookData(currentPage);
@@ -44,7 +53,10 @@ export default function Guestbook({ onClose, ownerName, ownerId }: GuestbookProp
       setCurrentPage(1);
     } catch (error) {
       console.error('방명록 등록 중 오류 발생:', error);
-      showToast('방명록을 등록하는 데 실패했어요. 다시 시도해 주세요!', 'error');
+      showToast(
+        '방명록을 등록하는 데 실패했어요. 다시 시도해 주세요!',
+        'error',
+      );
       setGuestbookData([]);
     }
   };
@@ -75,32 +87,30 @@ export default function Guestbook({ onClose, ownerName, ownerId }: GuestbookProp
       transition={{ type: 'spring', stiffness: 130, damping: 18 }}
       onClick={handleClickOutside}
       className='fixed inset-0 z-10 flex items-center justify-center'>
-      <div className='@container relative w-[calc(100vw*0.3966)] max-w-[800px] h-[calc(100vw*0.3611)] max-h-[700px] min-w-[600px] min-h-[550px]'>
+      <div className='@container relative w-[100vw] h-[100vw] max-w-none max-h-none min-w-0 min-h-0 sm:w-[calc(100vw*0.3966)] sm:max-w-[800px] sm:h-[calc(100vw*0.3611)] sm:max-h-[700px] sm:min-w-[600px] sm:min-h-[550px]'>
         {/* 뒤 배경 */}
-        <div
-          className='absolute w-full h-full bg-[#73A1F7] rounded-[60px] border-2 border-[#2656CD]'
-          style={{ bottom: '-24px', left: '0' }}></div>
+        <div className='guest-book-background absolute w-full h-full bg-[#73A1F7] !rounded-[40px] sm:!rounded-[60px] border-2 border-[#2656CD]'></div>
 
         {/* 스프링 요소 - 왼쪽 */}
-        <div className='spring-left-first'>
+        <div className='spring-left-first !left-[50px] sm:!left-[calc(50%-248px)]'>
           <div className='spring-element' />
         </div>
-        <div className='spring-left-second'>
+        <div className='spring-left-second !left-[100px] sm:!left-[calc(50%-198px)]'>
           <div className='spring-element' />
         </div>
 
         {/* 스프링 요소- 오른쪽 */}
-        <div className='spring-right-first'>
+        <div className='spring-right-first !right-[50px] sm:!right-[calc(50%-248px)]'>
           <div className='spring-element' />
         </div>
-        <div className='spring-right-second'>
+        <div className='spring-right-second !right-[100px] sm:!right-[calc(50%-198px)]'>
           <div className='spring-element' />
         </div>
 
         {/* 메인 배경 */}
         <section className='guest-book flex-col items-center pt-10 @2xl:pt-15 px-13 @2xl:px-16 @3xl:gap-4'>
           {/* 방명록 컨텐츠 */}
-          <span className='flex gap-2 font-bold text-3xl @2xl:text-4xl @2xl:my-3'>
+          <span className='flex gap-2 font-bold text-2xl @xl:text-3xl @2xl:text-4xl @2xl:my-3'>
             <p className='text-[#4983EF]'>{ownerName}</p>
             <p className='text-[#3E507D]'>님의 방명록</p>
           </span>

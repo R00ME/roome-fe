@@ -106,6 +106,46 @@
   z-index: 10;
 }
 
+@media (max-width: 640px) {
+  .guest-book {
+    width: 100vw;
+    height: 100vw;
+    max-width: none;
+    max-height: none;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 50px !important;
+  }
+}
+
+.guest-book-background {
+  max-width: 800px;
+  max-height: 700px;
+  min-width: 600px;
+  min-height: 550px;
+  bottom: -24px !important;
+  left: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .guest-book-background {
+    width: 100vw;
+    height: 100vw;
+    max-width: none;
+    max-height: none;
+    min-width: 0;
+    min-height: 0;
+    bottom: -18px !important;
+  }
+}
+
+@media (max-width: 640px) and (min-width: 480px) {
+  .guest-book-content {
+    max-height: 400px !important;
+    min-height: 400px !important;
+  }
+}
+
 .inputBase {
   @apply placeholder:font-medium placeholder:text-xs @2xl:placeholder:text-sm placeholder:text-[#A2A2A2]/70;
   @apply bg-[#EDE6EE]/25 border-2 border-[#A2A2A2]/30 rounded-[8px] @2xl:rounded-xl;
