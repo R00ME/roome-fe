@@ -9,15 +9,39 @@ interface TrackingSession {
   duration?: number;
 }
 
+interface FeatureStats {
+  usage_count: number;
+  total_duration: number;
+  min_duration: number;
+  max_duration: number;
+  average_duration?: number;
+  median_duration?: number;
+  durations: number[];
+}
+
+interface UserPattern {
+  features_used: Set<string>;
+  total_sessions: number;
+  total_time: number;
+  average_session_time?: number;
+}
+
+interface UserPatternResult {
+  features_used: string[];
+  total_sessions: number;
+  total_time: number;
+  average_session_time: number;
+}
+
 const createBatchManager = () => {
   let sessions: TrackingSession[] = [];
   let flushTimer: NodeJS.Timeout | null = null;
-  
+
   // 중앙값 계산
   const calculateMedian = (numbers: number[]): number => {
     const sorted = numbers.sort((a, b) => a - b);
     const middle = Math.floor(sorted.length / 2);
-    
+
     if (sorted.length % 2 === 0) {
       return (sorted[middle - 1] + sorted[middle]) / 2;
     }
@@ -26,14 +50,14 @@ const createBatchManager = () => {
 
   // 분석 데이터 계산
   const calculateAnalytics = () => {
-    const featureStats: Record<string, any> = {};
-    const userPatterns: Record<string, any> = {};
+    const featureStats: Record<string, FeatureStats> = {};
+    const userPatterns: Record<string, UserPattern> = {};
     const uniqueFeatures = new Set<string>();
     const uniqueUsers = new Set<string>();
 
-    sessions.forEach(session => {
+    sessions.forEach((session) => {
       const { featureName, userId, duration } = session;
-      
+
       uniqueFeatures.add(featureName);
       if (userId) uniqueUsers.add(userId);
 
@@ -44,7 +68,7 @@ const createBatchManager = () => {
           total_duration: 0,
           min_duration: Infinity,
           max_duration: 0,
-          durations: []
+          durations: [],
         };
       }
 
@@ -63,10 +87,10 @@ const createBatchManager = () => {
           userPatterns[userId] = {
             features_used: new Set(),
             total_sessions: 0,
-            total_time: 0
+            total_time: 0,
           };
         }
-        
+
         const pattern = userPatterns[userId];
         pattern.features_used.add(featureName);
         pattern.total_sessions += 1;
@@ -74,7 +98,7 @@ const createBatchManager = () => {
       }
     });
 
-    Object.keys(featureStats).forEach(feature => {
+    Object.keys(featureStats).forEach((feature) => {
       const stats = featureStats[feature];
       if (stats.durations.length > 0) {
         stats.average_duration = stats.total_duration / stats.durations.length;
@@ -83,17 +107,28 @@ const createBatchManager = () => {
       delete stats.durations;
     });
 
-    Object.keys(userPatterns).forEach(userId => {
+    Object.keys(userPatterns).forEach((userId) => {
       const pattern = userPatterns[userId];
-      pattern.features_used = Array.from(pattern.features_used);
-      pattern.average_session_time = pattern.total_time / pattern.total_sessions;
+      pattern.average_session_time =
+        pattern.total_time / pattern.total_sessions;
+    });
+
+    // UserPattern을 UserPatternResult로 변환
+    const userPatternsResult: Record<string, UserPatternResult> = {};
+    Object.keys(userPatterns).forEach((userId) => {
+      const pattern = userPatterns[userId];
+      userPatternsResult[userId] = {
+        ...pattern,
+        features_used: Array.from(pattern.features_used),
+        average_session_time: pattern.total_time / pattern.total_sessions,
+      };
     });
 
     return {
       featureStats,
-      userPatterns,
+      userPatterns: userPatternsResult,
       uniqueFeatures: Array.from(uniqueFeatures),
-      uniqueUsers: Array.from(uniqueUsers)
+      uniqueUsers: Array.from(uniqueUsers),
     };
   };
 
@@ -103,7 +138,7 @@ const createBatchManager = () => {
 
     // 기능별, 사용자별 그룹화 및 통계 계산
     const analytics = calculateAnalytics();
-    
+
     // 상세 이벤트로 정리
     trackEvent('backoffice_feature_analytics', {
       session_count: sessions.length,
@@ -118,7 +153,7 @@ const createBatchManager = () => {
     console.log('📊 백오피스 배치 데이터 전송:', {
       sessions: sessions.length,
       features: analytics.uniqueFeatures,
-      users: analytics.uniqueUsers.length
+      users: analytics.uniqueUsers.length,
     });
 
     // 초기화
@@ -132,7 +167,7 @@ const createBatchManager = () => {
   return {
     addSession: (session: TrackingSession) => {
       sessions.push(session);
-      
+
       // 30개 쌓이거나 10초마다 전송
       if (sessions.length >= 30) {
         flush();
@@ -150,8 +185,8 @@ const createBatchManager = () => {
     // 디버깅용 (개발 환경에서만)
     ...(process.env.NODE_ENV === 'development' && {
       getSessionCount: () => sessions.length,
-      getSessions: () => [...sessions]
-    })
+      getSessions: () => [...sessions],
+    }),
   };
 };
 
@@ -159,27 +194,33 @@ const batchManager = createBatchManager();
 
 // 백오피스용 추적 훅
 export const useBackofficeFeatureTracking = (
-  featureName: string, 
-  userId?: string, 
-  minDuration = 1000
+  featureName: string,
+  userId?: string,
+  minDuration = 1000,
 ) => {
   const startTimeRef = useRef<number | undefined>(undefined);
   const isTrackingRef = useRef<boolean>(false);
 
   const startTracking = useCallback(() => {
     if (isTrackingRef.current) return;
-    
+
     startTimeRef.current = Date.now();
     isTrackingRef.current = true;
-    
-    console.log(`🎯 백오피스 추적 시작: ${featureName}`);
-  }, [featureName]);
+
+    // 디버깅용: 현재 페이지 경로와 기능명 표시
+    const currentPath = window.location.pathname;
+    console.log(
+      `🎯 [GA 추적 시작] ${currentPath} → ${featureName} (사용자: ${
+        userId || '익명'
+      })`,
+    );
+  }, [featureName, userId]);
 
   const endTracking = useCallback(() => {
     if (!startTimeRef.current || !isTrackingRef.current) return;
 
     const duration = Date.now() - startTimeRef.current;
-    
+
     // 최소 시간 이상만 배치에 추가
     if (duration >= minDuration) {
       batchManager.addSession({
@@ -187,10 +228,13 @@ export const useBackofficeFeatureTracking = (
         userId,
         startTime: startTimeRef.current,
         endTime: Date.now(),
-        duration
+        duration,
       });
-      
-      console.log(`📊 배치에 추가: ${featureName}, ${duration}ms`);
+
+      // 디버깅용: 추적 완료 정보 (간단하게)
+      console.log(
+        `📊 [GA 추적 완료] ${featureName}: ${(duration / 1000).toFixed(1)}초`,
+      );
     }
 
     startTimeRef.current = undefined;
@@ -221,24 +265,21 @@ export const useBackofficeFeatureTracking = (
     };
   }, [endTracking]);
 
-  return { 
-    startTracking, 
-    endTracking, 
-    isTracking: isTrackingRef.current 
+  return {
+    startTracking,
+    endTracking,
+    isTracking: isTrackingRef.current,
   };
 };
 
 // 자동 추적 버전
 export const useAutoBackofficeTracking = (
-  featureName: string, 
+  featureName: string,
   userId?: string,
-  minDuration?: number
+  minDuration?: number,
 ) => {
-  const { startTracking, endTracking, isTracking } = useBackofficeFeatureTracking(
-    featureName, 
-    userId, 
-    minDuration
-  );
+  const { startTracking, endTracking, isTracking } =
+    useBackofficeFeatureTracking(featureName, userId, minDuration);
 
   useEffect(() => {
     startTracking();

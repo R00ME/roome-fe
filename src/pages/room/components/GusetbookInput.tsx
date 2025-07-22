@@ -1,10 +1,20 @@
 import { useRef, useState } from 'react';
 import LayeredButton from '../../../components/LayeredButton';
+import { useBackofficeFeatureTracking } from '@/hooks/useBackofficeBatchTracking';
+import { useUserStore } from '@/store/useUserStore';
 
 export default function GusetbookInput({ onSubmitMessage }) {
   const [guestMessage, setGuestMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const user = useUserStore((state) => state.user);
+
+  // 방명록 작성 시간 추적 (수동 추적)
+  const { startTracking, endTracking } = useBackofficeFeatureTracking(
+    'guestbook_writing',
+    user?.userId?.toString(),
+    2000,
+  );
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
@@ -15,6 +25,9 @@ export default function GusetbookInput({ onSubmitMessage }) {
       setIsSubmitting(true);
       await onSubmitMessage(guestMessage);
       setGuestMessage('');
+
+      // 작성 완료 시 추적 종료
+      endTracking();
     } finally {
       setIsSubmitting(false);
     }
@@ -33,6 +46,13 @@ export default function GusetbookInput({ onSubmitMessage }) {
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value;
     setGuestMessage(input.length > 180 ? input.slice(0, 180) : input);
+  };
+
+  // 첫 번째 입력 시 추적 시작
+  const handleFocus = () => {
+    if (guestMessage === '') {
+      startTracking();
+    }
   };
 
   return (
@@ -63,6 +83,7 @@ export default function GusetbookInput({ onSubmitMessage }) {
         value={guestMessage}
         onChange={handleInput}
         onKeyDown={handleKeyDown}
+        onFocus={handleFocus}
       />
       {/* 확인 버튼 */}
       <LayeredButton
