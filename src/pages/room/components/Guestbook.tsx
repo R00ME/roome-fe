@@ -6,24 +6,40 @@ import { useUserStore } from '../../../store/useUserStore';
 import Pagination from '../../../components/Pagination';
 import GuestbookMessage from '@pages/room/components/GuestbookMessage';
 import GusetbookInput from '@pages/room/components/GusetbookInput';
+import { useAutoBackofficeTracking } from '@/hooks/useBackofficeBatchTracking';
 
-export default function Guestbook({ onClose, ownerName, ownerId }: GuestbookProps) {
+export default function Guestbook({
+  onClose,
+  ownerName,
+  ownerId,
+}: GuestbookProps) {
   const { showToast } = useToastStore();
-  const [guestbookData, setGuestbookData] = useState<GuestbookMessageType[]>([]);
+  const [guestbookData, setGuestbookData] = useState<GuestbookMessageType[]>(
+    [],
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const user = useUserStore((state) => state.user);
 
-  const fetchGuestbookData = useCallback(async (page: number) => {
-    try {
-      const response = await guestbookAPI.getGuestbook(ownerId, page, 2);
-      setGuestbookData(response.guestbook || []);
-      setTotalPage(response.pagination?.totalPages);
-    } catch (error) {
-      console.error('방명록 조회 중 오류:', error);
-      setGuestbookData([]);
-    }
-  }, [ownerId]); 
+  useAutoBackofficeTracking(
+    'guestbook_viewing',
+    user?.userId?.toString(),
+    2000,
+  );
+
+  const fetchGuestbookData = useCallback(
+    async (page: number) => {
+      try {
+        const response = await guestbookAPI.getGuestbook(ownerId, page, 2);
+        setGuestbookData(response.guestbook || []);
+        setTotalPage(response.pagination?.totalPages);
+      } catch (error) {
+        console.error('방명록 조회 중 오류:', error);
+        setGuestbookData([]);
+      }
+    },
+    [ownerId],
+  );
 
   useEffect(() => {
     fetchGuestbookData(currentPage);
@@ -44,7 +60,10 @@ export default function Guestbook({ onClose, ownerName, ownerId }: GuestbookProp
       setCurrentPage(1);
     } catch (error) {
       console.error('방명록 등록 중 오류 발생:', error);
-      showToast('방명록을 등록하는 데 실패했어요. 다시 시도해 주세요!', 'error');
+      showToast(
+        '방명록을 등록하는 데 실패했어요. 다시 시도해 주세요!',
+        'error',
+      );
       setGuestbookData([]);
     }
   };

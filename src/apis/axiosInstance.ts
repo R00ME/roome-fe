@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
+import { useAuthStore } from '../store/useAuthStore';
 import { initStatus, refreshAccessTokenAPI } from './auth';
 const cookies = new Cookies();
 
@@ -8,12 +9,13 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const accessToken = cookies.get('accessToken');
+    const accessToken = useAuthStore.getState().accessToken;
 
     if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
 
@@ -37,22 +39,26 @@ axiosInstance.interceptors.response.use(
 
       const refreshToken = cookies.get('refreshToken');
 
-      // // 비로그인 상태일 경우
-      // if (!refreshToken) {
-      //   console.error('🚨 Refresh Token이 없습니다. 다시 로그인하세요.');
-      //   window.location.href = '/login';
-      //   initStatus();
-      //   return Promise.reject(error);
-      // }
+      // 비로그인 상태일 경우
+      if (!refreshToken) {
+        console.error('🚨 Refresh Token이 없습니다. 다시 로그인하세요.');
+        initStatus();
+        window.location.href = '/login';
+        return Promise.reject(error);
+      }
       try {
-        const response = await refreshAccessTokenAPI(refreshToken);
+        const response = await refreshAccessTokenAPI();
+        const newAccessToken = response.accessToken;
+        
+        useAuthStore.getState().setAccessToken(newAccessToken);
+
         originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
         return axiosInstance(originalRequest);
       } catch (error) {
         // 리프레시 토큰이 만료된 경우
         console.error('🚨 Refresh Token이 만료되었습니다. 다시 로그인하세요.');
-        // window.location.href = '/login';
         initStatus();
+        window.location.href = '/login';
         return Promise.reject(error);
       }
     } else {

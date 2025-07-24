@@ -7,12 +7,12 @@ export default function LoginPage() {
     <div
       style={{ backgroundImage: `url(${background_img})` }}
       className={`
-        bg-cover bg-center bg-no-repeat min-h-screen 
-        flex items-center justify-center md:py-40 md:px-30 py-20 px-8
+        bg-cover bg-center bg-no-repeat h-screen overflow-auto
+        flex items-center justify-center xl:px-70 md:py-20 md:px-40 py-30 px-8
       `}>
       <div
         className={`
-          h-full w-full p-2 md:p-4.5 md:rounded-4xl rounded-3xl min-w-[315px] max-w-[1200px]
+          w-full h-full p-2 md:p-4.5 md:rounded-4xl rounded-3xl min-w-[315px] max-w-[1200px] min-h-[470px]
           border-2 border-[#FCF7FD] bg-[#FCF7FD33] backdrop-blur-lg 
           `}>
         {/* 로그인 박스 */}

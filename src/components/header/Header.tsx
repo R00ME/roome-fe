@@ -12,7 +12,7 @@ import { notificationAPI } from '../../apis/notification';
 import { useUserStore } from '@/store/useUserStore';
 import { useToastStore } from '@/store/useToastStore';
 import { webSocketService } from '@/apis/websocket';
-import { getCookie } from '@/utils/cookie';
+import { useAuthStore } from '../../store/useAuthStore';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,6 +25,7 @@ const Header = () => {
   const housemateButtonRef = useRef<HTMLButtonElement>(null);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const showToast = useToastStore((state) => state.showToast);
+  const accessToken = useAuthStore(state => state.accessToken)
 
   useEffect(() => {
     // 1. 이벤트 리스너 설정
@@ -60,8 +61,7 @@ const Header = () => {
 
     // 3. 웹소켓 연결
     const connectWebSocket = async () => {
-      const token = getCookie('accessToken');
-      if (!token) {
+      if (!accessToken) {
         console.log('웹소켓 연결 실패: 토큰이 없음');
         setIsConnecting(false);
         return;
