@@ -12,6 +12,12 @@ import { useUserStore } from '@/store/useUserStore';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToastStore } from '@/store/useToastStore';
 import { AnimatePresence, motion } from 'framer-motion';
+import { DATA_LIST_THEMES, DataListType } from '@/constants/dataListTheme';
+import { useWindowSize } from '@/hooks/useWindowSize';
+
+interface DataListPropsWithClose extends DataListProps {
+  onClose?: () => void;
+}
 
 const DataList = React.memo(
   ({
@@ -25,12 +31,12 @@ const DataList = React.memo(
     totalCount,
     setSearchInput,
     count,
-  }: DataListProps) => {
-    const isBook = type === 'book' ? true : false;
-    const mainColor = isBook ? '#2656CD' : '#7838AF';
-    const subColor = isBook ? 'text-[#3E507D]' : 'text-[#60308C]';
-    const completeColor = isBook ? 'text-[#3E507D80]' : 'text-[#60308C]/70';
-    const inputBgColor = isBook ? 'bg-[#C3D7FF26]' : 'bg-[#DDC3FF26]';
+    onClose,
+  }: DataListPropsWithClose) => {
+    const dataListType: DataListType = type === 'book' ? 'book' : 'cd';
+    const theme = DATA_LIST_THEMES[dataListType];
+    const { width } = useWindowSize();
+    const isMobile = width <= 640;
 
     const navigate = useNavigate();
     const myCdId = Number(useParams().cdId);
@@ -105,7 +111,7 @@ const DataList = React.memo(
           return;
         }
 
-        if (isBook) {
+        if (type === 'book') {
           // 도서 삭제 로직
           const myBookIds = selectedIds.join(',');
           await bookAPI.deleteBookFromMyBook(String(userId), myBookIds);
@@ -126,13 +132,14 @@ const DataList = React.memo(
         setIsEdit(false); // 편집 모드 종료
 
         // 성공 메시지
-        showToast(`선택한 ${isBook ? '책' : 'CD'}이 삭제되었어요!`, 'success');
-      } catch (error: any) {
+        showToast(`선택한 ${theme.itemLabel}이 삭제되었어요!`, 'success');
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error && 'response' in error
+            ? (error as any).response?.data?.message
+            : '삭제 중 오류가 발생했어요.';
         console.error('삭제 중 오류가 발생했습니다:', error);
-        showToast(
-          error.response?.data?.message || '삭제 중 오류가 발생했어요.',
-          'error',
-        );
+        showToast(errorMessage, 'error');
       }
     };
 
@@ -158,42 +165,90 @@ const DataList = React.memo(
     return (
       <AnimatePresence>
         <motion.div
-          initial={{ x: '100%' }}
+          initial={{ x: isMobile ? '100%' : '100%' }}
           animate={{
             x: 0,
-            transition: { shiffness: 100, damping: 15 },
+            transition: { stiffness: 100, damping: 15 },
           }}
-          exit={{ x: '100%', transition: { duration: 0.3 } }}
-          className='absolute top-0 right-0 w-[444px] h-screen bg-[#FFFAFA] overflow-hidden rounded-tl-3xl rounded-bl-3xl z-10'>
-          <div className='pr-10 pl-11 h-full rounded-tl-3xl rounded-bl-3xl pt-15'>
-            <span
+          exit={{
+            x: isMobile ? '100%' : '100%',
+            transition: { duration: 0.3 },
+          }}
+          className={classNames(
+            'absolute top-0 bg-[#FFFAFA] overflow-hidden z-10',
+            isMobile
+              ? 'left-0 w-full h-full rounded-none'
+              : 'right-0 w-[444px] h-screen rounded-tl-3xl rounded-bl-3xl',
+          )}>
+          <div
+            className={classNames(
+              'h-[100vh]',
+              isMobile
+                ? 'px-4 py-8'
+                : 'pr-10 pl-11 pt-15 rounded-tl-3xl rounded-bl-3xl',
+            )}>
+            {/* 모바일 닫기 버튼 */}
+            {isMobile && onClose && (
+              <div className='flex justify-end mb-4'>
+                <button
+                  onClick={onClose}
+                  className='p-2 rounded-full hover:bg-gray-100 transition-colors duration-200'
+                  aria-label='닫기'>
+                  <svg
+                    className='w-6 h-6 text-gray-600'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'>
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M6 18L18 6M6 6l12 12'
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            <h3
               className={classNames(
-                `text-4xl font-bold leading-normal text-center`,
-                `text-[${mainColor}]`,
+                'font-bold leading-normal text-center block',
+                isMobile ? 'text-3xl mb-6' : 'text-4xl',
+                `text-[${theme.mainColor}]`,
               )}>
-              {isBook ? 'BookList' : 'PlayList'}
-            </span>
+              {theme.title}
+            </h3>
 
             {/* 총 갯수, 편집 버튼 */}
-            <div className='flex gap-4 justify-between items-center mb-7 font-semibold mt-15'>
+            <div
+              className={classNames(
+                'flex gap-4 justify-between items-center font-semibold',
+                isMobile ? 'mb-4 mt-4' : 'mb-7 mt-15',
+              )}>
               <span
                 className={classNames(
-                  `text-[18px]`,
-                  `${subColor}`,
+                  theme.subColor,
                   'font-semibold',
+                  isMobile ? 'text-base' : 'text-[18px]',
                 )}>
-                {`총 ${isBook ? count : totalCount}개`}
+                {`총 ${type === 'book' ? count : totalCount}개`}
               </span>
 
               {isEdit ? (
                 <div className='flex items-center gap-4.5'>
                   <button
-                    className={`cursor-pointer text-[${mainColor}]`}
+                    className={`cursor-pointer text-[${theme.mainColor}] ${
+                      isMobile ? 'text-sm' : ''
+                    }`}
                     onClick={handleDelete}>
                     삭제
                   </button>
                   <button
-                    className={classNames(`cursor-pointer`, `${completeColor}`)}
+                    className={classNames(
+                      `cursor-pointer`,
+                      theme.completeColor,
+                      isMobile ? 'text-sm' : '',
+                    )}
                     onClick={handleComplete}>
                     완료
                   </button>
@@ -202,8 +257,8 @@ const DataList = React.memo(
                 userId === myUserId && (
                   <button
                     className={classNames(
-                      `font-semibold cursor-pointer text-[16px]`,
-                      `text-[${mainColor}]`,
+                      `font-semibold cursor-pointer text-[${theme.mainColor}]`,
+                      isMobile ? 'text-sm' : 'text-[16px]',
                     )}
                     onClick={handleEdit}>
                     편집
@@ -217,21 +272,26 @@ const DataList = React.memo(
               value={currentInput}
               onChange={setCurrentInput}
               placeholder='어떤 것이든 검색해보세요!'
-              mainColor={mainColor}
-              bgColor={inputBgColor}
+              mainColor={theme.mainColor}
+              bgColor={theme.inputBgColor}
             />
 
             {/* 리스트 */}
             <ul
               ref={listRef}
-              className='flex flex-col max-h-[calc(100vh-350px)] gap-6 pr-2 overflow-y-auto scrollbar'>
+              className={classNames(
+                'flex flex-col gap-6 pr-2 overflow-y-auto scrollbar',
+                isMobile
+                  ? 'max-h-[calc(100vh-320px)]'
+                  : 'max-h-[calc(100vh-350px)]',
+              )}>
               {isSearching ? (
                 Array(5)
                   .fill(0)
                   .map((_, index) => (
                     <SkeletonItem
                       key={`skeleton-${index}`}
-                      isBook={isBook}
+                      isBook={type === 'book'}
                     />
                   ))
               ) : filteredDatas.length > 0 ? (
@@ -241,7 +301,7 @@ const DataList = React.memo(
                       <EditStatusItem
                         key={index}
                         data={data}
-                        isBook={isBook}
+                        isBook={type === 'book'}
                         isSelected={selectedIds.includes(data.id)}
                         onSelect={() => handleItemSelect(data.id)}
                       />
@@ -249,7 +309,7 @@ const DataList = React.memo(
                       <NoEditStatusItem
                         key={index}
                         data={data}
-                        isBook={isBook}
+                        isBook={type === 'book'}
                         userId={userId}
                       />
                     );
@@ -265,7 +325,7 @@ const DataList = React.memo(
                             .map((_, index) => (
                               <SkeletonItem
                                 key={`loading-more-${index}`}
-                                isBook={isBook}
+                                isBook={type === 'book'}
                               />
                             ))}
                         </div>

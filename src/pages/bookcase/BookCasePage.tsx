@@ -290,6 +290,7 @@ const BookCasePage = () => {
             fetchMore={() => {}}
             userId={Number(userId)}
             count={totalCount}
+            onClose={() => setIsListOpen(false)}
           />
         </ModalBackground>
       )}
