@@ -14,7 +14,6 @@ interface DataListContentProps {
   userId: number;
   hasMore: boolean;
   isLoadingMore: boolean;
-  listRef: React.RefObject<HTMLUListElement>;
   observerRef: React.RefObject<HTMLDivElement>;
   onItemSelect: (id: string) => void;
 }
@@ -28,7 +27,6 @@ export const DataListContent: React.FC<DataListContentProps> = ({
   userId,
   hasMore,
   isLoadingMore,
-  listRef,
   observerRef,
   onItemSelect,
 }) => {
@@ -37,7 +35,6 @@ export const DataListContent: React.FC<DataListContentProps> = ({
 
   return (
     <ul
-      ref={listRef}
       className={classNames(
         'flex flex-col gap-6 pr-2 overflow-y-auto scrollbar',
         isMobile ? 'max-h-[calc(100vh-320px)]' : 'max-h-[calc(100vh-350px)]',

@@ -64,7 +64,7 @@ const DataList = React.memo(
       onDelete,
     });
 
-    const { listRef, observerRef } = useInfiniteScroll({
+    const { observerRef } = useInfiniteScroll({
       fetchMore,
       isLoading: isLoadingMore,
       hasMore,
@@ -139,7 +139,6 @@ const DataList = React.memo(
               userId={userId}
               hasMore={hasMore}
               isLoadingMore={isLoadingMore}
-              listRef={listRef}
               observerRef={observerRef}
               onItemSelect={handleItemSelect}
             />
