@@ -45,6 +45,7 @@ export default function EditStatusItem({
           }
           checked={isSelected}
           onChange={onSelect}
+          onClick={(e) => e.stopPropagation()}
           className='w-4 h-4 bg-center bg-no-repeat rounded-full border appearance-none cursor-pointer'
         />
         {isSelected && (

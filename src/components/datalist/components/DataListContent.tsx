@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import NoEditStatusItem from '../NoEditStatusItem';
-import EditStatusItem from '../EditStatusItem';
+import NoEditStatusItem from './NoEditStatusItem';
+import EditStatusItem from './EditStatusItem';
 import SkeletonItem from '@components/SkeletonItem';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
