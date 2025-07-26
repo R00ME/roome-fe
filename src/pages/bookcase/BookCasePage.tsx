@@ -44,26 +44,30 @@ const BookCasePage = () => {
         // console.log('API Response:', response);
 
         if (response?.myBooks) {
-          const formattedBooks = response.myBooks.map((book: any) => ({
-            id: book.id,
-            title: book.title,
-            author: book.author,
-            publisher: book.publisher,
-            publishedDate: book.publishedDate,
-            imageUrl: book.imageUrl,
-            genreNames: book.genreNames,
-            page: book.page || 0,
-          }));
+          const formattedBooks = response.myBooks.map(
+            (book: BookCaseListType) => ({
+              id: book.id,
+              title: book.title,
+              author: book.author,
+              publisher: book.publisher,
+              publishedDate: book.publishedDate,
+              imageUrl: book.imageUrl,
+              genreNames: book.genreNames,
+              page: book.page || 0,
+            }),
+          );
 
           // DataList 컴포넌트용 데이터 변환
-          const dataListFormat = response.myBooks.map((book: any) => ({
-            id: book.id.toString(),
-            title: book.title,
-            author: book.author,
-            publisher: book.publisher,
-            released_year: book.publishedDate,
-            imageUrl: book.imageUrl,
-          }));
+          const dataListFormat = response.myBooks.map(
+            (book: BookCaseListType) => ({
+              id: book.id.toString(),
+              title: book.title,
+              author: book.author,
+              publisher: book.publisher,
+              released_year: book.publishedDate,
+              imageUrl: book.imageUrl,
+            }),
+          );
 
           // console.log('Formatted DataList Items:', dataListFormat);
 
@@ -257,7 +261,7 @@ const BookCasePage = () => {
               setTotalCount((prev) => prev + 1);
               setIsModalOpen(false);
             } catch (error) {
-              // 실패시 UI 롤백
+              console.error('책 추가에 실패했습니다:', error);
               setBooks((prevBooks) =>
                 prevBooks.filter((book) => book.id !== newBook.id),
               );
