@@ -103,6 +103,7 @@ export default function CdPlayer({
             isLoading={isLoading}
             fetchMore={handleFetchMoreDatas}
             userId={userId}
+            onClose={handleCloseModal}
           />
         </ModalBackground>
       )}

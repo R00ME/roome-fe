@@ -36,6 +36,23 @@
   height: 25px;
 }
 
+.scrollbar-purple::-webkit-scrollbar {
+  width: 13px;
+}
+
+.scrollbar-purple::-webkit-scrollbar-thumb {
+  background: #794eac24;
+  border-radius: 6px; /* 스크롤바 둥근 테두리 */
+  width: 13px;
+  height: 25px;
+}
+
+.scrollbar-purple::-webkit-scrollbar-track {
+  background: transparent; /*스크롤바 뒷 배경 색상*/
+  width: 13px;
+  height: 25px;
+}
+
 /* --- */
 .scrollbar-white::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.5);

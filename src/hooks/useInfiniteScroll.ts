@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 
 interface UseInfiniteScrollProps {
   fetchMore: () => void;
@@ -11,27 +11,29 @@ export const useInfiniteScroll = ({
   isLoading,
   hasMore,
 }: UseInfiniteScrollProps) => {
-  const listRef = useRef<HTMLUListElement>(null);
   const observerRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = useCallback(() => {
-    if (!listRef.current || isLoading || !hasMore) return;
+  useEffect(() => {
+    if (!observerRef.current || isLoading || !hasMore) return;
 
-    const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-    if (scrollHeight - scrollTop <= clientHeight + 100) {
-      fetchMore();
-    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchMore();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      },
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
   }, [fetchMore, isLoading, hasMore]);
 
-  useEffect(() => {
-    const listElement = listRef.current;
-    if (!listElement) return;
-
-    listElement.addEventListener('scroll', handleScroll);
-    return () => {
-      listElement.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
-
-  return { listRef, observerRef };
+  return { observerRef };
 };
