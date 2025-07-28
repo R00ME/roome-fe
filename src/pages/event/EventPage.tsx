@@ -47,6 +47,7 @@ export default function EventPage() {
         <img
           src={gameMachine}
           alt='오락 기계 이미지'
+          className='max-w-[75vw] sm:max-w-none'
         />
         {/* 보여줄 화면 */}
         <ResultScreen
@@ -54,14 +55,14 @@ export default function EventPage() {
           eventInfo={eventInfo}
         />
         <div
-          className={`absolute bottom-23 right-33  ${
+          className={`absolute bottom-23 right-33 max-sm:bottom-14 max-sm:right-8 max-[420px]:!bottom-9 ${
             isJoinDisabled && 'pointer-events-none'
           }`}
           onClick={handleJoinEvent}>
           <LayeredButton
             theme='red'
             disabled={isJoinDisabled}
-            className={`py-8 px-9 rounded-[10px] font-bold `}>
+            className={`py-8 px-9 rounded-[10px] font-bold max-sm:rounded-[6px] max-sm:py-4 max-sm:px-6 max-sm:text-sm max-[450px]:rounded-[6px] max-[450px]:!py-2 max-[450px]:!px-4 max-[450px]:!text-sm`}>
             {eventInfo?.id
               ? joinStatus === 'idle'
                 ? '참여하기'
