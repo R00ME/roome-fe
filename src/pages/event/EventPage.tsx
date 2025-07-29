@@ -8,6 +8,7 @@ import { useToastStore } from '@/store/useToastStore';
 import Loading from '@components/Loading';
 import ResultScreen from './components/ResultScreen';
 import { useFetchEvent } from '@hooks/event/useFetchEvent';
+import { useEventSecurityTracking } from '@/hooks/useEventSecurityTracking';
 
 export default function EventPage() {
   const showToast = useToastStore((state) => state.showToast);
@@ -18,15 +19,39 @@ export default function EventPage() {
 
   const isJoinDisabled = !eventInfo?.id || joinStatus !== 'idle' || isLoading;
 
+  // 이벤트 보안 추적 훅
+  const {
+    trackEventClick,
+    trackParticipationAttempt,
+    trackParticipationSuccess,
+    trackParticipationFailure,
+  } = useEventSecurityTracking({
+    eventId: eventInfo?.id?.toString(),
+    rewardPoints: eventInfo?.rewardPoints,
+    maxParticipants: eventInfo?.maxParticipants,
+  });
+
   const handleJoinEvent = async () => {
     if (joinStatus !== 'idle') return;
+
+    // 보안 추적
+    trackEventClick();
+    trackParticipationAttempt();
+
     setJoinStatus('joining');
     try {
       await addEventJoin(eventInfo?.id);
       setJoinStatus('success');
+
+      // 성공 추적
+      trackParticipationSuccess();
+
       showToast(`${eventInfo?.rewardPoints} 포인트를 획득했어요!`, 'success');
       setShowResult(true);
     } catch (error) {
+      // 실패 추적
+      trackParticipationFailure(error);
+
       showToast(
         error?.response?.data.message || '알 수 없는 오류가 발생했어요.',
         'error',
@@ -47,6 +72,7 @@ export default function EventPage() {
         <img
           src={gameMachine}
           alt='오락 기계 이미지'
+          className='max-w-[75vw] sm:max-w-none'
         />
         {/* 보여줄 화면 */}
         <ResultScreen
@@ -54,14 +80,14 @@ export default function EventPage() {
           eventInfo={eventInfo}
         />
         <div
-          className={`absolute bottom-23 right-33  ${
+          className={`absolute bottom-23 right-33 max-sm:bottom-14 max-sm:right-8 max-[420px]:!bottom-8 ${
             isJoinDisabled && 'pointer-events-none'
           }`}
           onClick={handleJoinEvent}>
           <LayeredButton
             theme='red'
             disabled={isJoinDisabled}
-            className={`py-8 px-9 rounded-[10px] font-bold `}>
+            className={`py-8 px-9 rounded-[10px] font-bold max-sm:rounded-[6px] max-sm:py-2 max-sm:px-4 max-sm:text-sm`}>
             {eventInfo?.id
               ? joinStatus === 'idle'
                 ? '참여하기'
