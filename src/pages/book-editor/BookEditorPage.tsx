@@ -9,7 +9,10 @@ import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
 import { bookAPI } from '@/apis/book';
 import { BookReviewData } from '@/types/book';
-import { useBackofficeFeatureTracking } from '@/hooks/useBackofficeBatchTracking';
+import {
+  useAutoBackofficeTracking,
+  useBackofficeFeatureTracking,
+} from '@/hooks/useBackofficeBatchTracking';
 
 interface BookEditorPageProps {
   bookTitle: string;
@@ -36,6 +39,9 @@ const BookEditorPage = ({
   const [isEditMode, setIsEditMode] = useState(
     searchParams.get('mode') === 'edit',
   );
+
+  // 페이지 접속 추적 (자동 시작/종료)
+  useAutoBackofficeTracking('book', user?.userId?.toString(), 1000);
 
   const { startTracking, endTracking } = useBackofficeFeatureTracking(
     'book',

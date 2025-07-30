@@ -11,7 +11,10 @@ import Loading from '@components/Loading';
 import AnimationGuide from '@components/AnimationGuide';
 import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
-import { useBackofficeFeatureTracking } from '@/hooks/useBackofficeBatchTracking';
+import {
+  useAutoBackofficeTracking,
+  useBackofficeFeatureTracking,
+} from '@/hooks/useBackofficeBatchTracking';
 
 const BookCasePage = () => {
   const { showToast } = useToastStore();
@@ -23,6 +26,9 @@ const BookCasePage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isGuideOpen, setIsGuideOpen] = useState(true);
+
+  // 페이지 접속 추적 (자동 시작/종료)
+  useAutoBackofficeTracking('book', user?.userId?.toString(), 1000);
 
   // 도서 추가 추적 - 통일된 'book' featureName 사용
   const {
