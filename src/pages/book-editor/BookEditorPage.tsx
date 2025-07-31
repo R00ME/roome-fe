@@ -6,8 +6,13 @@ import BookReviewDisplay from '@pages/book-viewer/components/BookReviewDisplay';
 import { BOOK_THEME } from '@/constants/bookTheme';
 import ThemeSelector from './components/ThemeSelector';
 import { useToastStore } from '@/store/useToastStore';
+import { useUserStore } from '@/store/useUserStore';
 import { bookAPI } from '@/apis/book';
 import { BookReviewData } from '@/types/book';
+import {
+  useAutoBackofficeTracking,
+  useBackofficeFeatureTracking,
+} from '@/hooks/useBackofficeBatchTracking';
 
 interface BookEditorPageProps {
   bookTitle: string;
@@ -29,9 +34,19 @@ const BookEditorPage = ({
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const showToast = useToastStore((state) => state.showToast);
+  const { user } = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditMode, setIsEditMode] = useState(
     searchParams.get('mode') === 'edit',
+  );
+
+  // 페이지 접속 추적 (자동 시작/종료)
+  useAutoBackofficeTracking('book', user?.userId?.toString(), 1000);
+
+  const { startTracking, endTracking } = useBackofficeFeatureTracking(
+    'book',
+    user?.userId?.toString(),
+    1000,
   );
   const [reviewFields, setReviewFields] = useState<BookReviewData>(() => {
     // localStorage에서 임시저장 데이터 불러오기
@@ -79,6 +94,11 @@ const BookEditorPage = ({
     const timer = setInterval(autoSave, 5000);
     return () => clearInterval(timer);
   }, [autoSave]);
+
+  // 컴포넌트 마운트 시 추적 시작
+  useEffect(() => {
+    startTracking();
+  }, [startTracking]);
 
   // 수정 모드일 때 기존 서평 데이터 불러오기
   useEffect(() => {
@@ -170,10 +190,16 @@ const BookEditorPage = ({
 
       // 공통 처리 로직
       localStorage.removeItem(`draft-review-${bookId}`);
+
+      endTracking();
+
       navigate(`/book/${bookId}`, { replace: true });
     } catch (error) {
       console.error('서평 저장 중 오류 발생:', error);
       showToast('서평 저장에 실패했습니다 ꌩ-ꌩ', 'error');
+
+      // 실패 시에도 추적 종료
+      endTracking();
     } finally {
       setIsSubmitting(false);
     }
