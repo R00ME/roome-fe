@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import ReviewTextField from './components/ReviewTextField';
 import FreeformEditor from './components/FreeformEditor';
 import BookReviewDisplay from '@pages/book-viewer/components/BookReviewDisplay';
+import ResponsiveBookInfo from './components/ResponsiveBookInfo';
 import { BOOK_THEME } from '@/constants/bookTheme';
 import ThemeSelector from './components/ThemeSelector';
 import { useToastStore } from '@/store/useToastStore';
@@ -206,10 +207,19 @@ const BookEditorPage = ({
   };
 
   return (
-    <section className='flex overflow-x-hidden w-full h-screen'>
+    <section className='flex overflow-x-hidden w-full h-screen max-[1024px]:flex-col'>
+      {/* 1024px 이하에서만 표시되는 책 정보 */}
+      <ResponsiveBookInfo
+        bookTitle={bookTitle}
+        author={author}
+        genreNames={genreNames}
+        imageUrl={imageUrl}
+        theme={reviewFields.theme}
+      />
+
       {/* 에디터 영역 */}
-      <article className='w-1/2 h-full p-8 overflow-y-auto bg-[#FDFEFF] scrollbar-hide scrollbar'>
-        <div className='flex overflow-auto flex-col gap-8 px-14 py-12'>
+      <article className='w-1/2 max-[1024px]:w-full h-full p-8 overflow-y-auto bg-[#FDFEFF] scrollbar-hide scrollbar max-[440px]:px-6'>
+        <div className='flex overflow-auto flex-col gap-8 px-14 max-[1024px]:px-6 py-12 max-[1024px]:py-0 max-[440px]:px-0'>
           {/* 제목 입력 영역 */}
           <input
             type='text'
@@ -218,7 +228,7 @@ const BookEditorPage = ({
             placeholder='제목을 입력해주세요...'
             value={reviewFields.title}
             onChange={(e) => handleFieldChange('title')(e.target.value)}
-            className={`overflow-hidden py-4 w-full text-4xl font-semibold focus:outline-none placeholder:text-opacity-40 text-ellipsis`}
+            className={`overflow-hidden py-4 w-full text-4xl max-[1024px]:text-2xl font-semibold focus:outline-none placeholder:text-opacity-40 text-ellipsis`}
             style={{
               borderBottomWidth: '2px',
               borderBottomColor: `${
@@ -273,10 +283,10 @@ const BookEditorPage = ({
               theme={reviewFields.theme}
             />
 
-            <div className='flex gap-4 justify-end'>
+            <div className='flex gap-4 max-[1024px]:gap-3 justify-end'>
               <button
                 onClick={handleTempSave}
-                className='px-7 py-2 text-gray-600 bg-gray-200 rounded-[10px] drop-shadow-logo'>
+                className='px-7 max-[1024px]:px-5 py-2 text-gray-600 bg-gray-200 rounded-[10px] drop-shadow-logo'>
                 임시저장
               </button>
               <button
@@ -292,7 +302,7 @@ const BookEditorPage = ({
                     handleSave();
                   }
                 }}
-                className={`px-7 py-2 text-white transition-colors rounded-[10px] drop-shadow-logo hover:opacity-80 active:bg-white ${
+                className={`px-7 max-[1024px]:px-5 py-2 text-white transition-colors rounded-[10px] drop-shadow-logo hover:opacity-80 active:bg-white ${
                   !isValidReview() || isSubmitting
                     ? 'bg-gray-400 cursor-not-allowed'
                     : ''
@@ -315,7 +325,7 @@ const BookEditorPage = ({
       </article>
 
       {/* 실시간 뷰어 영역 */}
-      <article className='overflow-x-hidden w-1/2 h-full'>
+      <article className='overflow-x-hidden w-1/2 max-[1024px]:hidden h-full'>
         <BookReviewDisplay
           mode='preview'
           previewData={reviewFields}
