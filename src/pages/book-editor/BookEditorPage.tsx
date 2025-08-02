@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ReviewTextField from './components/ReviewTextField';
 import FreeformEditor from './components/FreeformEditor';
 import ReviewTitleInput from './components/ReviewTitleInput';
@@ -34,10 +34,8 @@ const BookEditorPage = ({
   imageUrl,
 }: BookEditorPageProps) => {
   const { bookId } = useParams();
-  const [searchParams] = useSearchParams();
   const showToast = useToastStore((state) => state.showToast);
   const { user } = useUserStore();
-  const isEditMode = searchParams.get('mode') === 'edit';
 
   // 페이지 접속 추적 (자동 시작/종료)
   useAutoBackofficeTracking('book', user?.userId?.toString(), 1000);
@@ -46,6 +44,23 @@ const BookEditorPage = ({
     'book',
     user?.userId?.toString(),
     1000,
+  );
+
+  // endTracking 함수 메모이제이션
+  const memoizedEndTracking = useCallback(() => {
+    endTracking();
+  }, [endTracking]);
+
+  // bookInfo 객체 메모이제이션
+  const bookInfo = useMemo(
+    () => ({
+      bookTitle,
+      author,
+      genreNames,
+      publishedDate,
+      imageUrl,
+    }),
+    [bookTitle, author, genreNames, publishedDate, imageUrl],
   );
 
   // 서평 데이터 관리 커스텀 훅
@@ -57,15 +72,8 @@ const BookEditorPage = ({
     isValidReview,
   } = useBookReview({
     bookId,
-    bookInfo: {
-      bookTitle,
-      author,
-      genreNames,
-      publishedDate,
-      imageUrl,
-    },
-    isEditMode,
-    onComplete: endTracking,
+    bookInfo,
+    onComplete: memoizedEndTracking,
   });
 
   // 자동 저장 커스텀 훅

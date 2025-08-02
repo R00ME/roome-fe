@@ -17,7 +17,6 @@ interface UseBookReviewProps {
     publishedDate: string;
     imageUrl: string;
   };
-  isEditMode: boolean;
   onComplete?: () => void;
 }
 
@@ -27,12 +26,12 @@ interface UseBookReviewProps {
 export const useBookReview = ({
   bookId,
   bookInfo,
-  isEditMode,
   onComplete,
 }: UseBookReviewProps) => {
   const navigate = useNavigate();
   const showToast = useToastStore((state) => state.showToast);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasExistingReview, setHasExistingReview] = useState(false);
   const [reviewFields, setReviewFields] = useState<BookReviewData>(() => {
     // sessionStorage에서 임시저장 데이터 불러오기
     const savedData = sessionStorage.getItem(`draft-review-${bookId}`);
@@ -83,6 +82,7 @@ export const useBookReview = ({
     try {
       const review = await bookAPI.getReview(bookId);
       if (review) {
+        setHasExistingReview(true);
         setReviewFields({
           bookTitle: bookInfo.bookTitle,
           author: bookInfo.author,
@@ -98,9 +98,12 @@ export const useBookReview = ({
           discussion: review.topic,
           freeform: review.freeFormText,
         });
+      } else {
+        setHasExistingReview(false);
       }
     } catch (error) {
       console.error('서평 조회 중 오류 발생:', error);
+      setHasExistingReview(false);
     }
   }, [bookId, bookInfo]);
 
@@ -119,7 +122,7 @@ export const useBookReview = ({
       const reviewData = transformReviewDataForAPI(reviewFields);
 
       // API 호출 (수정 또는 새로 작성)
-      if (isEditMode) {
+      if (hasExistingReview) {
         await bookAPI.updateReview(bookId, reviewData);
         showToast('서평 수정 완료!', 'success');
       } else {
@@ -141,18 +144,16 @@ export const useBookReview = ({
     bookId,
     isSubmitting,
     reviewFields,
-    isEditMode,
+    hasExistingReview,
     showToast,
     onComplete,
     navigate,
   ]);
 
-  // 수정 모드일 때 기존 서평 데이터 불러오기
+  // 기존 서평 데이터 불러오기
   useEffect(() => {
-    if (isEditMode) {
-      fetchReview();
-    }
-  }, [isEditMode, fetchReview]);
+    fetchReview();
+  }, [fetchReview]);
 
   // 유효성 검사 함수 메모이제이션
   const isValidReviewResult = useMemo(
@@ -160,11 +161,17 @@ export const useBookReview = ({
     [reviewFields],
   );
 
+  // isValidReview 함수 메모이제이션
+  const isValidReviewFunction = useCallback(
+    () => isValidReviewResult,
+    [isValidReviewResult],
+  );
+
   return {
     reviewFields,
     isSubmitting,
     handleFieldChange,
     handleSave,
-    isValidReview: () => isValidReviewResult,
+    isValidReview: isValidReviewFunction,
   };
 };
