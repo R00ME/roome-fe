@@ -8,6 +8,7 @@ import BookReviewDisplay from '@pages/book/book-viewer/components/BookReviewDisp
 import ResponsiveBookInfo from './components/ResponsiveBookInfo';
 
 import ThemeSelector from './components/ThemeSelector';
+import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
 import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useBookReview } from '@hooks/book/useBookReview';
@@ -113,6 +114,9 @@ const BookEditorPage = ({
   // 유효성 검사 결과 메모이제이션
   const isValidReviewResult = useMemo(() => isValidReview(), [isValidReview]);
 
+  // 테마 색상 가져오기
+  const colors = BOOK_THEME[(reviewFields.theme as BookThemeType) || 'BLUE'];
+
   return (
     <section className='flex overflow-x-hidden w-full h-screen max-[1024px]:flex-col'>
       {/* 1024px 이하에서만 표시되는 책 정보 */}
@@ -126,7 +130,14 @@ const BookEditorPage = ({
       />
 
       {/* 에디터 영역 */}
-      <article className='w-1/2 max-[1024px]:w-full h-full p-8 overflow-y-auto bg-[#FDFEFF] scrollbar-hide scrollbar max-[440px]:px-6'>
+      <article
+        className='w-1/2 max-[1024px]:w-full h-full p-8 overflow-y-auto bg-[#FDFEFF] scrollbar-hide scrollbar max-[440px]:px-6'
+        style={
+          {
+            '--scrollbar-thumb-color': `${colors.primary}33`,
+            '--scrollbar-track-color': `${colors.background}`,
+          } as React.CSSProperties
+        }>
         <div className='flex overflow-auto flex-col gap-8 px-14 max-[1024px]:px-6 py-12 max-[1024px]:py-0 max-[440px]:px-0'>
           {/* 제목 입력 영역 */}
           <ReviewTitleInput
