@@ -1,14 +1,8 @@
 import { BookReviewData } from '@/types/book';
 import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
 
-interface ReviewField {
-  key: keyof BookReviewData;
-  title: string;
-}
-
 interface BookHeaderProps {
   title: string;
-  reviewFields: ReviewField[];
   headings: Array<{ id: string; level: number; text: string }>;
   colors: (typeof BOOK_THEME)[BookThemeType];
   reviewData: BookReviewData;
@@ -16,7 +10,6 @@ interface BookHeaderProps {
 
 export const BookHeader = ({
   title,
-  reviewFields,
   headings,
   colors,
   reviewData,
@@ -35,15 +28,40 @@ export const BookHeader = ({
         style={{ color: colors.primary }}>
         목차
       </li>
-      {reviewFields.map(({ key, title }) =>
-        reviewData[key] ? (
-          <li
-            key={key}
-            className='text-sm'
-            style={{ color: colors.primary }}>
-            <a href={`#section-${key}`}>{title}</a>
-          </li>
-        ) : null,
+      {reviewData.quote && (
+        <li
+          className='text-sm'
+          style={{ color: colors.primary }}>
+          <a href='#section-quote'>인상 깊은 구절</a>
+        </li>
+      )}
+      {reviewData.emotion && (
+        <li
+          className='text-sm'
+          style={{ color: colors.primary }}>
+          <a href='#section-emotion'>그 때 나의 감정</a>
+        </li>
+      )}
+      {reviewData.reason && (
+        <li
+          className='text-sm'
+          style={{ color: colors.primary }}>
+          <a href='#section-reason'>책을 선택하게 된 계기</a>
+        </li>
+      )}
+      {reviewData.discussion && (
+        <li
+          className='text-sm'
+          style={{ color: colors.primary }}>
+          <a href='#section-discussion'>다른 사람과 나누고 싶은 대화 주제</a>
+        </li>
+      )}
+      {reviewData.freeform && (
+        <li
+          className='text-sm'
+          style={{ color: colors.primary }}>
+          <a href='#section-freeform'>자유 형식</a>
+        </li>
       )}
       {headings.map(({ id, level, text }) => (
         <li

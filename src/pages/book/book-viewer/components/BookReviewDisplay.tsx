@@ -1,5 +1,5 @@
 // react
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // constants
@@ -28,11 +28,6 @@ interface BookReviewDisplayProps {
   // view 모드일 때는 userId와 bookId로 데이터를 조회
   userId?: string;
   bookId?: string;
-}
-
-interface ReviewField {
-  key: keyof BookReviewData;
-  title: string;
 }
 
 const extractHeadings = (content: string) => {
@@ -71,18 +66,6 @@ const BookReviewDisplay = ({
       // API 호출 로직 추가하기
     }
   }, [mode, userId, bookId]);
-
-  // reviewFields를 useMemo로 최적화
-  const reviewFields: ReviewField[] = useMemo(
-    () => [
-      { key: 'quote', title: '인상 깊은 구절' },
-      { key: 'emotion', title: '그 때 나의 감정' },
-      { key: 'reason', title: '책을 선택하게 된 계기' },
-      { key: 'discussion', title: '다른 사람과 나누고 싶은 대화 주제' },
-      { key: 'freeform', title: `${user.nickname}님의 서평` },
-    ],
-    [user.nickname],
-  );
 
   // 실제 표시할 데이터 (preview 모드면 previewData 사용)
   const displayData = previewData; // mode와 상관없이 previewData 사용
@@ -134,7 +117,6 @@ const BookReviewDisplay = ({
       style={{ scrollBehavior: 'smooth' }}>
       <BookHeader
         title={displayData.title}
-        reviewFields={reviewFields}
         headings={headings}
         colors={colors}
         reviewData={displayData}
@@ -155,7 +137,6 @@ const BookReviewDisplay = ({
         />
 
         <ReviewContent
-          reviewFields={reviewFields}
           reviewData={displayData}
           colors={colors}
           mode={mode}

@@ -1,14 +1,10 @@
+import { memo } from 'react';
 import { BookReviewData } from '@/types/book';
 import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
 import scrollDownIcon from '@assets/book/scroll-down-icon.svg';
 import { formatToKoreanDateTime } from '@/utils/dateFormat';
-interface ReviewField {
-  key: keyof BookReviewData;
-  title: string;
-}
 
 interface ReviewContentProps {
-  reviewFields: ReviewField[];
   reviewData: BookReviewData;
   colors: (typeof BOOK_THEME)[BookThemeType];
   mode: 'preview' | 'view';
@@ -17,28 +13,123 @@ interface ReviewContentProps {
   isMyReview?: boolean;
 }
 
-const ReviewSection = ({
-  id,
-  title,
-  content,
-  colors,
-  isFreeform = false,
-}: {
-  id: string;
-  title: string;
-  content: string;
-  colors: (typeof BOOK_THEME)[BookThemeType];
-  isFreeform?: boolean;
-}) => (
-  <div
-    id={id}
-    className='mb-6'>
-    <h2
-      className='mb-2 text-2xl font-semibold'
-      style={{ color: colors.primary }}>
-      {title}
-    </h2>
-    {isFreeform ? (
+// 개별 필드 컴포넌트들
+const QuoteSection = memo(
+  ({
+    content,
+    colors,
+  }: {
+    content: string;
+    colors: (typeof BOOK_THEME)[BookThemeType];
+  }) => (
+    <div
+      id='section-quote'
+      className='mb-6'>
+      <h2
+        className='mb-2 text-2xl font-semibold'
+        style={{ color: colors.primary }}>
+        인상 깊은 구절
+      </h2>
+      <p
+        className='text-lg whitespace-pre-wrap'
+        style={{ color: colors.secondary }}>
+        {content}
+      </p>
+    </div>
+  ),
+);
+
+const EmotionSection = memo(
+  ({
+    content,
+    colors,
+  }: {
+    content: string;
+    colors: (typeof BOOK_THEME)[BookThemeType];
+  }) => (
+    <div
+      id='section-emotion'
+      className='mb-6'>
+      <h2
+        className='mb-2 text-2xl font-semibold'
+        style={{ color: colors.primary }}>
+        그 때 나의 감정
+      </h2>
+      <p
+        className='text-lg whitespace-pre-wrap'
+        style={{ color: colors.secondary }}>
+        {content}
+      </p>
+    </div>
+  ),
+);
+
+const ReasonSection = memo(
+  ({
+    content,
+    colors,
+  }: {
+    content: string;
+    colors: (typeof BOOK_THEME)[BookThemeType];
+  }) => (
+    <div
+      id='section-reason'
+      className='mb-6'>
+      <h2
+        className='mb-2 text-2xl font-semibold'
+        style={{ color: colors.primary }}>
+        책을 선택하게 된 계기
+      </h2>
+      <p
+        className='text-lg whitespace-pre-wrap'
+        style={{ color: colors.secondary }}>
+        {content}
+      </p>
+    </div>
+  ),
+);
+
+const DiscussionSection = memo(
+  ({
+    content,
+    colors,
+  }: {
+    content: string;
+    colors: (typeof BOOK_THEME)[BookThemeType];
+  }) => (
+    <div
+      id='section-discussion'
+      className='mb-6'>
+      <h2
+        className='mb-2 text-2xl font-semibold'
+        style={{ color: colors.primary }}>
+        다른 사람과 나누고 싶은 대화 주제
+      </h2>
+      <p
+        className='text-lg whitespace-pre-wrap'
+        style={{ color: colors.secondary }}>
+        {content}
+      </p>
+    </div>
+  ),
+);
+
+const FreeformSection = memo(
+  ({
+    content,
+    colors,
+  }: {
+    content: string;
+    colors: (typeof BOOK_THEME)[BookThemeType];
+  }) => (
+    <div
+      id='section-freeform'
+      className='mb-6'>
+      <h2
+        className='mb-2 text-2xl font-semibold'
+        style={{ color: colors.primary }}>
+        자유 형식
+      </h2>
       <div
         className='prose-sm prose'
         style={{ color: colors.secondary }}
@@ -50,18 +141,11 @@ const ReviewSection = ({
             ) || '',
         }}
       />
-    ) : (
-      <p
-        className='text-lg whitespace-pre-wrap'
-        style={{ color: colors.secondary }}>
-        {content}
-      </p>
-    )}
-  </div>
+    </div>
+  ),
 );
 
 export const ReviewContent = ({
-  reviewFields,
   reviewData,
   colors,
   mode,
@@ -99,24 +183,40 @@ export const ReviewContent = ({
       </button>
     </div>
 
-    {reviewFields.map(
-      ({ key, title }) =>
-        reviewData[key] && (
-          <ReviewSection
-            key={key}
-            id={`section-${key}`}
-            title={title}
-            content={
-              key === 'freeform'
-                ? reviewData.freeform || ''
-                : Array.isArray(reviewData[key])
-                ? reviewData[key].join(', ')
-                : reviewData[key]!
-            }
-            colors={colors}
-            isFreeform={key === 'freeform'}
-          />
-        ),
+    {/* 개별 필드 컴포넌트들로 분리 */}
+    {reviewData.quote && (
+      <QuoteSection
+        content={reviewData.quote}
+        colors={colors}
+      />
+    )}
+
+    {reviewData.emotion && (
+      <EmotionSection
+        content={reviewData.emotion}
+        colors={colors}
+      />
+    )}
+
+    {reviewData.reason && (
+      <ReasonSection
+        content={reviewData.reason}
+        colors={colors}
+      />
+    )}
+
+    {reviewData.discussion && (
+      <DiscussionSection
+        content={reviewData.discussion}
+        colors={colors}
+      />
+    )}
+
+    {reviewData.freeform && (
+      <FreeformSection
+        content={reviewData.freeform}
+        colors={colors}
+      />
     )}
 
     {mode === 'view' && isMyReview && (
