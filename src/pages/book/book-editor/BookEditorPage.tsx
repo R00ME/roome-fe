@@ -120,6 +120,7 @@ const BookEditorPage = ({
         bookTitle={bookTitle}
         author={author}
         genreNames={genreNames}
+        publishedDate={publishedDate}
         imageUrl={imageUrl}
         theme={reviewFields.theme}
       />

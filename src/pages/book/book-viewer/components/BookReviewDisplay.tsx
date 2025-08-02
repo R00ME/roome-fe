@@ -1,10 +1,21 @@
-import { bookAPI } from '@apis/book';
+// react
 import { useState, useEffect, useMemo } from 'react';
-import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
 import { useNavigate, useParams } from 'react-router-dom';
+
+// constants
+import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
+
+// api
+import { bookAPI } from '@apis/book';
+
+// store
 import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
+
+// types
 import { BookReviewData } from '@/types/book';
+
+// components
 import { BookHeader } from './BookHeader';
 import { BookInfo } from './BookInfo';
 import { ReviewContent } from './ReviewContent';
