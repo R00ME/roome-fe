@@ -77,6 +77,10 @@ const BookReviewDisplay = ({
     ? extractHeadings(displayData.freeform)
     : [];
 
+  // 디버깅용: 테마와 클래스명 확인
+  console.log('Current theme:', displayData.theme);
+  console.log('Theme class:', `scrollbar-${displayData.theme?.toLowerCase()}`);
+
   const handleEdit = () => {
     if (!isMyReview) {
       showToast('아직 작성된 서평이 없네요... ʕ ´•̥ ᴥ•̥`ʔ', 'error');
@@ -114,7 +118,13 @@ const BookReviewDisplay = ({
   return (
     <div
       className='overflow-y-auto overflow-x-hidden relative h-full scrollbar'
-      style={{ scrollBehavior: 'smooth' }}>
+      style={
+        {
+          scrollBehavior: 'smooth',
+          '--scrollbar-thumb-color': `${colors.primary}33`,
+          '--scrollbar-track-color': `${colors.background}`,
+        } as React.CSSProperties
+      }>
       <BookHeader
         title={displayData.title}
         headings={headings}
