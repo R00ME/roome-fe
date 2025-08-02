@@ -143,6 +143,7 @@ const BookReviewDisplay = ({
           onEdit={handleEdit}
           onDelete={() => setIsDeleteModalOpen(true)}
           isMyReview={isMyReview}
+          nickname={user.nickname}
         />
       </article>
 

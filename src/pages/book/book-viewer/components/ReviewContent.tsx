@@ -11,6 +11,7 @@ interface ReviewContentProps {
   onEdit: () => void;
   onDelete: () => void;
   isMyReview?: boolean;
+  nickname: string;
 }
 
 // 개별 필드 컴포넌트들
@@ -118,9 +119,11 @@ const FreeformSection = memo(
   ({
     content,
     colors,
+    nickname,
   }: {
     content: string;
     colors: (typeof BOOK_THEME)[BookThemeType];
+    nickname: string;
   }) => (
     <div
       id='section-freeform'
@@ -128,7 +131,7 @@ const FreeformSection = memo(
       <h2
         className='mb-2 text-2xl font-semibold'
         style={{ color: colors.primary }}>
-        자유 형식
+        {nickname}님의 서평
       </h2>
       <div
         className='prose-sm prose'
@@ -152,6 +155,7 @@ export const ReviewContent = ({
   onEdit,
   onDelete,
   isMyReview = true,
+  nickname,
 }: ReviewContentProps) => (
   <>
     <div className='items-end py-8 mb-12 item-between'>
@@ -216,6 +220,7 @@ export const ReviewContent = ({
       <FreeformSection
         content={reviewData.freeform}
         colors={colors}
+        nickname={nickname}
       />
     )}
 
