@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { BookReviewData } from '@/types/book';
 
 interface UseBookReviewAutoSaveProps {
@@ -16,14 +16,22 @@ export const useBookReviewAutoSave = ({
   reviewData,
   autoSaveInterval = 5000,
 }: UseBookReviewAutoSaveProps) => {
+  // 최신 reviewData를 참조하기 위한 ref
+  const reviewDataRef = useRef(reviewData);
+  
+  // reviewData가 변경될 때마다 ref 업데이트
+  useEffect(() => {
+    reviewDataRef.current = reviewData;
+  }, [reviewData]);
+
   // 자동 저장 함수
   const autoSave = useCallback(() => {
     if (!bookId) return;
     sessionStorage.setItem(
       `draft-review-${bookId}`,
-      JSON.stringify(reviewData),
+      JSON.stringify(reviewDataRef.current),
     );
-  }, [bookId, reviewData]);
+  }, [bookId]);
 
   // 수동 임시저장
   const handleTempSave = useCallback(() => {

@@ -67,7 +67,13 @@ const BookEditorPage = ({
   const {
     reviewFields,
     isSubmitting,
-    handleFieldChange,
+    handleTitleChange,
+    handleThemeChange,
+    handleQuoteChange,
+    handleEmotionChange,
+    handleReasonChange,
+    handleDiscussionChange,
+    handleFreeformChange,
     handleSave,
     isValidReview,
   } = useBookReview({
@@ -125,20 +131,20 @@ const BookEditorPage = ({
           <ReviewTitleInput
             value={reviewFields.title}
             theme={reviewFields.theme}
-            onChange={(value) => handleFieldChange('title')(value)}
+            onChange={handleTitleChange}
           />
 
           {/* 테마 선택 영역 */}
           <ThemeSelector
             selectedTheme={reviewFields.theme}
-            onThemeChange={(theme) => handleFieldChange('theme')(theme)}
+            onThemeChange={handleThemeChange}
           />
 
           <div className='space-y-6'>
             <ReviewTextField
               title='인상 깊은 구절'
               value={reviewFields.quote}
-              onChange={handleFieldChange('quote')}
+              onChange={handleQuoteChange}
               placeholder='인상 깊은 구절을 남겨주세요.'
               theme={reviewFields.theme}
             />
@@ -146,7 +152,7 @@ const BookEditorPage = ({
             <ReviewTextField
               title='그 때 나의 감정'
               value={reviewFields.emotion}
-              onChange={handleFieldChange('emotion')}
+              onChange={handleEmotionChange}
               placeholder='그 때 나의 감정을 입력해주세요.'
               theme={reviewFields.theme}
             />
@@ -154,7 +160,7 @@ const BookEditorPage = ({
             <ReviewTextField
               title='책을 선택하게 된 계기'
               value={reviewFields.reason}
-              onChange={handleFieldChange('reason')}
+              onChange={handleReasonChange}
               placeholder='책을 선택하게 된 계기를 입력해주세요.'
               theme={reviewFields.theme}
             />
@@ -162,14 +168,14 @@ const BookEditorPage = ({
             <ReviewTextField
               title='다른 사람과 나누고 싶은 대화 주제'
               value={reviewFields.discussion}
-              onChange={handleFieldChange('discussion')}
+              onChange={handleDiscussionChange}
               placeholder='다른 사람과 나누고 싶은 대화 주제를 입력해주세요.'
               theme={reviewFields.theme}
             />
 
             <FreeformEditor
               value={reviewFields.freeform}
-              onChange={handleFieldChange('freeform')}
+              onChange={handleFreeformChange}
               theme={reviewFields.theme}
             />
 
