@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import ReviewTextField from './components/ReviewTextField';
 import FreeformEditor from './components/FreeformEditor';
@@ -79,11 +79,25 @@ const BookEditorPage = ({
   }, [startTracking]);
 
   // 수동 임시저장 핸들러
-  const handleTempSaveClick = () => {
+  const handleTempSaveClick = useCallback(() => {
     if (handleTempSave()) {
       showToast('임시저장 완료!', 'success');
     }
-  };
+  }, [handleTempSave, showToast]);
+
+  // 저장 핸들러
+  const handleSaveClick = useCallback(() => {
+    if (!isValidReview()) {
+      showToast('제목이나 내용을 깜빡한 것 같아요! ʕ ´•̥̥̥ ᴥ•̥̥̥`ʔ', 'error');
+      return;
+    }
+    if (!isSubmitting) {
+      handleSave();
+    }
+  }, [isValidReview, showToast, isSubmitting, handleSave]);
+
+  // 유효성 검사 결과 메모이제이션
+  const isValidReviewResult = useMemo(() => isValidReview(), [isValidReview]);
 
   return (
     <section className='flex overflow-x-hidden w-full h-screen max-[1024px]:flex-col'>
@@ -153,21 +167,10 @@ const BookEditorPage = ({
 
             <ReviewActionButtons
               isSubmitting={isSubmitting}
-              isValidReview={isValidReview()}
+              isValidReview={isValidReviewResult}
               theme={reviewFields.theme}
               onTempSave={handleTempSaveClick}
-              onSave={() => {
-                if (!isValidReview()) {
-                  showToast(
-                    '제목이나 내용을 깜빡한 것 같아요! ʕ ´•̥̥̥ ᴥ•̥̥̥`ʔ',
-                    'error',
-                  );
-                  return;
-                }
-                if (!isSubmitting) {
-                  handleSave();
-                }
-              }}
+              onSave={handleSaveClick}
             />
           </div>
         </div>

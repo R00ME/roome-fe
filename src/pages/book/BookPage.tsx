@@ -74,7 +74,7 @@ const BookPage = () => {
             if (!userId && !isEditMode) {
               showToast(
                 '아직 서평이 없어요! 첫 서평을 작성해주세요 ( 灬´ ˘ `灬 )',
-                'info',
+                'success',
               );
               navigate(`/book/${bookId}?mode=edit`, { replace: true });
               return;

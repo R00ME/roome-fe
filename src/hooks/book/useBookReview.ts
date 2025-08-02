@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { bookAPI } from '@/apis/book';
 import { BookReviewData } from '@/types/book';
@@ -62,10 +62,16 @@ export const useBookReview = ({
   // 필드 변경 핸들러
   const handleFieldChange = useCallback(
     (field: keyof BookReviewData) => (value: string | BookReviewData) => {
-      setReviewFields((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
+      setReviewFields((prev) => {
+        // 값이 실제로 변경된 경우에만 업데이트
+        if (prev[field] === value) {
+          return prev;
+        }
+        return {
+          ...prev,
+          [field]: value,
+        };
+      });
     },
     [],
   );
@@ -95,12 +101,8 @@ export const useBookReview = ({
       }
     } catch (error) {
       console.error('서평 조회 중 오류 발생:', error);
-      showToast(
-        '아직 서평이 없어요! 첫 서평을 작성해주세요 ( 灬´ ˘ `灬 )',
-        'success',
-      );
     }
-  }, [bookId, bookInfo, showToast]);
+  }, [bookId, bookInfo]);
 
   // 서평 저장
   const handleSave = useCallback(async () => {
@@ -152,11 +154,17 @@ export const useBookReview = ({
     }
   }, [isEditMode, fetchReview]);
 
+  // 유효성 검사 함수 메모이제이션
+  const isValidReviewResult = useMemo(
+    () => isValidReview(reviewFields),
+    [reviewFields],
+  );
+
   return {
     reviewFields,
     isSubmitting,
     handleFieldChange,
     handleSave,
-    isValidReview: () => isValidReview(reviewFields),
+    isValidReview: () => isValidReviewResult,
   };
 };
