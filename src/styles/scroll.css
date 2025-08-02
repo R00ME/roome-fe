@@ -8,14 +8,17 @@
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #4e7acf4d;
+  background: var(--scrollbar-thumb-color, #4e7acf4d);
   border-radius: 6px; /* 스크롤바 둥근 테두리 */
   width: 13px;
   height: 25px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  background: transparent; /*스크롤바 뒷 배경 색상*/
+  background: var(
+    --scrollbar-track-color,
+    transparent
+  ); /*스크롤바 뒷 배경 색상*/
   width: 13px;
   height: 25px;
 }
@@ -57,4 +60,44 @@
 .scrollbar-white::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.5);
   border-radius: 6px; /* 스크롤바 둥근 테두리 */
+}
+
+/* 테마별 스크롤바 스타일 */
+.scrollbar-blue::-webkit-scrollbar-thumb {
+  background: #162c63 !important;
+  border-radius: 6px;
+  width: 13px;
+  height: 25px;
+}
+
+.scrollbar-blue::-webkit-scrollbar-track {
+  background: #162c6333 !important;
+  width: 13px;
+  height: 25px;
+}
+
+.scrollbar-pink::-webkit-scrollbar-thumb {
+  background: #521630 !important;
+  border-radius: 6px;
+  width: 13px;
+  height: 25px;
+}
+
+.scrollbar-pink::-webkit-scrollbar-track {
+  background: #52163033 !important;
+  width: 13px;
+  height: 25px;
+}
+
+.scrollbar-green::-webkit-scrollbar-thumb {
+  background: #1b4d3e !important;
+  border-radius: 6px;
+  width: 13px;
+  height: 25px;
+}
+
+.scrollbar-green::-webkit-scrollbar-track {
+  background: #1b4d3e33 !important;
+  width: 13px;
+  height: 25px;
 }

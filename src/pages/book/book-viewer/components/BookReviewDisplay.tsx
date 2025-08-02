@@ -1,10 +1,21 @@
-import { bookAPI } from '@apis/book';
+// react
 import { useState, useEffect } from 'react';
-import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
 import { useNavigate, useParams } from 'react-router-dom';
+
+// constants
+import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
+
+// api
+import { bookAPI } from '@apis/book';
+
+// store
 import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
+
+// types
 import { BookReviewData } from '@/types/book';
+
+// components
 import { BookHeader } from './BookHeader';
 import { BookInfo } from './BookInfo';
 import { ReviewContent } from './ReviewContent';
@@ -18,21 +29,6 @@ interface BookReviewDisplayProps {
   userId?: string;
   bookId?: string;
 }
-
-interface ReviewField {
-  key: keyof BookReviewData;
-  title: string;
-}
-
-// const review = await bookAPI.getBookDetail('1');
-// const review = await bookAPI.getReview('1');
-
-const REVIEW_FIELDS: ReviewField[] = [
-  { key: 'quote', title: '인상 깊은 구절' },
-  { key: 'emotion', title: '그 때 나의 감정' },
-  { key: 'reason', title: '책을 선택하게 된 계기' },
-  { key: 'discussion', title: '다른 사람과 나누고 싶은 대화 주제' },
-];
 
 const extractHeadings = (content: string) => {
   const parser = new DOMParser();
@@ -81,6 +77,10 @@ const BookReviewDisplay = ({
     ? extractHeadings(displayData.freeform)
     : [];
 
+  // 디버깅용: 테마와 클래스명 확인
+  console.log('Current theme:', displayData.theme);
+  console.log('Theme class:', `scrollbar-${displayData.theme?.toLowerCase()}`);
+
   const handleEdit = () => {
     if (!isMyReview) {
       showToast('아직 작성된 서평이 없네요... ʕ ´•̥ ᴥ•̥`ʔ', 'error');
@@ -118,17 +118,22 @@ const BookReviewDisplay = ({
   return (
     <div
       className='overflow-y-auto overflow-x-hidden relative h-full scrollbar'
-      style={{ scrollBehavior: 'smooth' }}>
+      style={
+        {
+          scrollBehavior: 'smooth',
+          '--scrollbar-thumb-color': `${colors.primary}33`,
+          '--scrollbar-track-color': `${colors.background}`,
+        } as React.CSSProperties
+      }>
       <BookHeader
         title={displayData.title}
-        reviewFields={REVIEW_FIELDS}
         headings={headings}
         colors={colors}
         reviewData={displayData}
       />
 
       <article
-        className='absolute flex flex-col w-full gap-4 rounded-tl-[80px] top-[70%] min-h-[30%] px-24 py-16 overflow-x-hidden'
+        className='absolute flex flex-col w-full gap-4 rounded-tl-[80px] top-[70%] min-h-[30%] px-24 py-16 overflow-x-hidden max-[1200px]:px-16 max-[1200px]:py-12'
         style={{
           backgroundColor: `${colors.surface}`,
           scrollBehavior: 'smooth',
@@ -142,13 +147,13 @@ const BookReviewDisplay = ({
         />
 
         <ReviewContent
-          reviewFields={REVIEW_FIELDS}
           reviewData={displayData}
           colors={colors}
           mode={mode}
           onEdit={handleEdit}
           onDelete={() => setIsDeleteModalOpen(true)}
           isMyReview={isMyReview}
+          nickname={user.nickname}
         />
       </article>
 

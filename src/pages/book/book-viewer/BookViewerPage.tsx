@@ -15,16 +15,16 @@ const BookViewerPage = ({ reviewData, bookId }: BookViewerPageProps) => {
   if (!reviewData) return <NotFoundPage />;
 
   return (
-    <section className='flex w-full h-screen overflow-auto'>
+    <section className='flex w-full h-screen overflow-auto max-[1024px]:flex-col'>
       <Link
         to='/'
-        className='fixed top-12 left-21 z-50'>
+        className='fixed top-12 left-21 z-50 max-[1024px]:hidden'>
         <img
           src={logo}
           alt='logo'
         />
       </Link>
-      <figure className='w-1/2 h-full p-4'>
+      <figure className='w-1/2 h-full p-4 max-[1024px]:hidden'>
         <ul className='w-full h-full rounded-2xl overflow-hidden relative'>
           <BookCoverList className='h-[30%]' />
           <BookCoverList className='h-[40%]'>
@@ -42,7 +42,7 @@ const BookViewerPage = ({ reviewData, bookId }: BookViewerPageProps) => {
           <BookCoverList className='h-[30%]' />
         </ul>
       </figure>
-      <article className='w-1/2 h-full scroll-smooth'>
+      <article className='w-1/2 h-full scroll-smooth max-[1024px]:w-full'>
         <BookReviewDisplay
           mode='view'
           previewData={reviewData}
