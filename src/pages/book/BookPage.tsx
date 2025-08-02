@@ -1,7 +1,7 @@
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import BookReviewEditor from '../book-editor/BookEditorPage';
-import BookReviewViewer from '../book-viewer/BookViewerPage';
+import BookReviewEditor from './book-editor/BookEditorPage';
+import BookReviewViewer from './book-viewer/BookViewerPage';
 import { bookAPI } from '@/apis/book';
 import { useToastStore } from '@/store/useToastStore';
 import { BookReviewData } from '@/types/book';

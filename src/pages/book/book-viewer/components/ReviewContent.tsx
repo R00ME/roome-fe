@@ -22,11 +22,13 @@ const ReviewSection = ({
   title,
   content,
   colors,
+  isFreeform = false,
 }: {
   id: string;
   title: string;
   content: string;
   colors: (typeof BOOK_THEME)[BookThemeType];
+  isFreeform?: boolean;
 }) => (
   <div
     id={id}
@@ -36,11 +38,25 @@ const ReviewSection = ({
       style={{ color: colors.primary }}>
       {title}
     </h2>
-    <p
-      className='text-lg whitespace-pre-wrap'
-      style={{ color: colors.secondary }}>
-      {content}
-    </p>
+    {isFreeform ? (
+      <div
+        className='prose-sm prose'
+        style={{ color: colors.secondary }}
+        dangerouslySetInnerHTML={{
+          __html:
+            content?.replace(
+              /<(h[2-5])>/g,
+              (_, tag) => `<${tag} id="heading-$1">`,
+            ) || '',
+        }}
+      />
+    ) : (
+      <p
+        className='text-lg whitespace-pre-wrap'
+        style={{ color: colors.secondary }}>
+        {content}
+      </p>
+    )}
   </div>
 );
 
@@ -91,27 +107,16 @@ export const ReviewContent = ({
             id={`section-${key}`}
             title={title}
             content={
-              Array.isArray(reviewData[key])
+              key === 'freeform'
+                ? reviewData.freeform || ''
+                : Array.isArray(reviewData[key])
                 ? reviewData[key].join(', ')
                 : reviewData[key]!
             }
             colors={colors}
+            isFreeform={key === 'freeform'}
           />
         ),
-    )}
-
-    {reviewData.freeform && (
-      <div
-        className='mt-8 prose-sm prose'
-        style={{ color: colors.secondary }}
-        dangerouslySetInnerHTML={{
-          __html:
-            reviewData.freeform?.replace(
-              /<(h[2-5])>/g,
-              (_, tag) => `<${tag} id="heading-$1">`,
-            ) || '',
-        }}
-      />
     )}
 
     {mode === 'view' && isMyReview && (

@@ -1,5 +1,5 @@
 import { bookAPI } from '@apis/book';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { BOOK_THEME, BookThemeType } from '@/constants/bookTheme';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToastStore } from '@/store/useToastStore';
@@ -23,16 +23,6 @@ interface ReviewField {
   key: keyof BookReviewData;
   title: string;
 }
-
-// const review = await bookAPI.getBookDetail('1');
-// const review = await bookAPI.getReview('1');
-
-const REVIEW_FIELDS: ReviewField[] = [
-  { key: 'quote', title: '인상 깊은 구절' },
-  { key: 'emotion', title: '그 때 나의 감정' },
-  { key: 'reason', title: '책을 선택하게 된 계기' },
-  { key: 'discussion', title: '다른 사람과 나누고 싶은 대화 주제' },
-];
 
 const extractHeadings = (content: string) => {
   const parser = new DOMParser();
@@ -70,6 +60,18 @@ const BookReviewDisplay = ({
       // API 호출 로직 추가하기
     }
   }, [mode, userId, bookId]);
+
+  // reviewFields를 useMemo로 최적화
+  const reviewFields: ReviewField[] = useMemo(
+    () => [
+      { key: 'quote', title: '인상 깊은 구절' },
+      { key: 'emotion', title: '그 때 나의 감정' },
+      { key: 'reason', title: '책을 선택하게 된 계기' },
+      { key: 'discussion', title: '다른 사람과 나누고 싶은 대화 주제' },
+      { key: 'freeform', title: `${user.nickname}님의 서평` },
+    ],
+    [user.nickname],
+  );
 
   // 실제 표시할 데이터 (preview 모드면 previewData 사용)
   const displayData = previewData; // mode와 상관없이 previewData 사용
@@ -121,14 +123,14 @@ const BookReviewDisplay = ({
       style={{ scrollBehavior: 'smooth' }}>
       <BookHeader
         title={displayData.title}
-        reviewFields={REVIEW_FIELDS}
+        reviewFields={reviewFields}
         headings={headings}
         colors={colors}
         reviewData={displayData}
       />
 
       <article
-        className='absolute flex flex-col w-full gap-4 rounded-tl-[80px] top-[70%] min-h-[30%] px-24 py-16 overflow-x-hidden'
+        className='absolute flex flex-col w-full gap-4 rounded-tl-[80px] top-[70%] min-h-[30%] px-24 py-16 overflow-x-hidden max-[1200px]:px-16 max-[1200px]:py-12'
         style={{
           backgroundColor: `${colors.surface}`,
           scrollBehavior: 'smooth',
@@ -142,7 +144,7 @@ const BookReviewDisplay = ({
         />
 
         <ReviewContent
-          reviewFields={REVIEW_FIELDS}
+          reviewFields={reviewFields}
           reviewData={displayData}
           colors={colors}
           mode={mode}

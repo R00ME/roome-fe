@@ -22,7 +22,7 @@ export const BookInfo = ({
         style={{ color: `${colors.primary}` }}>
         {publishedDate?.split('-')[0]}
       </span>
-      <div className='flex items-end w-full gap-4'>
+      <div className='flex items-end w-full gap-4 max-[1200px]:flex-col max-[1200px]:items-start'>
         <h2
           className='text-4xl font-bold'
           style={{ color: colors.primary }}>

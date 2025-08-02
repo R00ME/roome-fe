@@ -21,7 +21,7 @@ export const BookHeader = ({
   colors,
   reviewData,
 }: BookHeaderProps) => (
-  <div className='py-12 flex justify-between items-start px-14 w-full'>
+  <div className='py-12 flex justify-between items-start px-14 w-full max-[1200px]:flex-col'>
     <h1
       className={`mb-8 font-semibold transition-all duration-300 ${
         title?.length > 10 ? 'text-4xl' : 'text-6xl'
@@ -29,7 +29,7 @@ export const BookHeader = ({
       style={{ color: colors.primary }}>
       {title}
     </h1>
-    <ul className='flex flex-col items-end justify-start gap-2 shrink-0'>
+    <ul className='flex flex-col items-end justify-start gap-2 shrink-0 max-[1200px]:items-start'>
       <li
         className='text-lg font-semibold'
         style={{ color: colors.primary }}>

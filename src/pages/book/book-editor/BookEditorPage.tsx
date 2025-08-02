@@ -4,7 +4,7 @@ import ReviewTextField from './components/ReviewTextField';
 import FreeformEditor from './components/FreeformEditor';
 import ReviewTitleInput from './components/ReviewTitleInput';
 import ReviewActionButtons from './components/ReviewActionButtons';
-import BookReviewDisplay from '@pages/book-viewer/components/BookReviewDisplay';
+import BookReviewDisplay from '@pages/book/book-viewer/components/BookReviewDisplay';
 import ResponsiveBookInfo from './components/ResponsiveBookInfo';
 
 import ThemeSelector from './components/ThemeSelector';
