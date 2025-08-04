@@ -25,12 +25,11 @@ const Header = () => {
   const housemateButtonRef = useRef<HTMLButtonElement>(null);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const showToast = useToastStore((state) => state.showToast);
-  const accessToken = useAuthStore(state => state.accessToken)
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
     // 1. 이벤트 리스너 설정
     const eventListeners = new Map([
-      ['mousedown', handleClickOutside],
       ['newNotification', handleNewNotification],
       ['websocketConnected', () => setIsConnecting(false)],
       ['websocketDisconnected', () => setIsConnecting(true)],
@@ -91,16 +90,6 @@ const Header = () => {
       webSocketService.disconnect();
     };
   }, []); // 컴포넌트 마운트 시 한 번만 실행
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      isMenuOpen &&
-      buttonRef.current &&
-      !buttonRef.current.contains(event.target as Node)
-    ) {
-      setIsMenuOpen(false);
-    }
-  };
 
   const handleNewNotification = () => {
     setHasUnreadNotifications(true);
@@ -242,7 +231,11 @@ const Header = () => {
                 className='w-8 h-8'
               />
             </button>
-            <HiddenMenu isOpen={isMenuOpen} />
+            <HiddenMenu
+              isOpen={isMenuOpen}
+              onClose={() => setIsMenuOpen(false)}
+              buttonRef={buttonRef}
+            />
           </div>
         </nav>
       </header>
