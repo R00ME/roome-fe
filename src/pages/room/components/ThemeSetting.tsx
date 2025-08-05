@@ -5,6 +5,7 @@ import ConfirmModal from '../../../components/ConfirmModal';
 import { useClickOutside } from '../../../hooks/useClickOutside';
 import { useToastStore } from '../../../store/useToastStore';
 import { useUserStore } from '../../../store/useUserStore';
+import { useBackofficeFeatureTracking } from '../../../hooks/useBackofficeBatchTracking';
 import ThemeSettingCard from './ThemeSettingCard';
 
 export default function ThemeSetting({
@@ -22,13 +23,30 @@ export default function ThemeSetting({
     'BASIC' | 'FOREST' | 'MARINE' | null
   >(null);
 
+  const { startTracking, endTracking } = useBackofficeFeatureTracking(
+    'theme_setting',
+    user?.userId?.toString(),
+    1000,
+  );
+
   useClickOutside({
     modalRef,
     buttonRef,
     isOpen: true,
-    onClose,
+    onClose: () => {
+      endTracking();
+      onClose();
+    },
     excludeSelectors: ['.bottom-menu', '.modal-shadow'],
   });
+
+  useEffect(() => {
+    startTracking();
+
+    return () => {
+      endTracking();
+    };
+  }, [startTracking, endTracking]);
 
   useEffect(() => {
     const fetchUnlockedThemes = async () => {
@@ -56,6 +74,7 @@ export default function ThemeSetting({
       setUnlockedThemes(updatedThemes);
 
       await roomAPI.updateRoomTheme(user.roomId, user.userId, pendingTheme);
+      endTracking();
       onThemeSelect(pendingTheme);
       showToast(
         `${themeData[pendingTheme].title} 테마가 적용되었어요!`,
@@ -101,11 +120,14 @@ export default function ThemeSetting({
               theme={theme as 'BASIC' | 'FOREST' | 'MARINE'}
               isSelected={selectedTheme === theme}
               isLocked={isLocked}
-              onClick={() =>
-                isLocked
-                  ? handleLockedClick(theme as 'BASIC' | 'FOREST' | 'MARINE')
-                  : onThemeSelect(theme as 'BASIC' | 'FOREST' | 'MARINE')
-              }
+              onClick={() => {
+                if (isLocked) {
+                  handleLockedClick(theme as 'BASIC' | 'FOREST' | 'MARINE');
+                } else {
+                  endTracking();
+                  onThemeSelect(theme as 'BASIC' | 'FOREST' | 'MARINE');
+                }
+              }}
             />
           );
         })}
