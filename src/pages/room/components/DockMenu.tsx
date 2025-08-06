@@ -6,7 +6,11 @@ import preferenceIcon from '@assets/room/preferenceIcon.svg';
 import themeNoselectIcon from '@assets/room/theme-noselect-Icon.svg';
 import themeIcon from '@assets/room/themeIcon.svg';
 
-export default function DockMenu({ activeSettings, onSettingsChange, resetState }: DockMenuProps) {
+export default function DockMenu({
+  activeSettings,
+  onSettingsChange,
+  resetState,
+}: DockMenuProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hasSelectedSetting, setHasSelectedSetting] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -40,7 +44,7 @@ export default function DockMenu({ activeSettings, onSettingsChange, resetState 
   }, [activeSettings]);
 
   const getCurrentIcon = () => {
-    if (!hasSelectedSetting ) return dockMenuIcon;
+    if (!hasSelectedSetting) return dockMenuIcon;
     if (isOpen) return dockMenuNoselectIcon;
     if (activeSettings === 'preference' && !isOpen) return preferenceIcon;
     if (activeSettings === 'theme' && !isOpen) return themeIcon;
@@ -86,7 +90,7 @@ export default function DockMenu({ activeSettings, onSettingsChange, resetState 
   return (
     <div
       ref={menuRef}
-      className={`bottom-menu bottom-20 right-21 drop-shadow-logo relative ${
+      className={`bottom-menu bottom-20 right-21 max-sm:bottom-16 max-sm:right-16 drop-shadow-logo relative ${
         isOpen ? 'h-[202px]' : 'h-16'
       }`}>
       <div className='relative flex flex-col-reverse items-center w-full h-full gap-5'>

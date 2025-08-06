@@ -3,17 +3,31 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logoutAPI } from '@apis/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUserStore } from '../../../store/useUserStore';
+import { useClickOutside } from '../../../hooks/useClickOutside';
+
 interface HiddenMenuProps {
   isOpen: boolean;
+  onClose: () => void;
+  buttonRef: React.RefObject<HTMLButtonElement>;
 }
-const HiddenMenu = ({ isOpen }: HiddenMenuProps) => {
+
+const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { user } = useUserStore();
+
+  useClickOutside({
+    modalRef: menuRef,
+    buttonRef,
+    isOpen,
+    onClose,
+  });
+
   const handleLogout = async () => {
     await logoutAPI();
     navigate('/login');
   };
+
   return (
     <AnimatePresence>
       {isOpen && (
