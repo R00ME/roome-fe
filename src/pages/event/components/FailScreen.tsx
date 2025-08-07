@@ -2,7 +2,7 @@ import gameOver from '@assets/event/game-over.svg';
 
 export default function FailScreen() {
   return (
-    <div className='absolute top-54 left-42 flex flex-col items-center gap-4.5 max-sm:top-[22vw] max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 max-sm:gap-[1.5vw]'>
+    <div className='absolute top-54 left-42 flex flex-col items-center gap-4.5 sm:top-[42%] sm:left-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2 max-sm:top-[22vw] max-sm:left-1/2 max-sm:transform max-sm:-translate-x-1/2 max-sm:gap-[1.5vw]'>
       <div className='flex flex-col items-center'>
         <img
           src={gameOver}
