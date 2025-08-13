@@ -1,6 +1,7 @@
 import axiosInstance from './axiosInstance';
 import { webSocketService } from '@/apis/websocket';
 import { Cookies } from 'react-cookie';
+import { SaveExtraInfoPayload } from '../types/login';
 
 const cookies = new Cookies();
 
@@ -138,3 +139,13 @@ export const profileAPI = {
     return data;
   },
 };
+
+export const saveExtraInfoAPI = async (userId: number, data: SaveExtraInfoPayload) => {
+  try{
+    const res = await axiosInstance.patch(`${API_URL}/users/${userId}/profile`,data)
+    return res.data;
+  } catch (error){
+    console.error("🚨 추가 정보 저장 실패:", error);
+    throw error;
+  }
+}
