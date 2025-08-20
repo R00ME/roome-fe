@@ -17,13 +17,18 @@ import RoomPage from '../pages/room/RoomPage';
 // import PaymentFailPage from '@pages/payment/PaymentFailPage';
 // import RefundPage from '@pages/payment/RefundPage';
 import OnboardingPage from '@pages/onboarding/OnboardingPage';
-import ProtectedRoute from '../components/ProtectedRoute';
-import OAuthCallback from '../pages/login/components/OAuthCallback';
-import ExtraInfo from '../pages/login/ExtraInfo';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import OAuthCallback from '@pages/login/components/OAuthCallback';
+import ExtraInfo from '@pages/login/ExtraInfo';
+import TempPage from '@pages/temp/TempPage';
 
 const Router = () => {
   return (
     <Routes>
+      <Route
+        path='/temp'
+        element={<TempPage />}
+      />
       <Route
         path='/login/callback'
         element={<OAuthCallback />}

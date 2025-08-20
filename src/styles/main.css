@@ -92,18 +92,41 @@
 
 /* 방명록 */
 .guest-book {
-  width: calc(100vw * 0.3966);
-  height: calc(100vw * 0.3611);
-  max-width: 800px;
-  max-height: 700px;
-  min-width: 600px;
-  min-height: 550px;
   background-color: #fcf7fd;
   display: flex;
   border-radius: 60px;
   border: 2px solid #2656cd;
   position: relative;
   z-index: 10;
+}
+
+@media (max-width: 640px) {
+  .guest-book {
+    width: 95vw;
+    height: 95vw;
+    max-width: none;
+    max-height: none;
+  }
+}
+
+.guest-book-background {
+  max-width: 800px;
+  max-height: 700px;
+  bottom: -30px !important;
+  left: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .guest-book-background {
+    width: 95vw;
+    height: 95vw;
+    max-width: none;
+    max-height: none;
+    min-width: 0;
+    min-height: 0;
+    bottom: -30px !important;
+    border-radius: 80px !important;
+  }
 }
 
 .inputBase {
