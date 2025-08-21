@@ -63,8 +63,8 @@ export const trackFeatureUsage = (
 ) => {
   trackEvent('feature_usage', {
     feature_name: featureName,
-    user_id: userId,
+    custom_user_id: userId,
     duration_ms: durationMs,
-    session_id: Date.now().toString(),
+    tracking_session_id: Date.now().toString(),
   });
 };
