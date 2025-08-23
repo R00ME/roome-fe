@@ -76,23 +76,66 @@
   }
 
   .spring-left-first {
-    @apply absolute -top-[30px] z-20 left-[calc(50%-200px-48px)] @2xl:left-[calc(50%-270px-32px)];
+    @apply absolute z-20 left-[calc(50%-200px-48px)] @2xl:left-[calc(50%-270px-32px)];
+    top: -30px;
   }
 
   .spring-left-second {
-    @apply absolute -top-[30px] z-20 left-[calc(50%-200px-2px)] @2xl:left-[calc(50%-270px+12px)];
+    @apply absolute z-20 left-[calc(50%-200px-2px)] @2xl:left-[calc(50%-270px+12px)];
+    top: -30px;
   }
 
   .spring-right-first {
-    @apply absolute -top-[30px] z-20 right-[calc(50%-200px-48px)] @2xl:right-[calc(50%-270px-32px)];
+    @apply absolute z-20 right-[calc(50%-200px-48px)] @2xl:right-[calc(50%-270px-32px)];
+    top: -30px;
   }
 
   .spring-right-second {
-    @apply absolute -top-[30px] z-20 right-[calc(50%-200px-2px)] @2xl:right-[calc(50%-270px+12px)];
+    @apply absolute z-20 right-[calc(50%-200px-2px)] @2xl:right-[calc(50%-270px+12px)];
+    top: -30px;
+  }
+
+  /* 640px 이하에서만 적용 */
+  @media (max-width: 640px) {
+    .spring-left-first {
+      left: 35px !important;
+      top: -28px !important;
+    }
+
+    .spring-left-second {
+      left: 70px !important;
+      top: -28px !important;
+    }
+
+    .spring-right-first {
+      right: 35px !important;
+      top: -28px !important;
+    }
+
+    .spring-right-second {
+      right: 70px !important;
+      top: -28px !important;
+    }
   }
 
   .spring-element {
-    @apply w-7 h-16 bg-[#73A1F7] rounded-full border-2 border-[#2656CD] 2xl:h-20 2xl:w-8;
+    @apply bg-[#73A1F7] rounded-full border-2 border-[#2656CD];
+    width: 28px;
+    height: 64px;
+  }
+
+  @media (min-width: 640px) {
+    .spring-element {
+      width: 28px;
+      height: 64px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .spring-element {
+      width: 32px;
+      height: 80px;
+    }
   }
 
   .book-shadow {
