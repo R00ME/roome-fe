@@ -3,7 +3,7 @@ import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import Strike from '@tiptap/extension-strike';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { BookThemeType, BOOK_THEME } from '@/constants/bookTheme';
 
 interface FreeformEditorProps {
@@ -12,7 +12,7 @@ interface FreeformEditorProps {
   theme?: BookThemeType;
 }
 
-const FreeformEditor = ({
+const FreeformEditor = memo(({
   value,
   onChange,
   theme = 'BLUE',
@@ -112,6 +112,6 @@ const FreeformEditor = ({
       </div>
     </div>
   );
-};
+});
 
 export default FreeformEditor;

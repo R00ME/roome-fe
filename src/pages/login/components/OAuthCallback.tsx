@@ -12,6 +12,7 @@ export default function OAuthCallback() {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const tempCode = queryParams.get('temp_code');
+    const isNewUser = queryParams.get('is_new_user') === "true" ? true : false;
 
     if(!tempCode){
       console.error('tempCode가 없습니다.');
@@ -24,7 +25,11 @@ export default function OAuthCallback() {
         const accessToken = await getToken(tempCode);
         setAccessToken(accessToken);
         await fetchUserInfo(accessToken);
-        navigate('/');
+        if(isNewUser) {
+          navigate('/login/info')
+        } else{
+          navigate('/');
+        } 
       } catch (error){
         console.error('엑세스 토큰 처리 실패:', error);
         navigate('/login');

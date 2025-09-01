@@ -17,49 +17,68 @@ import RoomPage from '../pages/room/RoomPage';
 // import PaymentFailPage from '@pages/payment/PaymentFailPage';
 // import RefundPage from '@pages/payment/RefundPage';
 import OnboardingPage from '@pages/onboarding/OnboardingPage';
-import OAuthCallback from '../pages/login/components/OAuthCallback';
-import ProtectedRoute from '../components/ProtectedRoute';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import OAuthCallback from '@pages/login/components/OAuthCallback';
+import ExtraInfo from '@pages/login/ExtraInfo';
+import TempPage from '@pages/temp/TempPage';
 
 const Router = () => {
   return (
     <Routes>
-      <Route path='/login/callback' element={<OAuthCallback />} />
-      <Route path='/login' element={<LoginPage />} />
-      <Route path='/onboarding' element={<OnboardingPage />} />
+      <Route
+        path='/temp'
+        element={<TempPage />}
+      />
+      <Route
+        path='/login/callback'
+        element={<OAuthCallback />}
+      />
+      <Route
+        path='/login'
+        element={<LoginPage />}
+      />
+      <Route
+        path='/onboarding'
+        element={<OnboardingPage />}
+      />
+      <Route
+        path='/login/info'
+        element={<ExtraInfo />}
+      />
 
       {/* 보호 라우터  */}
       <Route element={<ProtectedRoute />}>
-      {/* 헤더가 필요한 페이지 */}
-      <Route element={<BaseLayout hasHeader={true} />}>
-        <Route
-          path='/'
-          element={<MainPage />}
+        {/* 헤더가 필요한 페이지 */}
+        <Route element={<BaseLayout hasHeader={true} />}>
+          <Route
+            path='/'
+            element={<MainPage />}
           />
-        <Route
-          path='/bookcase/:userId'
-          element={<BookCasePage />}
+          <Route
+            path='/bookcase/:userId'
+            element={<BookCasePage />}
           />
-        <Route
-          path='/cdrack/:userId'
-          element={<CdRackPage />}
+          <Route
+            path='/cdrack/:userId'
+            element={<CdRackPage />}
           />
-        <Route
-          path='/room/:userId'
-          element={<RoomPage />}
+          <Route
+            path='/room/:userId'
+            element={<RoomPage />}
           />
-        <Route
-          path='/profile/:userId'
-          element={<ProfileCardPage />}
+          <Route
+            path='/profile/:userId'
+            element={<ProfileCardPage />}
           />
-        <Route
-          path='/profile/:userId/edit'
-          element={<ProfileCardEditPage />}
+          <Route
+            path='/profile/:userId/edit'
+            element={<ProfileCardEditPage />}
           />
-        <Route
-          path='/point/:userId'
-          element={<PointPage />}
+          <Route
+            path='/point/:userId'
+            element={<PointPage />}
           />
-        {/* <Route
+          {/* <Route
           path='/payment'
           element={<PaymentPage />}
           />
@@ -67,32 +86,32 @@ const Router = () => {
           path='/payment/refund'
           element={<RefundPage />}
           /> */}
-        <Route
-          path='/event'
-          element={<EventPage />}
+          <Route
+            path='/event'
+            element={<EventPage />}
           />
-      </Route>
+        </Route>
 
-      {/* 내 서평 보기/작성/수정 */}
-      <Route
-        path='/book/:bookId'
-        element={<BookPage />}
+        {/* 내 서평 보기/작성/수정 */}
+        <Route
+          path='/book/:bookId'
+          element={<BookPage />}
         />
-      {/* 다른 유저의 서평 보기 */}
-      <Route
-        path='/book/:bookId/user/:userId'
-        element={<BookPage />}
+        {/* 다른 유저의 서평 보기 */}
+        <Route
+          path='/book/:bookId/user/:userId'
+          element={<BookPage />}
         />
-      <Route
-        path='/cd/:cdId/user/:userId'
-        element={<CdPage />}
+        <Route
+          path='/cd/:cdId/user/:userId'
+          element={<CdPage />}
         />
-      <Route
-        path='*'
-        element={<NotFoundPage />}
+        <Route
+          path='*'
+          element={<NotFoundPage />}
         />
 
-      {/* <Route
+        {/* <Route
         path='/payment/success'
         element={<PaymentSuccessPage />}
         />
@@ -100,7 +119,7 @@ const Router = () => {
         path='/payment/fail'
         element={<PaymentFailPage />}
         /> */}
-        </Route>
+      </Route>
     </Routes>
   );
 };

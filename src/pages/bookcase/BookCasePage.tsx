@@ -11,6 +11,10 @@ import Loading from '@components/Loading';
 import AnimationGuide from '@components/AnimationGuide';
 import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
+import {
+  useAutoBackofficeTracking,
+  useBackofficeFeatureTracking,
+} from '@/hooks/useBackofficeBatchTracking';
 
 const BookCasePage = () => {
   const { showToast } = useToastStore();
@@ -22,6 +26,15 @@ const BookCasePage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isGuideOpen, setIsGuideOpen] = useState(true);
+
+  // 페이지 접속 추적 (자동 시작/종료)
+  useAutoBackofficeTracking('book', user?.userId?.toString(), 1000);
+
+  // 도서 추가 추적 - 통일된 'book' featureName 사용
+  const {
+    startTracking: startBookAddTracking,
+    endTracking: endBookAddTracking,
+  } = useBackofficeFeatureTracking('book', user?.userId?.toString(), 1000);
 
   const BOOKS_PER_ROW = 15;
   const [isDragging, setIsDragging] = useState(false);
@@ -44,26 +57,30 @@ const BookCasePage = () => {
         // console.log('API Response:', response);
 
         if (response?.myBooks) {
-          const formattedBooks = response.myBooks.map((book: any) => ({
-            id: book.id,
-            title: book.title,
-            author: book.author,
-            publisher: book.publisher,
-            publishedDate: book.publishedDate,
-            imageUrl: book.imageUrl,
-            genreNames: book.genreNames,
-            page: book.page || 0,
-          }));
+          const formattedBooks = response.myBooks.map(
+            (book: BookCaseListType) => ({
+              id: book.id,
+              title: book.title,
+              author: book.author,
+              publisher: book.publisher,
+              publishedDate: book.publishedDate,
+              imageUrl: book.imageUrl,
+              genreNames: book.genreNames,
+              page: book.page || 0,
+            }),
+          );
 
           // DataList 컴포넌트용 데이터 변환
-          const dataListFormat = response.myBooks.map((book: any) => ({
-            id: book.id.toString(),
-            title: book.title,
-            author: book.author,
-            publisher: book.publisher,
-            released_year: book.publishedDate,
-            imageUrl: book.imageUrl,
-          }));
+          const dataListFormat = response.myBooks.map(
+            (book: BookCaseListType) => ({
+              id: book.id.toString(),
+              title: book.title,
+              author: book.author,
+              publisher: book.publisher,
+              released_year: book.publishedDate,
+              imageUrl: book.imageUrl,
+            }),
+          );
 
           // console.log('Formatted DataList Items:', dataListFormat);
 
@@ -216,7 +233,10 @@ const BookCasePage = () => {
       </div>
 
       <ToolBoxButton
-        onAddBook={() => setIsModalOpen(true)}
+        onAddBook={() => {
+          startBookAddTracking();
+          setIsModalOpen(true);
+        }}
         onOpenList={() => setIsListOpen(true)}
         isOtherUserBookcase={user?.userId !== Number(userId)}
       />
@@ -256,8 +276,10 @@ const BookCasePage = () => {
               ]);
               setTotalCount((prev) => prev + 1);
               setIsModalOpen(false);
+
+              endBookAddTracking();
             } catch (error) {
-              // 실패시 UI 롤백
+              console.error('책 추가에 실패했습니다:', error);
               setBooks((prevBooks) =>
                 prevBooks.filter((book) => book.id !== newBook.id),
               );
@@ -266,6 +288,8 @@ const BookCasePage = () => {
               );
               setTotalCount((prev) => prev - 1);
               showToast('책 추가에 실패했습니다 ꌩ-ꌩ', 'error');
+
+              endBookAddTracking();
             }
           }}
         />
@@ -290,6 +314,7 @@ const BookCasePage = () => {
             fetchMore={() => {}}
             userId={Number(userId)}
             count={totalCount}
+            onClose={() => setIsListOpen(false)}
           />
         </ModalBackground>
       )}

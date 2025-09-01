@@ -1,7 +1,7 @@
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import BookReviewEditor from '../book-editor/BookEditorPage';
-import BookReviewViewer from '../book-viewer/BookViewerPage';
+import BookReviewEditor from './book-editor/BookEditorPage';
+import BookReviewViewer from './book-viewer/BookViewerPage';
 import { bookAPI } from '@/apis/book';
 import { useToastStore } from '@/store/useToastStore';
 import { BookReviewData } from '@/types/book';
@@ -74,7 +74,7 @@ const BookPage = () => {
             if (!userId && !isEditMode) {
               showToast(
                 '아직 서평이 없어요! 첫 서평을 작성해주세요 ( 灬´ ˘ `灬 )',
-                'info',
+                'success',
               );
               navigate(`/book/${bookId}?mode=edit`, { replace: true });
               return;
