@@ -109,6 +109,15 @@
   }
 }
 
+@media (max-width: 560px) {
+  .guest-book {
+    width: 95vw;
+    height: 100vw;
+    max-width: none;
+    max-height: none;
+  }
+}
+
 .guest-book-background {
   max-width: 800px;
   max-height: 700px;
