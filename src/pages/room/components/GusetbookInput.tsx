@@ -58,7 +58,7 @@ export default function GusetbookInput({ onSubmitMessage }) {
   return (
     <form
       ref={formRef}
-      className='@container guest-book-form flex items-start w-full mb-0 gap-2 relative max-[640px]:mb-3 max-[640px]:mt-[5vw]'
+      className='@container guest-book-form flex items-start w-full mb-0 gap-2 relative max-[640px]:mb-3 max-[640px]:mt-[5vw] max-[525px]:mt-[10vw] max-[500px]:mt-[15vw]  max-[480px]:mt-[18vw]  max-[460px]:mt-[20vw]  max-[440px]:mt-[24vw] max-[420px]:mt-[28vw] max-[420px]:mb-0'
       aria-label='방명록 작성'
       onSubmit={handleSubmit}>
       {/* 글자 수 표시 */}

@@ -48,7 +48,7 @@ export default function GuestbookMessage({
   };
 
   return (
-    <div className='guest-book-content @container w-full flex flex-col gap-2 2xl:gap-4 mt-3 mb-2 2xl:mb-3 3xl:mb-8 max-h-[300px] sm:max-h-80 min-h-[300px] sm:min-h-[300px] max-sm:max-h-[45.875vw] max-sm:min-h-[45.875vw] max-sm:mt-8 max-[560px]:mb-6'>
+    <div className='guest-book-content @container w-full flex flex-col gap-2 2xl:gap-4 mt-3 mb-2 2xl:mb-3 3xl:mb-8 max-h-[300px] sm:max-h-80 min-h-[300px] sm:min-h-[300px] max-sm:max-h-[45.875vw] max-sm:min-h-[45.875vw] max-sm:mt-8 max-[560px]:mb-6 max-[480px]:mt-4'>
       {/* 방명록 글 0개일 경우 */}
       {messages.length === 0 ? (
         <div className='flex flex-col justify-center items-center text-gray-500/50 h-50 @lg:h-74 @xl:h-96 font-medium'>
