@@ -22,12 +22,10 @@ function App() {
         event_category: 'user_engagement',
       });
 
-      // 테스트 이벤트 (개발 환경에서만 실행)
-      if (import.meta.env.DEV) {
-        setTimeout(() => {
-          trackTestEvent();
-        }, 5000);
-      }
+      // 테스트 이벤트 (배포 환경에서도 실행)
+      setTimeout(() => {
+        trackTestEvent();
+      }, 5000);
 
       // 유입 경로 추적
       const referrer = document.referrer || 'direct';
