@@ -25,7 +25,7 @@ export const initGA = (measurementId: string) => {
       page_title: document.title,
       page_location: window.location.href,
       send_page_view: true,
-      debug_mode: ${import.meta.env.DEV}
+      debug_mode: true
     });
   `;
   document.head.appendChild(script2);
