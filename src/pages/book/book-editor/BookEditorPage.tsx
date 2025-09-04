@@ -17,6 +17,7 @@ import {
   useAutoBackofficeTracking,
   useBackofficeFeatureTracking,
 } from '@/hooks/useBackofficeBatchTracking';
+import { trackEvent } from '@/utils/ga';
 
 interface BookEditorPageProps {
   bookTitle: string;
@@ -50,7 +51,17 @@ const BookEditorPage = ({
   // endTracking 함수 메모이제이션
   const memoizedEndTracking = useCallback(() => {
     endTracking();
-  }, [endTracking]);
+
+    // 개별 이벤트 전송
+    trackEvent('backoffice_feature_analytics', {
+      feature_name: 'book_editor',
+      user_id: user?.userId?.toString() || 'anonymous',
+      session_id: Date.now().toString(),
+      event_type: 'review_completed',
+      book_title: bookTitle,
+      timestamp: new Date().toISOString(),
+    });
+  }, [endTracking, user?.userId, bookTitle]);
 
   // bookInfo 객체 메모이제이션
   const bookInfo = useMemo(
