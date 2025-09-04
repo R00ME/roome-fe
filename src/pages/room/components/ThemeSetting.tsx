@@ -6,6 +6,7 @@ import { useClickOutside } from '../../../hooks/useClickOutside';
 import { useToastStore } from '../../../store/useToastStore';
 import { useUserStore } from '../../../store/useUserStore';
 import { useBackofficeFeatureTracking } from '../../../hooks/useBackofficeBatchTracking';
+import { trackEvent } from '../../../utils/ga';
 import ThemeSettingCard from './ThemeSettingCard';
 
 export default function ThemeSetting({
@@ -126,6 +127,16 @@ export default function ThemeSetting({
                 } else {
                   endTracking();
                   onThemeSelect(theme as 'BASIC' | 'FOREST' | 'MARINE');
+
+                  // 개별 이벤트 전송
+                  trackEvent('backoffice_feature_analytics', {
+                    feature_name: 'room_theme_setting',
+                    user_id: user?.userId?.toString() || 'anonymous',
+                    session_id: Date.now().toString(),
+                    event_type: 'theme_selected',
+                    selected_theme: theme,
+                    timestamp: new Date().toISOString(),
+                  });
                 }
               }}
             />

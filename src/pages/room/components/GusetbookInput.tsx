@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import LayeredButton from '../../../components/LayeredButton';
 import { useBackofficeFeatureTracking } from '@/hooks/useBackofficeBatchTracking';
+import { trackEvent } from '@/utils/ga';
 import { useUserStore } from '@/store/useUserStore';
 
 export default function GusetbookInput({ onSubmitMessage }) {
@@ -28,6 +29,15 @@ export default function GusetbookInput({ onSubmitMessage }) {
 
       // 작성 완료 시 추적 종료
       endTracking();
+
+      // 개별 이벤트 전송
+      trackEvent('backoffice_feature_analytics', {
+        feature_name: 'guestbook_writing',
+        user_id: user?.userId?.toString() || 'anonymous',
+        session_id: Date.now().toString(),
+        event_type: 'completion',
+        timestamp: new Date().toISOString(),
+      });
     } finally {
       setIsSubmitting(false);
     }
