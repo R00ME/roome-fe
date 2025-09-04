@@ -148,6 +148,9 @@ const createBatchManager = () => {
       user_patterns: analytics.userPatterns,
       timestamp: new Date().toISOString(),
       batch_id: Date.now().toString(),
+      feature_name: analytics.uniqueFeatures.join(','),
+      user_id: analytics.uniqueUsers.join(','),
+      session_id: Date.now().toString(),
     });
 
     console.log('📊 백오피스 배치 데이터 전송:', {

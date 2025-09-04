@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import LayeredButton from '../../../components/LayeredButton';
 import { useBackofficeFeatureTracking } from '@/hooks/useBackofficeBatchTracking';
+import { trackEvent } from '@/utils/ga';
 import { useUserStore } from '@/store/useUserStore';
 
 export default function GusetbookInput({ onSubmitMessage }) {
@@ -28,6 +29,15 @@ export default function GusetbookInput({ onSubmitMessage }) {
 
       // 작성 완료 시 추적 종료
       endTracking();
+
+      // 개별 이벤트 전송
+      trackEvent('backoffice_feature_analytics', {
+        feature_name: 'guestbook_writing',
+        user_id: user?.userId?.toString() || 'anonymous',
+        session_id: Date.now().toString(),
+        event_type: 'completion',
+        timestamp: new Date().toISOString(),
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -58,7 +68,7 @@ export default function GusetbookInput({ onSubmitMessage }) {
   return (
     <form
       ref={formRef}
-      className='@container flex items-start w-full mb-0 gap-2 relative'
+      className='@container guest-book-form flex items-start w-full mb-0 gap-2 relative max-[640px]:mb-3 max-[640px]:mt-[5vw] max-[525px]:mt-[10vw] max-[500px]:mt-[15vw]  max-[480px]:mt-[18vw]  max-[460px]:mt-[20vw]  max-[440px]:mt-[24vw] max-[420px]:mt-[28vw] max-[420px]:mb-0'
       aria-label='방명록 작성'
       onSubmit={handleSubmit}>
       {/* 글자 수 표시 */}

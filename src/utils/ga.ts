@@ -24,7 +24,8 @@ export const initGA = (measurementId: string) => {
     gtag('config', '${measurementId}', {
       page_title: document.title,
       page_location: window.location.href,
-      send_page_view: true
+      send_page_view: true,
+      debug_mode: ${import.meta.env.DEV}
     });
   `;
   document.head.appendChild(script2);
@@ -35,12 +36,25 @@ export const trackEvent = (
   eventName: string,
   parameters: Record<string, any> = {},
 ) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, {
-      ...parameters,
-      timestamp: new Date().toISOString(),
-    });
-    console.log('GA Event tracked:', eventName, parameters);
+  if (typeof window !== 'undefined') {
+    // gtag가 없으면 dataLayer에 직접 추가
+    if (window.gtag) {
+      window.gtag('event', eventName, {
+        ...parameters,
+        timestamp: new Date().toISOString(),
+      });
+      console.log('GA Event tracked (gtag):', eventName, parameters);
+    } else if (window.dataLayer) {
+      // dataLayer에 직접 추가 (fallback)
+      window.dataLayer.push({
+        event: eventName,
+        ...parameters,
+        timestamp: new Date().toISOString(),
+      });
+      console.log('GA Event tracked (dataLayer):', eventName, parameters);
+    } else {
+      console.warn('GA not initialized, event not tracked:', eventName);
+    }
   }
 };
 
@@ -66,5 +80,14 @@ export const trackFeatureUsage = (
     custom_user_id: userId,
     duration_ms: durationMs,
     tracking_session_id: Date.now().toString(),
+  });
+};
+
+// 테스트용 이벤트 (디버깅용)
+export const trackTestEvent = () => {
+  trackEvent('test_custom_event', {
+    test_parameter: 'test_value',
+    timestamp: new Date().toISOString(),
+    user_agent: navigator.userAgent,
   });
 };

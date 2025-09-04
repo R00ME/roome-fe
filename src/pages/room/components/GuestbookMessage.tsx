@@ -48,7 +48,7 @@ export default function GuestbookMessage({
   };
 
   return (
-    <div className='guest-book-content @container w-full flex flex-col gap-2 2xl:gap-4 mt-3 mb-2 2xl:mb-3 3xl:mb-8 max-h-[300px] sm:max-h-80 min-h-[300px] sm:min-h-[300px] max-sm:max-h-[45.875vw] max-sm:min-h-[45.875vw] max-sm:mt-8'>
+    <div className='guest-book-content @container w-full flex flex-col gap-2 2xl:gap-4 mt-3 mb-2 2xl:mb-3 3xl:mb-8 max-h-[300px] sm:max-h-80 min-h-[300px] sm:min-h-[300px] max-sm:max-h-[45.875vw] max-sm:min-h-[45.875vw] max-sm:mt-8 max-[560px]:mb-6 max-[480px]:mt-4'>
       {/* 방명록 글 0개일 경우 */}
       {messages.length === 0 ? (
         <div className='flex flex-col justify-center items-center text-gray-500/50 h-50 @lg:h-74 @xl:h-96 font-medium'>
@@ -66,7 +66,7 @@ export default function GuestbookMessage({
             key={msg.guestbookId}
             className={`flex items-center bg-[#F5F1FA]/40 rounded-xl @xl:rounded-3xl w-full py-5 gap-8 @xl:gap-11 px-8 @xl:px-12`}>
             {/* 방명록 컨텐츠 */}
-            <div className='flex flex-col flex-1 min-h-[100px] justify-between '>
+            <div className='flex flex-col flex-1 min-h-[100px] justify-between w-full'>
               <div className='flex justify-between items-center w-full mb-2 @xl:mb-4'>
                 {/* 관계 */}
                 <p
@@ -109,7 +109,7 @@ export default function GuestbookMessage({
               </div>
 
               {/* 방명록 본문 */}
-              <p className='text-xs @xl:text-sm text-[#292929]/70 font-medium mb-2 ml-[2px] leading-tight '>
+              <p className='text-xs @xl:text-sm text-[#292929]/70 font-medium mb-2 ml-[2px] leading-tight w-full break-words whitespace-pre-wrap'>
                 {msg.message}
               </p>
 

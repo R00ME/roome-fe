@@ -15,6 +15,7 @@ import {
   useAutoBackofficeTracking,
   useBackofficeFeatureTracking,
 } from '@/hooks/useBackofficeBatchTracking';
+import { trackEvent } from '@/utils/ga';
 
 const BookCasePage = () => {
   const { showToast } = useToastStore();
@@ -278,6 +279,16 @@ const BookCasePage = () => {
               setIsModalOpen(false);
 
               endBookAddTracking();
+
+              // 개별 이벤트 전송
+              trackEvent('backoffice_feature_analytics', {
+                feature_name: 'book',
+                user_id: user?.userId?.toString() || 'anonymous',
+                session_id: Date.now().toString(),
+                event_type: 'book_added',
+                book_title: newBook.title,
+                timestamp: new Date().toISOString(),
+              });
             } catch (error) {
               console.error('책 추가에 실패했습니다:', error);
               setBooks((prevBooks) =>
