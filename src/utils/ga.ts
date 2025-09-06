@@ -38,10 +38,14 @@ export const trackEvent = (
   parameters: Record<string, any> = {},
 ) => {
   if (typeof window !== 'undefined') {
+    // 현재 사용자 ID 가져오기 (localStorage에서)
+    const currentUserId = localStorage.getItem('userId') || 'anonymous';
+
     // gtag가 없으면 dataLayer에 직접 추가
     if (window.gtag) {
       window.gtag('event', eventName, {
         ...parameters,
+        user_id: currentUserId, // 모든 이벤트에 user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (gtag):', eventName, parameters);
@@ -50,6 +54,7 @@ export const trackEvent = (
       window.dataLayer.push({
         event: eventName,
         ...parameters,
+        user_id: currentUserId, // 모든 이벤트에 user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (dataLayer):', eventName, parameters);

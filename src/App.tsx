@@ -17,6 +17,10 @@ function App() {
   useEffect(() => {
     const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
     if (measurementId) {
+      if (user?.userId) {
+        localStorage.setItem('userId', user.userId.toString());
+      }
+
       initGA(measurementId, user?.userId?.toString());
       console.log(
         'Google Analytics 초기화 완료:',
