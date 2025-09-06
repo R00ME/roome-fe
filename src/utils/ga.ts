@@ -25,8 +25,8 @@
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }
 
@@ -84,17 +84,13 @@ export const initGA = (measurementId: string, userId?: string) => {
  */
 export const trackEvent = (
   eventName: string,
-  parameters: Record<string, any> = {},
+  parameters: Record<string, unknown> = {},
 ) => {
   if (typeof window !== 'undefined') {
-    // 현재 사용자 ID 가져오기 (localStorage에서)
-    const currentUserId = localStorage.getItem('userId') || 'anonymous';
-
     // gtag가 없으면 dataLayer에 직접 추가
     if (window.gtag) {
       window.gtag('event', eventName, {
         ...parameters,
-        custom_user_id: currentUserId, // 모든 이벤트에 custom_user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (gtag):', eventName, parameters);
@@ -103,7 +99,6 @@ export const trackEvent = (
       window.dataLayer.push({
         event: eventName,
         ...parameters,
-        custom_user_id: currentUserId, // 모든 이벤트에 custom_user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (dataLayer):', eventName, parameters);
@@ -136,10 +131,10 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
  * @param user_agent - 사용자 브라우저 정보
  * @param user_id - 로그인한 사용자의 아이디 (자동 추가됨)
  */
-export const trackTestEvent = () => {
+export const trackTestEvent = (userId?: string) => {
   trackEvent('test_custom_event', {
+    custom_user_id: userId || 'anonymous',
     test_parameter: 'test_value',
-    timestamp: new Date().toISOString(),
     user_agent: navigator.userAgent,
   });
 };
