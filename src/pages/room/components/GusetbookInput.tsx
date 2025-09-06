@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react';
 import LayeredButton from '../../../components/LayeredButton';
-import { useBackofficeFeatureTracking } from '@/hooks/useBackofficeBatchTracking';
-import { trackEvent } from '@/utils/ga';
+import {
+  useFeatureUsageTracking,
+  FEATURE_NAMES,
+} from '@/hooks/useFeatureUsageTracking';
 import { useUserStore } from '@/store/useUserStore';
 
 export default function GusetbookInput({ onSubmitMessage }) {
@@ -11,11 +13,8 @@ export default function GusetbookInput({ onSubmitMessage }) {
   const user = useUserStore((state) => state.user);
 
   // 방명록 작성 시간 추적 (수동 추적)
-  const { startTracking, endTracking } = useBackofficeFeatureTracking(
-    'guestbook_writing',
-    user?.userId?.toString(),
-    2000,
-  );
+  const { startFeatureTracking, trackFeatureCompletion } =
+    useFeatureUsageTracking();
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
@@ -27,17 +26,8 @@ export default function GusetbookInput({ onSubmitMessage }) {
       await onSubmitMessage(guestMessage);
       setGuestMessage('');
 
-      // 작성 완료 시 추적 종료
-      endTracking();
-
-      // 개별 이벤트 전송
-      trackEvent('backoffice_feature_analytics', {
-        feature_name: 'guestbook_writing',
-        custom_user_id: user?.userId?.toString() || 'anonymous',
-        session_id: Date.now().toString(),
-        event_type: 'completion',
-        timestamp: new Date().toISOString(),
-      });
+      // 작성 완료 시 추적 (시간 계산해서 한 번에 전송)
+      trackFeatureCompletion(FEATURE_NAMES.GUESTBOOK, user?.userId?.toString());
     } finally {
       setIsSubmitting(false);
     }
@@ -61,7 +51,7 @@ export default function GusetbookInput({ onSubmitMessage }) {
   // 첫 번째 입력 시 추적 시작
   const handleFocus = () => {
     if (guestMessage === '') {
-      startTracking();
+      startFeatureTracking(FEATURE_NAMES.GUESTBOOK, user?.userId?.toString());
     }
   };
 

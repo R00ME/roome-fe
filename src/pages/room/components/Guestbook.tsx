@@ -6,7 +6,10 @@ import { useUserStore } from '../../../store/useUserStore';
 import Pagination from '../../../components/Pagination';
 import GuestbookMessage from '@pages/room/components/GuestbookMessage';
 import GusetbookInput from '@pages/room/components/GusetbookInput';
-import { useAutoBackofficeTracking } from '@/hooks/useBackofficeBatchTracking';
+import {
+  useFeatureUsageTracking,
+  FEATURE_NAMES,
+} from '@/hooks/useFeatureUsageTracking';
 
 export default function Guestbook({
   onClose,
@@ -21,11 +24,8 @@ export default function Guestbook({
   const [totalPage, setTotalPage] = useState<number>(1);
   const user = useUserStore((state) => state.user);
 
-  useAutoBackofficeTracking(
-    'guestbook_viewing',
-    user?.userId?.toString(),
-    2000,
-  );
+  const { startFeatureTracking, trackFeatureCompletion } =
+    useFeatureUsageTracking();
 
   const fetchGuestbookData = useCallback(
     async (page: number) => {
@@ -42,8 +42,10 @@ export default function Guestbook({
   );
 
   useEffect(() => {
+    // 방명록 조회 시작
+    startFeatureTracking(FEATURE_NAMES.GUESTBOOK, user?.userId?.toString());
     fetchGuestbookData(currentPage);
-  }, [fetchGuestbookData, currentPage]);
+  }, [fetchGuestbookData, currentPage, startFeatureTracking, user?.userId]);
 
   const handleSubmitMessage = async (guestMessage: string) => {
     if (guestMessage.trim() === '') return;
@@ -70,6 +72,8 @@ export default function Guestbook({
 
   const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
+      // 방명록 조회 완료
+      trackFeatureCompletion(FEATURE_NAMES.GUESTBOOK, user?.userId?.toString());
       onClose();
     }
   };

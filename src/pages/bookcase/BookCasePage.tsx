@@ -12,10 +12,10 @@ import AnimationGuide from '@components/AnimationGuide';
 import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
 import {
-  useAutoBackofficeTracking,
-  useBackofficeFeatureTracking,
-} from '@/hooks/useBackofficeBatchTracking';
-import { trackEvent } from '@/utils/ga';
+  useAutoFeatureTracking,
+  useFeatureUsageTracking,
+  FEATURE_NAMES,
+} from '@/hooks/useFeatureUsageTracking';
 
 const BookCasePage = () => {
   const { showToast } = useToastStore();
@@ -29,13 +29,11 @@ const BookCasePage = () => {
   const [isGuideOpen, setIsGuideOpen] = useState(true);
 
   // 페이지 접속 추적 (자동 시작/종료)
-  useAutoBackofficeTracking('book', user?.userId?.toString(), 1000);
+  useAutoFeatureTracking();
 
-  // 도서 추가 추적 - 통일된 'book' featureName 사용
-  const {
-    startTracking: startBookAddTracking,
-    endTracking: endBookAddTracking,
-  } = useBackofficeFeatureTracking('book', user?.userId?.toString(), 1000);
+  // 도서 추가 추적
+  const { startFeatureTracking, trackFeatureCompletion } =
+    useFeatureUsageTracking();
 
   const BOOKS_PER_ROW = 15;
   const [isDragging, setIsDragging] = useState(false);
@@ -235,7 +233,7 @@ const BookCasePage = () => {
 
       <ToolBoxButton
         onAddBook={() => {
-          startBookAddTracking();
+          startFeatureTracking(FEATURE_NAMES.BOOK, user?.userId?.toString());
           setIsModalOpen(true);
         }}
         onOpenList={() => setIsListOpen(true)}
@@ -278,17 +276,11 @@ const BookCasePage = () => {
               setTotalCount((prev) => prev + 1);
               setIsModalOpen(false);
 
-              endBookAddTracking();
-
-              // 개별 이벤트 전송
-              trackEvent('backoffice_feature_analytics', {
-                feature_name: 'book',
-                custom_user_id: user?.userId?.toString() || 'anonymous',
-                session_id: Date.now().toString(),
-                event_type: 'book_added',
-                book_title: newBook.title,
-                timestamp: new Date().toISOString(),
-              });
+              // 완료 추적 (시간 계산해서 한 번에 전송)
+              trackFeatureCompletion(
+                FEATURE_NAMES.BOOK,
+                user?.userId?.toString(),
+              );
             } catch (error) {
               console.error('책 추가에 실패했습니다:', error);
               setBooks((prevBooks) =>
@@ -300,7 +292,11 @@ const BookCasePage = () => {
               setTotalCount((prev) => prev - 1);
               showToast('책 추가에 실패했습니다 ꌩ-ꌩ', 'error');
 
-              endBookAddTracking();
+              // 실패 시에도 완료 추적
+              trackFeatureCompletion(
+                FEATURE_NAMES.BOOK,
+                user?.userId?.toString(),
+              );
             }
           }}
         />
