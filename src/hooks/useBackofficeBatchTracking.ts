@@ -149,7 +149,7 @@ const createBatchManager = () => {
       timestamp: new Date().toISOString(),
       batch_id: Date.now().toString(),
       feature_name: analytics.uniqueFeatures.join(','),
-      user_id: analytics.uniqueUsers.join(','),
+      custom_user_id: analytics.uniqueUsers.join(','),
       session_id: Date.now().toString(),
     };
 

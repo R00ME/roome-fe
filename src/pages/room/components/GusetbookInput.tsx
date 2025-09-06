@@ -33,7 +33,7 @@ export default function GusetbookInput({ onSubmitMessage }) {
       // 개별 이벤트 전송
       trackEvent('backoffice_feature_analytics', {
         feature_name: 'guestbook_writing',
-        user_id: user?.userId?.toString() || 'anonymous',
+        custom_user_id: user?.userId?.toString() || 'anonymous',
         session_id: Date.now().toString(),
         event_type: 'completion',
         timestamp: new Date().toISOString(),

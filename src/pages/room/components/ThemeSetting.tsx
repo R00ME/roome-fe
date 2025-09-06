@@ -131,7 +131,7 @@ export default function ThemeSetting({
                   // 개별 이벤트 전송
                   trackEvent('backoffice_feature_analytics', {
                     feature_name: 'room_theme_setting',
-                    user_id: user?.userId?.toString() || 'anonymous',
+                    custom_user_id: user?.userId?.toString() || 'anonymous',
                     session_id: Date.now().toString(),
                     event_type: 'theme_selected',
                     selected_theme: theme,

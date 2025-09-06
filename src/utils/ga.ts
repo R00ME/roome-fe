@@ -65,7 +65,7 @@ export const initGA = (measurementId: string, userId?: string) => {
  * 커스텀 이벤트 전송
  * @param eventName - 이벤트 이름 (예: 'button_click', 'page_view')
  * @param parameters - 이벤트 파라미터 객체
- * @param parameters.user_id - 로그인한 사용자의 아이디 (자동 추가됨)
+ * @param parameters.custom_user_id - 로그인한 사용자의 아이디 (자동 추가됨)
  * @param parameters.timestamp - 이벤트 발생 시간 (자동 추가됨)
  * @param parameters.event_category - 이벤트 카테고리 (선택사항)
  * @param parameters.event_label - 이벤트 라벨 (선택사항)
@@ -86,7 +86,7 @@ export const trackEvent = (
     if (window.gtag) {
       window.gtag('event', eventName, {
         ...parameters,
-        user_id: currentUserId, // 모든 이벤트에 user_id 추가
+        custom_user_id: currentUserId, // 모든 이벤트에 custom_user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (gtag):', eventName, parameters);
@@ -95,7 +95,7 @@ export const trackEvent = (
       window.dataLayer.push({
         event: eventName,
         ...parameters,
-        user_id: currentUserId, // 모든 이벤트에 user_id 추가
+        custom_user_id: currentUserId, // 모든 이벤트에 custom_user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (dataLayer):', eventName, parameters);
