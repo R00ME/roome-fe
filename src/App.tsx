@@ -9,13 +9,21 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // utils
 import { initGA, trackEvent, trackTestEvent } from '@utils/ga';
 import PageTracker from './components/PageTracker';
+import { useUserStore } from './store/useUserStore';
 
 function App() {
+  const { user } = useUserStore();
+
   useEffect(() => {
     const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
     if (measurementId) {
-      initGA(measurementId);
-      console.log('Google Analytics 초기화 완료:', measurementId);
+      initGA(measurementId, user?.userId?.toString());
+      console.log(
+        'Google Analytics 초기화 완료:',
+        measurementId,
+        'User ID:',
+        user?.userId,
+      );
 
       // 세션 시작 추적
       trackEvent('session_start', {
@@ -59,7 +67,7 @@ function App() {
     } else {
       console.warn('GA_MEASUREMENT_ID가 설정되지 않았습니다.');
     }
-  }, []);
+  }, [user?.userId]);
 
   const queryClient = new QueryClient();
 

@@ -6,7 +6,7 @@ declare global {
 }
 
 // GA 초기화
-export const initGA = (measurementId: string) => {
+export const initGA = (measurementId: string, userId?: string) => {
   // 이미 로드되었는지 확인
   if (window.gtag) return;
 
@@ -25,7 +25,8 @@ export const initGA = (measurementId: string) => {
       page_title: document.title,
       page_location: window.location.href,
       send_page_view: true,
-      debug_mode: true
+      debug_mode: true,
+      user_id: '${userId || 'anonymous'}'
     });
   `;
   document.head.appendChild(script2);
@@ -67,20 +68,6 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
     });
     console.log('GA PageView tracked:', pagePath, pageTitle);
   }
-};
-
-// 기능 사용 시간 추적
-export const trackFeatureUsage = (
-  featureName: string,
-  userId: string,
-  durationMs: number,
-) => {
-  trackEvent('feature_usage', {
-    feature_name: featureName,
-    custom_user_id: userId,
-    duration_ms: durationMs,
-    tracking_session_id: Date.now().toString(),
-  });
 };
 
 // 테스트용 이벤트 (디버깅용)
