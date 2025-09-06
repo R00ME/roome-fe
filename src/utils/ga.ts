@@ -45,20 +45,28 @@ export const initGA = (measurementId: string, userId?: string) => {
   script1.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
   document.head.appendChild(script1);
 
+  // gtag 초기화 스크립트
   const script2 = document.createElement('script');
   script2.innerHTML = `
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', '${measurementId}', {
-      page_title: document.title,
-      page_location: window.location.href,
-      send_page_view: true,
-      debug_mode: true,
-      user_id: '${userId || 'anonymous'}'
-    });
   `;
   document.head.appendChild(script2);
+
+  // gtag가 로드된 후 config 호출
+  script1.onload = () => {
+    if (window.gtag) {
+      window.gtag('config', measurementId, {
+        page_title: document.title,
+        page_location: window.location.href,
+        send_page_view: true,
+        debug_mode: true,
+        user_id: userId || 'anonymous',
+      });
+      console.log('GA Config 설정 완료:', measurementId, 'User ID:', userId);
+    }
+  };
 };
 
 /**
