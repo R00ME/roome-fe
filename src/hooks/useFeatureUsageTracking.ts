@@ -55,8 +55,7 @@ export const useFeatureUsageTracking = () => {
       );
 
       // 완료 시 한 번에 모든 데이터 전송 (백오피스 통합용)
-      trackEvent('feature_complete', {
-        feature_name: featureName,
+      trackEvent(`${featureName}_usage`, {
         custom_user_id: userId || 'anonymous',
         duration_sec: Math.round(duration / 1000),
         timestamp: new Date().toISOString(),
