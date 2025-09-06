@@ -12,7 +12,6 @@ import AnimationGuide from '@components/AnimationGuide';
 import { useToastStore } from '@/store/useToastStore';
 import { useUserStore } from '@/store/useUserStore';
 import {
-  useAutoFeatureTracking,
   useFeatureUsageTracking,
   FEATURE_NAMES,
 } from '@/hooks/useFeatureUsageTracking';
@@ -27,9 +26,6 @@ const BookCasePage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isGuideOpen, setIsGuideOpen] = useState(true);
-
-  // 페이지 접속 추적 (자동 시작/종료)
-  useAutoFeatureTracking();
 
   // 도서 추가 추적
   const { startFeatureTracking, trackFeatureCompletion } =
