@@ -139,8 +139,8 @@ const createBatchManager = () => {
     // 기능별, 사용자별 그룹화 및 통계 계산
     const analytics = calculateAnalytics();
 
-    // 상세 이벤트로 정리
-    trackEvent('backoffice_feature_analytics', {
+    // 전송할 이벤트 데이터 구성
+    const eventData = {
       session_count: sessions.length,
       unique_features: analytics.uniqueFeatures.length,
       unique_users: analytics.uniqueUsers.length,
@@ -151,7 +151,27 @@ const createBatchManager = () => {
       feature_name: analytics.uniqueFeatures.join(','),
       user_id: analytics.uniqueUsers.join(','),
       session_id: Date.now().toString(),
-    });
+    };
+
+    // 🔍 상세 디버깅 로그
+    console.log('🚀 ===== 백오피스 배치 전송 시작 =====');
+    console.log('📊 수집된 세션 데이터:', sessions);
+    console.log('📈 계산된 분석 데이터:', analytics);
+    console.log('📤 전송할 이벤트 데이터:', eventData);
+    console.log(
+      '📋 feature_stats 상세:',
+      JSON.stringify(analytics.featureStats, null, 2),
+    );
+    console.log(
+      '👥 user_patterns 상세:',
+      JSON.stringify(analytics.userPatterns, null, 2),
+    );
+    console.log('🏷️ feature_name 목록:', analytics.uniqueFeatures);
+    console.log('👤 user_id 목록:', analytics.uniqueUsers);
+    console.log('🚀 ===== 백오피스 배치 전송 완료 =====');
+
+    // 상세 이벤트로 정리
+    trackEvent('backoffice_feature_analytics', eventData);
 
     console.log('📊 백오피스 배치 데이터 전송:', {
       sessions: sessions.length,
@@ -170,12 +190,18 @@ const createBatchManager = () => {
   return {
     addSession: (session: TrackingSession) => {
       sessions.push(session);
+      console.log(
+        `📝 세션 추가됨: ${session.featureName} (${session.userId}) - 현재 세션 수: ${sessions.length}`,
+      );
 
       // 30개 쌓이거나 10초마다 전송
       if (sessions.length >= 30) {
+        console.log('⚡ 30개 세션 도달 - 즉시 전송');
         flush();
       } else if (!flushTimer) {
+        console.log('⏰ 10초 타이머 시작 - 10초 후 전송 예정');
         flushTimer = setTimeout(() => {
+          console.log('⏰ 10초 타이머 완료 - 전송 시작');
           flush();
         }, 10000);
       }
