@@ -5,8 +5,10 @@ import ConfirmModal from '../../../components/ConfirmModal';
 import { useClickOutside } from '../../../hooks/useClickOutside';
 import { useToastStore } from '../../../store/useToastStore';
 import { useUserStore } from '../../../store/useUserStore';
-import { useBackofficeFeatureTracking } from '../../../hooks/useBackofficeBatchTracking';
-import { trackEvent } from '../../../utils/ga';
+import {
+  useFeatureUsageTracking,
+  FEATURE_NAMES,
+} from '../../../hooks/useFeatureUsageTracking';
 import ThemeSettingCard from './ThemeSettingCard';
 
 export default function ThemeSetting({
@@ -24,30 +26,23 @@ export default function ThemeSetting({
     'BASIC' | 'FOREST' | 'MARINE' | null
   >(null);
 
-  const { startTracking, endTracking } = useBackofficeFeatureTracking(
-    'theme_setting',
-    user?.userId?.toString(),
-    1000,
-  );
+  const { startFeatureTracking, trackFeatureCompletion } =
+    useFeatureUsageTracking();
 
   useClickOutside({
     modalRef,
     buttonRef,
     isOpen: true,
     onClose: () => {
-      endTracking();
+      trackFeatureCompletion(FEATURE_NAMES.THEME, user?.userId?.toString());
       onClose();
     },
     excludeSelectors: ['.bottom-menu', '.modal-shadow'],
   });
 
   useEffect(() => {
-    startTracking();
-
-    return () => {
-      endTracking();
-    };
-  }, [startTracking, endTracking]);
+    startFeatureTracking(FEATURE_NAMES.THEME, user?.userId?.toString());
+  }, [startFeatureTracking, user?.userId]);
 
   useEffect(() => {
     const fetchUnlockedThemes = async () => {
@@ -75,7 +70,7 @@ export default function ThemeSetting({
       setUnlockedThemes(updatedThemes);
 
       await roomAPI.updateRoomTheme(user.roomId, user.userId, pendingTheme);
-      endTracking();
+      trackFeatureCompletion(FEATURE_NAMES.THEME, user?.userId?.toString());
       onThemeSelect(pendingTheme);
       showToast(
         `${themeData[pendingTheme].title} 테마가 적용되었어요!`,
@@ -125,18 +120,11 @@ export default function ThemeSetting({
                 if (isLocked) {
                   handleLockedClick(theme as 'BASIC' | 'FOREST' | 'MARINE');
                 } else {
-                  endTracking();
+                  trackFeatureCompletion(
+                    FEATURE_NAMES.THEME,
+                    user?.userId?.toString(),
+                  );
                   onThemeSelect(theme as 'BASIC' | 'FOREST' | 'MARINE');
-
-                  // 개별 이벤트 전송
-                  trackEvent('backoffice_feature_analytics', {
-                    feature_name: 'room_theme_setting',
-                    custom_user_id: user?.userId?.toString() || 'anonymous',
-                    session_id: Date.now().toString(),
-                    event_type: 'theme_selected',
-                    selected_theme: theme,
-                    timestamp: new Date().toISOString(),
-                  });
                 }
               }}
             />

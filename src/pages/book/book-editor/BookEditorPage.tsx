@@ -14,10 +14,9 @@ import { useUserStore } from '@/store/useUserStore';
 import { useBookReview } from '@hooks/book/useBookReview';
 import { useBookReviewAutoSave } from '@hooks/book/useBookReviewAutoSave';
 import {
-  useAutoBackofficeTracking,
-  useBackofficeFeatureTracking,
-} from '@/hooks/useBackofficeBatchTracking';
-import { trackEvent } from '@/utils/ga';
+  useFeatureUsageTracking,
+  FEATURE_NAMES,
+} from '@/hooks/useFeatureUsageTracking';
 
 interface BookEditorPageProps {
   bookTitle: string;
@@ -39,29 +38,13 @@ const BookEditorPage = ({
   const showToast = useToastStore((state) => state.showToast);
   const { user } = useUserStore();
 
-  // 페이지 접속 추적 (자동 시작/종료)
-  useAutoBackofficeTracking('book', user?.userId?.toString(), 1000);
+  const { startFeatureTracking, trackFeatureCompletion } =
+    useFeatureUsageTracking();
 
-  const { startTracking, endTracking } = useBackofficeFeatureTracking(
-    'book',
-    user?.userId?.toString(),
-    1000,
-  );
-
-  // endTracking 함수 메모이제이션
+  // trackFeatureCompletion 함수 메모이제이션
   const memoizedEndTracking = useCallback(() => {
-    endTracking();
-
-    // 개별 이벤트 전송
-    trackEvent('backoffice_feature_analytics', {
-      feature_name: 'book_editor',
-      custom_user_id: user?.userId?.toString() || 'anonymous',
-      session_id: Date.now().toString(),
-      event_type: 'review_completed',
-      book_title: bookTitle,
-      timestamp: new Date().toISOString(),
-    });
-  }, [endTracking, user?.userId, bookTitle]);
+    trackFeatureCompletion(FEATURE_NAMES.BOOK, user?.userId?.toString());
+  }, [trackFeatureCompletion, user?.userId]);
 
   // bookInfo 객체 메모이제이션
   const bookInfo = useMemo(
@@ -101,8 +84,8 @@ const BookEditorPage = ({
   });
 
   useEffect(() => {
-    startTracking();
-  }, [startTracking]);
+    startFeatureTracking(FEATURE_NAMES.BOOK, user?.userId?.toString());
+  }, [startFeatureTracking, user?.userId]);
 
   // 수동 임시저장 핸들러
   const handleTempSaveClick = useCallback(() => {
