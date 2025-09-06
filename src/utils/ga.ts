@@ -62,7 +62,7 @@ export const initGA = (measurementId: string, userId?: string) => {
         page_location: window.location.href,
         send_page_view: true,
         debug_mode: true,
-        user_id: userId || 'anonymous',
+        user_id: String(userId || 'anonymous'),
       });
       console.log('GA Config 설정 완료:', measurementId, 'User ID:', userId);
     }
