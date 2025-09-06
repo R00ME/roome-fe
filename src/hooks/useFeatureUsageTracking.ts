@@ -39,7 +39,7 @@ export const useFeatureUsageTracking = () => {
     (
       featureName: FeatureName,
       userId: string | undefined,
-      additionalData: Record<string, any> = {},
+      additionalData: Record<string, unknown> = {},
     ) => {
       const startTime = startTimesRef.current.get(featureName);
       const endTime = Date.now();
@@ -58,7 +58,6 @@ export const useFeatureUsageTracking = () => {
       trackEvent(`${featureName}_usage`, {
         custom_user_id: userId || 'anonymous',
         duration_sec: Math.round(duration / 1000),
-        timestamp: new Date().toISOString(),
         ...additionalData,
       });
 

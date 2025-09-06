@@ -31,17 +31,19 @@ function App() {
 
       // 세션 시작 추적
       trackEvent('session_start', {
+        custom_user_id: user?.userId?.toString() || 'anonymous',
         event_category: 'user_engagement',
       });
 
       // 테스트 이벤트 (배포 환경에서도 실행)
       setTimeout(() => {
-        trackTestEvent();
+        trackTestEvent(user?.userId?.toString());
       }, 5000);
 
       // 유입 경로 추적
       const referrer = document.referrer || 'direct';
       trackEvent('traffic_source', {
+        custom_user_id: user?.userId?.toString() || 'anonymous',
         event_category: 'acquisition',
         source: referrer,
         medium: referrer.includes('google')
@@ -58,6 +60,7 @@ function App() {
       const handleBeforeUnload = () => {
         const duration = ~~((Date.now() - startTime) / 1000);
         trackEvent('session_duration', {
+          custom_user_id: user?.userId?.toString() || 'anonymous',
           event_category: 'engagement',
           session_duration_sec: duration,
           pages_visited: window.history.length,
