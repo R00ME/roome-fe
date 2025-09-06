@@ -2,7 +2,7 @@ import { useCallback, useRef, useEffect } from 'react';
 import { trackEvent } from '@/utils/ga';
 
 // 보안 추적 전용 훅
-export const useSecurityTracking = (eventId?: string) => {
+export const useSecurityTracking = (eventId?: string, userId?: string) => {
   const clickCountRef = useRef(0);
   const lastClickTimeRef = useRef(0);
   const sessionStartTimeRef = useRef(Date.now());
@@ -18,6 +18,7 @@ export const useSecurityTracking = (eventId?: string) => {
 
       if (clickCountRef.current > 3) {
         trackEvent('suspicious_event_clicking', {
+          custom_user_id: userId || 'anonymous',
           event_category: 'event_security',
           event_label: 'rapid_clicks',
           value: clickCountRef.current,
@@ -30,7 +31,7 @@ export const useSecurityTracking = (eventId?: string) => {
     }
 
     lastClickTimeRef.current = now;
-  }, [eventId]);
+  }, [eventId, userId]);
 
   // 즉시 참여 감지
   const trackImmediateParticipation = useCallback(() => {
@@ -39,13 +40,14 @@ export const useSecurityTracking = (eventId?: string) => {
     // 페이지 로드 후 3초 내 이벤트 참여
     if (sessionDuration < 3000) {
       trackEvent('suspicious_immediate_participation', {
+        custom_user_id: userId || 'anonymous',
         event_category: 'event_security',
         event_label: 'immediate_click',
         value: sessionDuration,
         custom_parameter_1: eventId,
       });
     }
-  }, [eventId]);
+  }, [eventId, userId]);
 
   // 종합 보안 추적
   const trackSecurityEvent = useCallback(() => {
@@ -62,6 +64,7 @@ export const useEventTracking = (
     eventId?: string;
     rewardPoints?: number;
     maxParticipants?: number;
+    userId?: string;
   } = {},
 ) => {
   const participationAttemptsRef = useRef(0);
@@ -69,34 +72,42 @@ export const useEventTracking = (
   // 페이지 뷰 추적
   useEffect(() => {
     trackEvent('event_page_view', {
+      custom_user_id: options.userId || 'anonymous',
       event_category: 'event',
       event_label: 'event_page_loaded',
       custom_parameter_1: options.eventId || 'unknown',
     });
-  }, [options.eventId]);
+  }, [options.eventId, options.userId]);
 
   // 이벤트 참여 시도 추적
   const trackParticipationAttempt = useCallback(() => {
     participationAttemptsRef.current++;
 
     trackEvent('event_participation_attempt', {
+      custom_user_id: options.userId || 'anonymous',
       event_category: 'event',
       event_label: 'participation_attempted',
       value: participationAttemptsRef.current,
       custom_parameter_1: options.eventId,
     });
-  }, [options.eventId]);
+  }, [options.eventId, options.userId]);
 
   // 이벤트 참여 성공 추적
   const trackParticipationSuccess = useCallback(() => {
     trackEvent('event_participation_success', {
+      custom_user_id: options.userId || 'anonymous',
       event_category: 'event',
       event_label: 'participation_complete',
       value: options.rewardPoints || 0,
       custom_parameter_1: options.eventId,
       custom_parameter_2: options.maxParticipants?.toString(),
     });
-  }, [options.eventId, options.rewardPoints, options.maxParticipants]);
+  }, [
+    options.eventId,
+    options.rewardPoints,
+    options.maxParticipants,
+    options.userId,
+  ]);
 
   // 이벤트 참여 실패 추적
   const trackParticipationFailure = useCallback(
@@ -106,6 +117,7 @@ export const useEventTracking = (
         | { response?: { data?: { message?: string }; status?: number } },
     ) => {
       trackEvent('event_participation_failed', {
+        custom_user_id: options.userId || 'anonymous',
         event_category: 'event',
         event_label: 'participation_failed',
         custom_parameter_1: options.eventId,
@@ -119,7 +131,7 @@ export const useEventTracking = (
             : undefined,
       });
     },
-    [options.eventId],
+    [options.eventId, options.userId],
   );
 
   return {
