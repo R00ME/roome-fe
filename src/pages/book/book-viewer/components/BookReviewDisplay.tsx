@@ -77,10 +77,6 @@ const BookReviewDisplay = ({
     ? extractHeadings(displayData.freeform)
     : [];
 
-  // 디버깅용: 테마와 클래스명 확인
-  console.log('Current theme:', displayData.theme);
-  console.log('Theme class:', `scrollbar-${displayData.theme?.toLowerCase()}`);
-
   const handleEdit = () => {
     if (!isMyReview) {
       showToast('아직 작성된 서평이 없네요... ʕ ´•̥ ᴥ•̥`ʔ', 'error');
