@@ -1,3 +1,28 @@
+/**
+ * Google Analytics 4 유틸리티 모듈
+ *
+ * 주요 기능:
+ * - GA4 초기화 및 설정
+ * - 커스텀 이벤트 전송 (자동 user_id 포함)
+ * - 페이지뷰 추적 (SPA 지원)
+ * - 테스트 이벤트 (디버깅용)
+ *
+ * 사용 예시:
+ * ```typescript
+ * // GA 초기화
+ * initGA('G-XXXXXXXXXX', 'user123');
+ *
+ * // 커스텀 이벤트 전송
+ * trackEvent('button_click', {
+ *   event_category: 'engagement',
+ *   event_label: 'header_menu'
+ * });
+ *
+ * // 페이지뷰 추적
+ * trackPageView('/room/12', 'RoomE - 방명록');
+ * ```
+ */
+
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
@@ -5,8 +30,12 @@ declare global {
   }
 }
 
-// GA 초기화
-export const initGA = (measurementId: string) => {
+/**
+ * Google Analytics 4 초기화
+ * @param measurementId - GA4 측정 ID (G-XXXXXXXXXX)
+ * @param userId - 로그인한 사용자의 아이디 (선택사항)
+ */
+export const initGA = (measurementId: string, userId?: string) => {
   // 이미 로드되었는지 확인
   if (window.gtag) return;
 
@@ -25,22 +54,39 @@ export const initGA = (measurementId: string) => {
       page_title: document.title,
       page_location: window.location.href,
       send_page_view: true,
-      debug_mode: true
+      debug_mode: true,
+      user_id: '${userId || 'anonymous'}'
     });
   `;
   document.head.appendChild(script2);
 };
 
-// 커스텀 이벤트 전송
+/**
+ * 커스텀 이벤트 전송
+ * @param eventName - 이벤트 이름 (예: 'button_click', 'page_view')
+ * @param parameters - 이벤트 파라미터 객체
+ * @param parameters.user_id - 로그인한 사용자의 아이디 (자동 추가됨)
+ * @param parameters.timestamp - 이벤트 발생 시간 (자동 추가됨)
+ * @param parameters.event_category - 이벤트 카테고리 (선택사항)
+ * @param parameters.event_label - 이벤트 라벨 (선택사항)
+ * @param parameters.value - 이벤트 값 (선택사항)
+ * @param parameters.custom_parameter_1 - 커스텀 파라미터 1 (선택사항)
+ * @param parameters.custom_parameter_2 - 커스텀 파라미터 2 (선택사항)
+ * @param parameters.custom_parameter_3 - 커스텀 파라미터 3 (선택사항)
+ */
 export const trackEvent = (
   eventName: string,
   parameters: Record<string, any> = {},
 ) => {
   if (typeof window !== 'undefined') {
+    // 현재 사용자 ID 가져오기 (localStorage에서)
+    const currentUserId = localStorage.getItem('userId') || 'anonymous';
+
     // gtag가 없으면 dataLayer에 직접 추가
     if (window.gtag) {
       window.gtag('event', eventName, {
         ...parameters,
+        user_id: currentUserId, // 모든 이벤트에 user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (gtag):', eventName, parameters);
@@ -49,6 +95,7 @@ export const trackEvent = (
       window.dataLayer.push({
         event: eventName,
         ...parameters,
+        user_id: currentUserId, // 모든 이벤트에 user_id 추가
         timestamp: new Date().toISOString(),
       });
       console.log('GA Event tracked (dataLayer):', eventName, parameters);
@@ -58,7 +105,11 @@ export const trackEvent = (
   }
 };
 
-// 페이지뷰 추적
+/**
+ * 페이지뷰 추적 (SPA용)
+ * @param pagePath - 페이지 경로 (예: '/room/12', '/bookcase')
+ * @param pageTitle - 페이지 제목 (선택사항, 기본값: document.title)
+ */
 export const trackPageView = (pagePath: string, pageTitle?: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('config', import.meta.env.VITE_GA_MEASUREMENT_ID, {
@@ -69,21 +120,14 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
   }
 };
 
-// 기능 사용 시간 추적
-export const trackFeatureUsage = (
-  featureName: string,
-  userId: string,
-  durationMs: number,
-) => {
-  trackEvent('feature_usage', {
-    feature_name: featureName,
-    custom_user_id: userId,
-    duration_ms: durationMs,
-    tracking_session_id: Date.now().toString(),
-  });
-};
-
-// 테스트용 이벤트 (디버깅용)
+/**
+ * 테스트용 이벤트 (디버깅용)
+ * GA 연결 상태 확인 및 디버깅 목적으로 사용
+ * @param test_parameter - 테스트 파라미터 값
+ * @param timestamp - 이벤트 발생 시간
+ * @param user_agent - 사용자 브라우저 정보
+ * @param user_id - 로그인한 사용자의 아이디 (자동 추가됨)
+ */
 export const trackTestEvent = () => {
   trackEvent('test_custom_event', {
     test_parameter: 'test_value',
