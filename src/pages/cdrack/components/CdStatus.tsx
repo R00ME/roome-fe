@@ -1,18 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import Dock from './Dock';
-import CdSwiper from './CdSwiper';
-import { SwiperRef } from 'swiper/react';
-import SlidingTitle from './SlidingTitle';
-import { SearchModal } from '@components/search-modal/SearchModal';
-import cd from '@assets/cd/cd.png';
-import cd_add_icon from '@assets/cd/cd-add-icon.svg';
 import { useUserStore } from '@/store/useUserStore';
-import { useParams } from 'react-router-dom';
+import cd_add_icon from '@assets/cd/cd-add-icon.svg';
+import cd from '@assets/cd/cd.png';
+import { SearchModal } from '@components/search-modal/SearchModal';
 import TypingText from '@components/TypingText';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { SwiperRef } from 'swiper/react';
+import CdSwiper from './CdSwiper';
+import Dock from './Dock';
+import SlidingTitle from './SlidingTitle';
 
 interface CdStatusProps {
   cdRackInfo: CDRackInfo;
-  setCdRackInfo: (value: CDRackInfo) => void;
+  setCdRackInfo: React.Dispatch<React.SetStateAction<CDRackInfo>>;
   onPrevPage: () => void;
   onNextPage: (cursor: number) => void;
 }
@@ -100,7 +100,7 @@ export default function CdStatus({
     <div className='flex h-full flex-col gap-10 2xl:gap-12 items-center relative w-full'>
       {cdRackInfo?.data?.length > 0 ? (
         <>
-          <div className='text-center mt-20 '>
+          <div className='flex flex-col items-center text-center mt-30 md:mt-20 '>
             <span className='text-white  opacity-70 text-sm xl:text-[16px] 2xl:text-xl'>
               {activeTrack?.artist} | {activeTrack?.releaseDate.split('-')[0]}
             </span>
@@ -122,15 +122,17 @@ export default function CdStatus({
         <div className='relative w-full min-h-full'>
           <TypingText
             text='  꽂을 CD가 없네요...'
-            className='absolute top-40 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[30px] font-bold text-white text-center'
+            className='absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-base lg:text-[30px] font-bold text-white/70 text-center'
           />
           <img
-            className='absolute top-100 2xl:top-110 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-90 h-90 2xl:w-[472px] 2xl:h-[472px] shrink-0 drop-shadow-book aspect-square m-auto hover:animate-slowSpin '
+            className='absolute top-2/4 2xl:top-110 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-65 2xl:w-[472px] 2xl:h-[472px] shrink-0 drop-shadow-book aspect-square m-auto hover:animate-slowSpin'
             src={cd}
             alt='cd 실사 이미지'
           />
         </div>
       )}
+
+      <div className='hidden md:block w-full'>
 
       <Dock
         ref={swiperRef}
@@ -140,12 +142,13 @@ export default function CdStatus({
         activeIndex={activeIndex}
         onPrevPage={onPrevPage}
         onNextPage={onNextPage}
-      />
+        />
+        </div>
 
       {myUserId === userId && (
         <div
           onClick={() => setIsSerarchModalOpen((prev) => !prev)}
-          className='hover:animate-pulse fixed bottom-21 right-21 z-[5] bg-[#FFFFFF33] backdrop-blur-[35px] rounded-full w-16 h-16 cursor-pointer 
+          className='hover:animate-pulse fixed bottom-10 right-10 md:bottom-21 md:right-21 z-[5] bg-[#FFFFFF33] backdrop-blur-[35px] rounded-full w-16 h-16 cursor-pointer 
        item-middle border-2 border-[#FFFFFFB2]'>
           <img
             className='w-5 h-5'
