@@ -35,11 +35,11 @@ export default function SlidingTitle({
   return (
     <div
       ref={containerRef}
-      style={{ width: `${width}px` }} // ✅ Tailwind 대신 style 적용
-      className='overflow-hidden whitespace-nowrap items-center h-[60px] relative'>
+      style={{ width: `${width}px` }}
+      className='overflow-hidden whitespace-nowrap items-center h-full relative'>
       <h1
         ref={titleRef}
-        className={`text-white text-[25px] xl:text-[30px] 2xl:text-[40px] font-bold inline-block ${
+        className={`text-[#142b4b] text-sm xl:text-lg 2xl:text-xl font-bold inline-block ${
           isAnimating
             ? 'animate-slideTitle absolute top-0 right-0 z-[5]'
             : 'relative'

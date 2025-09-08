@@ -2,6 +2,7 @@
 import { useTexture } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as THREE from 'three';
 import { useCdStore } from '../../../store/useCdStore';
 import { cdSettings } from '../constants/cdSettings';
@@ -17,6 +18,9 @@ export default function CdSet({
   rightLocal,
   basePosition,
 }: Omit<CdSetProps, 'coverUrl'> & { item: CdItem }) {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+
   const group = useRef<THREE.Group>(null!);
   const cdMesh = useRef<THREE.Mesh>(null!);
   const coverMesh = useRef<THREE.Mesh>(null);
@@ -25,7 +29,7 @@ export default function CdSet({
   const { caseMat, cdEdgeMat, cdFaceMat } = useCdMaterials();
   const { gl } = useThree();
   const { hoveredCd, setHoveredCd } = useCdStore();
-  const hoverTimer = useRef<number>();
+  const hoverTimer = useRef<number>(0);
 
   const coverTex = useTexture(coverUrl);
   coverTex.colorSpace = THREE.SRGBColorSpace;
@@ -116,7 +120,12 @@ export default function CdSet({
   return (
     <group
       ref={group}
-      position={basePosition}>
+      position={basePosition}
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate(`/cd/${item.myCdId}/user/${userId}`);
+      }}
+      >
       <mesh
         ref={caseMesh}
         geometry={caseGeom}
