@@ -1,4 +1,4 @@
-import { OrbitControls } from '@react-three/drei';
+// import { OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
@@ -41,11 +41,11 @@ export default function CdRackScene(props: CdWheelProps) {
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
       />
-      <OrbitControls
+      {/* <OrbitControls
         enablePan={false}
         enableZoom={false}
         target={[0, 0, 0]}
-      />
+      /> */}
       <CdWheel
         {...props}
         rightLocal={rightLocal}

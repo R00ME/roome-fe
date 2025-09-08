@@ -125,7 +125,19 @@ export default function CdSet({
         e.stopPropagation();
         navigate(`/cd/${item.myCdId}/user/${userId}`);
       }}
-      >
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        clearTimeout(hoverTimer.current);
+        hoverTimer.current = window.setTimeout(() => {
+          setHoveredCd(item);
+        }, 140);
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        clearTimeout(hoverTimer.current);
+        setHoveredCd(null);
+        document.body.style.cursor = 'default';
+      }}>
       <mesh
         ref={caseMesh}
         geometry={caseGeom}
@@ -150,17 +162,6 @@ export default function CdSet({
           position={axisOffsetVec(caseAxisIndex, coverOffset)}
           quaternion={coverAlignQuat}
           receiveShadow={true}
-          onPointerOver={(e) => {
-            e.stopPropagation();
-            clearTimeout(hoverTimer.current);
-            hoverTimer.current = window.setTimeout(() => {
-              setHoveredCd(item);
-            }, 120);
-          }}
-          onPointerOut={() => {
-            clearTimeout(hoverTimer.current);
-            setHoveredCd(null);
-          }}
         />
       </mesh>
     </group>
