@@ -5,6 +5,7 @@ import {
   getCdRack,
 } from '../../../apis/cd';
 import { mockGetCdRack } from '../../../apis/mockCd';
+import { useToastStore } from '../../../store/useToastStore';
 
 type Options = {
   pageSize?: number;
@@ -25,6 +26,8 @@ export default function useCdRackData(
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const inFlight = useRef(false);
+    const { showToast } = useToastStore();
+  
 
   useEffect(() => {
     setItems([]);
@@ -131,8 +134,12 @@ const deleteCd = useCallback(
       await deleteCdsFromMyRack(myCdIds);
 
       setItems((prev) => prev.filter((cd) => !myCdIds.includes(cd.myCdId)));
+      showToast('성공적으로 음악이 삭제 되었어요!', 'success');
+
     } catch (err) {
       console.error("🚨 CD 삭제 실패 (rollback):", err);
+      showToast('다시 시도해주세요', 'error');
+
       fetchPage(undefined);
     }
   },
