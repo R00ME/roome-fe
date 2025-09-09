@@ -13,6 +13,7 @@ export default function CdWheel({
   coverGeom,
   caseAxisIndex,
   rightLocal,
+  isModalOpen,
 }: CdWheelProps) {
   const wheel = useRef<THREE.Group>(null);
   const setPhase = useCdStore((set) => set.setPhase);
@@ -23,12 +24,14 @@ export default function CdWheel({
   const dir = useMemo(() => cdSettings.DIR.clone(), []);
 
   useEffect(() => {
+    if (isModalOpen) return; 
+
     const onWheel = (e: WheelEvent) => {
       phaseVel.current += e.deltaY * -0.003;
     };
     window.addEventListener('wheel', onWheel, { passive: true });
     return () => window.removeEventListener('wheel', onWheel);
-  }, []);
+  }, [isModalOpen]);
 
   useFrame((_state, dt) => {
     phase.current += phaseVel.current * dt;

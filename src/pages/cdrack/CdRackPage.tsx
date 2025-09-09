@@ -30,6 +30,7 @@ export default function CdRackPage() {
   );
   const [resetDockMenuState, setResetDockMenuState] = useState(false);
   const phase = useCdStore((set) => set.phase);
+  const isModalOpen = activeSettings === 'add' || activeSettings === 'delete';
 
   useEffect(() => {
     if (phase > items.length - 3 && hasMore && !isFetchingMore) {
@@ -72,6 +73,7 @@ export default function CdRackPage() {
           <>
             <CdRack
               items={items}
+              isModalOpen={isModalOpen} 
             />
             <CdHoverLabel />
 

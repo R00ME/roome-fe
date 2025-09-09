@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import useCdModel from '../hooks/useCdModel';
 import CdRackScene from './CdRackScene';
 
-export default function CdRack({ items }: CdRackProps) {
+export default function CdRack({ items, isModalOpen }: CdRackProps) {
   const { caseGeom, cdGeom, coverGeom, caseAxisIndex } = useCdModel();
 
   return (
@@ -23,6 +23,7 @@ export default function CdRack({ items }: CdRackProps) {
         cdGeom={cdGeom}
         coverGeom={coverGeom}
         caseAxisIndex={caseAxisIndex}
+        isModalOpen={isModalOpen}
       />
     </Canvas>
   );

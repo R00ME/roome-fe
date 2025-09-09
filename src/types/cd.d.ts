@@ -2,6 +2,7 @@ type CdItem = Pick<CDRackItem, 'myCdId' | 'coverUrl' | 'title' | 'artist' | 'alb
 
 interface CdRackProps {
   items: CdItem[];
+  isModalOpen?: boolean; 
 }
 
 interface CDRackInfo {
