@@ -15,7 +15,7 @@ import useCdRackData from './hooks/useCdRackData';
 export default function CdRackPage() {
   const { userId: myUserId } = useUserStore().user;
   const { userId } = useParams();
-  const targetUserId = Number(userId) || 1;
+  const targetUserId = Number(userId);
   const {
     items,
     initialLoading,
@@ -52,6 +52,8 @@ export default function CdRackPage() {
     setTimeout(() => setResetDockMenuState(false), 0);
   };
 
+  console.log('myUserId:', myUserId, 'targetUserId:', targetUserId);
+
   const isEmpty = !items || items.length === 0;
 
   return (
@@ -59,10 +61,12 @@ export default function CdRackPage() {
       <div className=' w-full h-screen bg-[#516392cc] backdrop-blur-[35px] '>
         {isEmpty ? (
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
-            <TypingText
-              text='  꽂을 CD가 없네요...'
-              className='text-base lg:text-[30px] font-bold text-white/70 mb-6'
-            />
+            <div className='mb-6 h-[40px] lg:h-[60px] flex items-center'>
+              <TypingText
+                text='꽂을 CD가 없네요...'
+                className='text-base lg:text-[30px] font-bold text-white/70'
+              />
+            </div>
             <img
               className='w-48 lg:w-[472px] aspect-square drop-shadow-book hover:animate-slowSpin'
               src={cd}
@@ -73,36 +77,35 @@ export default function CdRackPage() {
           <>
             <CdRack
               items={items}
-              isModalOpen={isModalOpen} 
+              isModalOpen={isModalOpen}
             />
             <CdHoverLabel />
-
-            {/* 독메뉴 */}
-            {myUserId === targetUserId && (
-              <CdDockMenu
-                activeSettings={activeSettings}
-                onSettingsChange={handleSettingsChange}
-                resetState={resetDockMenuState}
-              />
-            )}
-
-            {/* 서치모달 / 삭제 모달 */}
-            {activeSettings === 'add' && (
-              <SearchModal
-                title='CD 랙에 담을 음악 찾기'
-                onClose={handleCloseSettings}
-                type='CD'
-                onSelect={(cdItem) => addCd(cdItem)}
-              />
-            )}
-            {activeSettings === 'delete' && (
-              <CdDeleteModal
-                items={items}
-                onClose={handleCloseSettings}
-                onDelete={(ids) => deleteCd(ids)}
-              />
-            )}
           </>
+        )}
+        {/* 독메뉴 */}
+        {myUserId === targetUserId && (
+          <CdDockMenu
+            activeSettings={activeSettings}
+            onSettingsChange={handleSettingsChange}
+            resetState={resetDockMenuState}
+          />
+        )}
+
+        {/* 서치모달 / 삭제 모달 */}
+        {activeSettings === 'add' && (
+          <SearchModal
+            title='CD 랙에 담을 음악 찾기'
+            onClose={handleCloseSettings}
+            type='CD'
+            onSelect={(cdItem) => addCd(cdItem)}
+          />
+        )}
+        {activeSettings === 'delete' && (
+          <CdDeleteModal
+            items={items}
+            onClose={handleCloseSettings}
+            onDelete={(ids) => deleteCd(ids)}
+          />
         )}
       </div>
     </div>
