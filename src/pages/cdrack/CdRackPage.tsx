@@ -24,7 +24,7 @@ export default function CdRackPage() {
     loadMore,
     addCd,
     deleteCd,
-  } = useCdRackData(targetUserId, 14, { useMock: true });
+  } = useCdRackData(targetUserId, 14);
   const [activeSettings, setActiveSettings] = useState<'add' | 'delete' | null>(
     null,
   );
