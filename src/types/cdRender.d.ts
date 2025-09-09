@@ -37,4 +37,5 @@ interface CdWheelProps {
   coverGeom: THREE.BufferGeometry;
   caseAxisIndex: Axis;
   rightLocal?: THREE.Vector3;
+  isModalOpen?: boolean;
 }
