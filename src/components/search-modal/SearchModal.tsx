@@ -71,7 +71,7 @@ export const SearchModal = ({
                    w-[95vw] max-w-[1000px] h-[90vh] max-h-[657px] 
                    sm:w-[90vw] lg:w-[1000px] sm:h-[657px]'>
         <div
-          className='gap-2 sm:gap-4 p-6 sm:p-10 w-full h-full bg-[#FCF7FD] rounded-xl sm:rounded-2xl 
+          className='gap-2 sm:gap-4 p-6 sm:p-10 w-full h-full bg-[#fffeff] rounded-xl sm:rounded-2xl 
                         flex flex-col lg:flex-row lg:item-between'>
           {/* 제목 + 검색 바 + 아이템 리스트 */}
           <div className='w-full lg:w-1/2 h-full flex flex-col'>
