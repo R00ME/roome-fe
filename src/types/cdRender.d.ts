@@ -21,7 +21,7 @@ interface CdModel {
 }
 
 interface CdSetProps {
-  item: CdItem;                      
+  item: CdItem;
   caseGeom: THREE.BufferGeometry;
   cdGeom: THREE.BufferGeometry;
   coverGeom: THREE.BufferGeometry;

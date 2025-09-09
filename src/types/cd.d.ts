@@ -1,6 +1,8 @@
 type CdItem = Pick<CDRackItem, 'myCdId' | 'coverUrl' | 'title' | 'artist' | 'album' | 'releaseDate' | 'genres' | 'youtubeUrl' | 'duration'>
 
-type CdProps = {items: CdItem[]}
+interface CdRackProps {
+  items: CdItem[];
+}
 
 interface CDRackInfo {
   data: CDRackItem[];
@@ -139,4 +141,16 @@ interface CdHoverState {
   activeIndex: number;          
   setActiveIndex: (i: number) => void;
 
+}
+
+interface CdDockMenuProps {
+  activeSettings: 'add' | 'delete' | null;
+  onSettingsChange: (setting: 'add' | 'delete') => void;
+  resetState: boolean;
+}
+
+interface CdDeleteModalProps {
+  items: CdItem[];
+  onClose: () => void;
+  onDelete: (ids: number[]) => void;
 }

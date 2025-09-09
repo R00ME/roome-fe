@@ -1,29 +1,55 @@
 import cd from '@assets/cd/cd.png';
 import Loading from '@components/Loading';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { SearchModal } from '../../components/search-modal/SearchModal';
 import TypingText from '../../components/TypingText';
-import useFetchCdLists from '../../hooks/cdrack/useFetchCdLists';
+import { useCdStore } from '../../store/useCdStore';
+import { useUserStore } from '../../store/useUserStore';
+import CdDeleteModal from './components/CdDeleteModal';
+import CdDockMenu from './components/CdDockMenu';
 import CdHoverLabel from './components/CdHoverLabel';
 import CdRack from './components/CdRack';
-import { useCdStore } from '../../store/useCdStore';
-import { useEffect } from 'react';
+import useCdRackData from './hooks/useCdRackData';
 
 export default function CdRackPage() {
+  const { userId: myUserId } = useUserStore().user;
   const { userId } = useParams();
   const targetUserId = Number(userId) || 1;
-  const { items, initialLoading, isFetchingMore, hasMore, loadMore } =
-    useFetchCdLists(targetUserId, 14, { useMock: true });
+  const {
+    items,
+    initialLoading,
+    isFetchingMore,
+    hasMore,
+    loadMore,
+    addCd,
+    deleteCd,
+  } = useCdRackData(targetUserId, 14, { useMock: true });
+  const [activeSettings, setActiveSettings] = useState<'add' | 'delete' | null>(
+    null,
+  );
+  const [resetDockMenuState, setResetDockMenuState] = useState(false);
   const phase = useCdStore((set) => set.phase);
 
   useEffect(() => {
-    if(phase > items.length -3 && hasMore && !isFetchingMore){
+    if (phase > items.length - 3 && hasMore && !isFetchingMore) {
       loadMore();
     }
-  }, [phase, items, hasMore, isFetchingMore, loadMore])
+  }, [phase, items, hasMore, isFetchingMore, loadMore]);
 
   if (initialLoading) {
     return <Loading />;
   }
+
+  const handleSettingsChange = (setting: 'add' | 'delete') => {
+    setActiveSettings(activeSettings === setting ? null : setting);
+  };
+
+  const handleCloseSettings = () => {
+    setActiveSettings(null);
+    setResetDockMenuState(true);
+    setTimeout(() => setResetDockMenuState(false), 0);
+  };
 
   const isEmpty = !items || items.length === 0;
 
@@ -31,7 +57,6 @@ export default function CdRackPage() {
     <div className='w-full h-screen'>
       <div className=' w-full h-screen bg-[#516392cc] backdrop-blur-[35px] '>
         {isEmpty ? (
-          // 👉 CD 없을 때 UI
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
             <TypingText
               text='  꽂을 CD가 없네요...'
@@ -45,8 +70,36 @@ export default function CdRackPage() {
           </div>
         ) : (
           <>
-            <CdRack items={items} />
+            <CdRack
+              items={items}
+            />
             <CdHoverLabel />
+
+            {/* 독메뉴 */}
+            {myUserId === targetUserId && (
+              <CdDockMenu
+                activeSettings={activeSettings}
+                onSettingsChange={handleSettingsChange}
+                resetState={resetDockMenuState}
+              />
+            )}
+
+            {/* 서치모달 / 삭제 모달 */}
+            {activeSettings === 'add' && (
+              <SearchModal
+                title='CD 랙에 담을 음악 찾기'
+                onClose={handleCloseSettings}
+                type='CD'
+                onSelect={(cdItem) => addCd(cdItem)}
+              />
+            )}
+            {activeSettings === 'delete' && (
+              <CdDeleteModal
+                items={items}
+                onClose={handleCloseSettings}
+                onDelete={(ids) => deleteCd(ids)}
+              />
+            )}
           </>
         )}
       </div>

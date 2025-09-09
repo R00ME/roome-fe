@@ -1,8 +1,8 @@
-import * as THREE from "three";
 import { useLoader } from '@react-three/fiber';
 import { useMemo } from 'react';
+import * as THREE from 'three';
+import type { GLTF } from 'three-stdlib';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import type { GLTF } from "three-stdlib";
 import { cdSettings } from '../constants/cdSettings';
 import {
   alignGeomToAxis,

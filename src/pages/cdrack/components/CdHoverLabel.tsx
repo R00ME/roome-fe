@@ -36,7 +36,7 @@ export default function CdHoverLabel() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className='absolute bottom-14 right-6 w-74 bg-white/80
+            className='fixed bottom-14 right-6 z-[999] w-74 bg-white/90 backdrop-blur-3xl pointer-events-none
             text-[#142b4b] p-4 rounded-xl shadow-lg flex gap-4 items-center'>
             <div className='flex items-center gap-5'>
               {/* 앨범 커버 썸네일 */}

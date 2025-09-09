@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import useCdModel from '../hooks/useCdModel';
 import CdRackScene from './CdRackScene';
 
-export default function CdRack({ items }: CdProps) {
+export default function CdRack({ items }: CdRackProps) {
   const { caseGeom, cdGeom, coverGeom, caseAxisIndex } = useCdModel();
 
   return (
@@ -16,8 +16,7 @@ export default function CdRack({ items }: CdProps) {
         outputColorSpace: THREE.SRGBColorSpace,
       }}
       camera={{ fov: 15, near: 0.1, far: 40 }}
-      className='w-full h-full'
-      >
+      className='w-full h-full'>
       <CdRackScene
         items={items}
         caseGeom={caseGeom}

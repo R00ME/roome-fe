@@ -1,19 +1,25 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { getCdRack } from '../../apis/cd';
-import { mockGetCdRack } from '../../apis/mockCd';
+import { useCallback, useEffect, useOptimistic, useRef, useState } from 'react';
+import {
+  addCdToMyRack,
+  deleteCdsFromMyRack,
+  getCdRack,
+} from '../../../apis/cd';
+import { mockGetCdRack } from '../../../apis/mockCd';
 
 type Options = {
   pageSize?: number;
   useMock?: boolean;
 };
 
-export default function useFetchCdLists(
+export default function useCdRackData(
   targetUserId: number | null,
   pageSize = 14,
   opts: Options = {},
 ) {
   const { useMock = false } = opts;
   const [items, setItems] = useState<CdItem[]>([]);
+  const [optimisticItems, setOptimisticItems] = useOptimistic(items);
+
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [initialLoading, setInitialLoading] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
@@ -54,6 +60,9 @@ export default function useFetchCdLists(
           artist: cd.artist,
           album: cd.album,
           genres: cd.genres,
+          releaseDate: cd.releaseDate ?? '',
+          youtubeUrl: cd.youtubeUrl ?? '',
+          duration: cd.duration ?? 0,
         }));
 
         setItems((prev) => {
@@ -73,7 +82,7 @@ export default function useFetchCdLists(
         inFlight.current = false;
       }
     },
-    [targetUserId, pageSize, hasMore],
+    [targetUserId, pageSize, hasMore, useMock],
   );
 
   useEffect(() => {
@@ -85,14 +94,61 @@ export default function useFetchCdLists(
     fetchPage(nextCursor);
   }, [fetchPage, nextCursor, hasMore]);
 
+  const addCd = useCallback(
+    async (cdData: PostCDInfo) => {
+      const tempItem: CdItem = {
+        myCdId: Date.now(),
+        coverUrl: cdData.coverUrl,
+        title: cdData.title,
+        artist: cdData.artist,
+        album: cdData.album,
+        genres: cdData.genres ?? [],
+        releaseDate: cdData.releaseDate ?? '',
+        youtubeUrl: cdData.youtubeUrl ?? '',
+        duration: cdData.duration ?? 0,
+      };
+
+      setOptimisticItems([...optimisticItems, tempItem]);
+
+      try {
+        const res = await addCdToMyRack(cdData);
+        setItems((prev) => [...prev, res]);
+      } catch (err) {
+        console.error('🚨 CD 추가 실패 (rollback):', err);
+        fetchPage(undefined);
+      }
+    },
+    [setOptimisticItems, optimisticItems, fetchPage],
+  );
+
+const deleteCd = useCallback(
+  async (myCdIds: number[]) => {
+    setOptimisticItems(
+      optimisticItems.filter((cd) => !myCdIds.includes(cd.myCdId))
+    );
+
+    try {
+      await deleteCdsFromMyRack(myCdIds);
+
+      setItems((prev) => prev.filter((cd) => !myCdIds.includes(cd.myCdId)));
+    } catch (err) {
+      console.error("🚨 CD 삭제 실패 (rollback):", err);
+      fetchPage(undefined);
+    }
+  },
+  [setOptimisticItems, optimisticItems, fetchPage]
+);
+
   const isLoading = initialLoading || isFetchingMore;
 
   return {
-    items,
+    items: optimisticItems,
     initialLoading,
     isFetchingMore,
     isLoading,
     hasMore,
     loadMore,
+    addCd,
+    deleteCd,
   };
 }
