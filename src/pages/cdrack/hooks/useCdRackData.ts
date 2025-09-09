@@ -4,20 +4,12 @@ import {
   deleteCdsFromMyRack,
   getCdRack,
 } from '../../../apis/cd';
-import { mockGetCdRack } from '../../../apis/mockCd';
 import { useToastStore } from '../../../store/useToastStore';
-
-type Options = {
-  pageSize?: number;
-  useMock?: boolean;
-};
 
 export default function useCdRackData(
   targetUserId: number | null,
   pageSize = 14,
-  opts: Options = {},
 ) {
-  const { useMock = false } = opts;
   const [items, setItems] = useState<CdItem[]>([]);
   const [optimisticItems, setOptimisticItems] = useOptimistic(items);
 
@@ -43,19 +35,8 @@ export default function useCdRackData(
         if (cursor == null) setInitialLoading(true);
         else setIsFetchingMore(true);
 
-        let res: CDRackInfo;
-        if (useMock) {
-          res = await mockGetCdRack(
-            targetUserId,
-            pageSize,
-            cursor ?? undefined,
-          );
-        } else {
-          res = await getCdRack(targetUserId, pageSize, cursor ?? undefined);
-        }
-
+        const res: CDRackInfo = await getCdRack(targetUserId, pageSize, cursor ?? undefined);
         const list: CDRackItem[] = res?.data ?? [];
-
         const mapped: CdItem[] = list.map((cd) => ({
           myCdId: cd.myCdId,
           coverUrl: cd.coverUrl,
@@ -85,7 +66,7 @@ export default function useCdRackData(
         inFlight.current = false;
       }
     },
-    [targetUserId, pageSize, hasMore, useMock],
+    [targetUserId, pageSize, hasMore],
   );
 
   useEffect(() => {
