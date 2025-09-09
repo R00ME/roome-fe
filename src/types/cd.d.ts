@@ -1,9 +1,28 @@
+type CdItem = Pick<CDRackItem, 'myCdId' | 'coverUrl' | 'title' | 'artist' | 'album' | 'releaseDate' | 'genres' | 'youtubeUrl' | 'duration'>
+
+interface CdRackProps {
+  items: CdItem[];
+  isModalOpen?: boolean; 
+}
+
 interface CDRackInfo {
-  data: CDInfo[] | DataListInfo[];
+  data: CDRackItem[];
   nextCursor: number;
   totalCount: number;
   firstMyCdId: number;
   lastMyCdId: number;
+}
+
+interface CDRackItem {
+  myCdId: number;      
+  title: string;
+  artist: string;
+  album: string;
+  releaseDate: string;  
+  genres: string[];
+  coverUrl: string;
+  youtubeUrl: string;
+  duration: number;    
 }
 
 // cd response body type
@@ -111,4 +130,28 @@ interface CdPlayer {
   progress: number;
   currentTime: number;
   duration: number;
+}
+
+interface CdHoverState {
+  hoveredCd: CDRackItem | null;
+  setHoveredCd: (cd: CDRackItem | null) => void;
+
+    phase: number;                  
+  setPhase: (p: number) => void;
+
+  activeIndex: number;          
+  setActiveIndex: (i: number) => void;
+
+}
+
+interface CdDockMenuProps {
+  activeSettings: 'add' | 'delete' | null;
+  onSettingsChange: (setting: 'add' | 'delete') => void;
+  resetState: boolean;
+}
+
+interface CdDeleteModalProps {
+  items: CdItem[];
+  onClose: () => void;
+  onDelete: (ids: number[]) => void;
 }

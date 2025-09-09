@@ -14,7 +14,7 @@ export const SearchInput = ({
   onChange,
   placeholder,
   mainColor,
-  bgColor = 'bg-gray-100',
+  bgColor = 'bg-[#f3f3f3]',
 }: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
