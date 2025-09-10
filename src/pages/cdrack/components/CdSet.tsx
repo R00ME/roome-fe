@@ -17,21 +17,23 @@ export default function CdSet({
   caseAxisIndex,
   rightLocal,
   basePosition,
-}: Omit<CdSetProps, 'coverUrl'> & { item: CdItem }) {
+}: Omit<CdSetProps, 'coverUrl'> & { item: ExtendedCdItem }) {
   const navigate = useNavigate();
   const { userId } = useParams();
+
+  const isPlaceholder = item.isPlaceholder ?? false;
 
   const group = useRef<THREE.Group>(null!);
   const cdMesh = useRef<THREE.Mesh>(null!);
   const coverMesh = useRef<THREE.Mesh>(null);
 
-  const { coverUrl } = item;
   const { caseMat, cdEdgeMat, cdFaceMat } = useCdMaterials();
   const { gl } = useThree();
   const { hoveredCd, setHoveredCd } = useCdStore();
   const hoverTimer = useRef<number>(0);
 
-  const coverTex = useTexture(coverUrl);
+  const coverTex = useTexture(item.coverUrl || ''); 
+
   coverTex.colorSpace = THREE.SRGBColorSpace;
   coverTex.minFilter = THREE.LinearFilter;
   coverTex.magFilter = THREE.LinearFilter;
@@ -42,18 +44,19 @@ export default function CdSet({
   coverTex.repeat.x = -1;
   coverTex.offset.x = 1;
 
-  const coverMat = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        roughness: 0.2,
-        metalness: 0.0,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-        side: THREE.DoubleSide,
-        map: coverTex,
-      }),
-    [coverTex],
+  const coverMat = useMemo(() =>{
+
+    if (isPlaceholder) return null;
+    return new THREE.MeshStandardMaterial({
+      roughness: 0.2,
+      metalness: 0.0,
+      polygonOffset: true,
+      polygonOffsetFactor: 1,
+      polygonOffsetUnits: 1,
+      side: THREE.DoubleSide,
+      map: coverTex,
+    })
+  },[coverTex, isPlaceholder],
   );
 
   const { baseCdPos, slideMax, coverOffset, coverAlignQuat } = useMemo(() => {
@@ -90,6 +93,7 @@ export default function CdSet({
   const caseMesh = useRef<THREE.Mesh>(null!);
 
   useFrame((_state, dt) => {
+    if (isPlaceholder) return;
     const k = 1 - Math.exp(-11 * dt);
     hoverNow.current += (hoverTarget.current - hoverNow.current) * k;
 
@@ -122,10 +126,12 @@ export default function CdSet({
       ref={group}
       position={basePosition}
       onClick={(e) => {
+        if (isPlaceholder) return;
         e.stopPropagation();
         navigate(`/cd/${item.myCdId}/user/${userId}`);
       }}
       onPointerOver={(e) => {
+        if (isPlaceholder) return;
         e.stopPropagation();
         clearTimeout(hoverTimer.current);
         hoverTimer.current = window.setTimeout(() => {
@@ -134,6 +140,7 @@ export default function CdSet({
         document.body.style.cursor = 'pointer';
       }}
       onPointerOut={() => {
+        if (isPlaceholder) return;
         clearTimeout(hoverTimer.current);
         setHoveredCd(null);
         document.body.style.cursor = 'default';
@@ -163,6 +170,28 @@ export default function CdSet({
           quaternion={coverAlignQuat}
           receiveShadow={true}
         />
+        {!isPlaceholder && (
+          <>
+            <mesh
+              ref={cdMesh}
+              geometry={cdGeom}
+              material={
+                cdGeom.groups && cdGeom.groups.length >= 3
+                  ? [cdEdgeMat, cdFaceMat, cdFaceMat]
+                  : cdFaceMat
+              }
+              position={baseCdPos}
+            />
+            <mesh
+              ref={coverMesh}
+              geometry={coverGeom}
+              material={coverMat!}
+              position={axisOffsetVec(caseAxisIndex, coverOffset)}
+              quaternion={coverAlignQuat}
+              receiveShadow={true}
+            />
+          </>
+        )}
       </mesh>
     </group>
   );

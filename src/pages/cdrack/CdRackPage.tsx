@@ -52,8 +52,6 @@ export default function CdRackPage() {
     setTimeout(() => setResetDockMenuState(false), 0);
   };
 
-  console.log('myUserId:', myUserId, 'targetUserId:', targetUserId);
-
   const isEmpty = !items || items.length === 0;
 
   return (
