@@ -1,5 +1,7 @@
 type CdItem = Pick<CDRackItem, 'myCdId' | 'coverUrl' | 'title' | 'artist' | 'album' | 'releaseDate' | 'genres' | 'youtubeUrl' | 'duration'>
 
+type ExtendedCdItem = CdItem & { isPlaceholder?: boolean };
+
 interface CdRackProps {
   items: CdItem[];
   isModalOpen?: boolean; 

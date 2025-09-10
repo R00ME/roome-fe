@@ -124,7 +124,7 @@ const deleteCd = useCallback(
       fetchPage(undefined);
     }
   },
-  [setOptimisticItems, optimisticItems, fetchPage]
+  [setOptimisticItems, optimisticItems, fetchPage, showToast]
 );
 
   const isLoading = initialLoading || isFetchingMore;
