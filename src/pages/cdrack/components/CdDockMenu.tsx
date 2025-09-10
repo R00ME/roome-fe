@@ -30,7 +30,7 @@ export default function CdDockMenu({
   return (
     <div
       ref={menuRef}
-      className={`z-5 bottom-menu bottom-20 right-21 max-sm:bottom-16 max-sm:right-16 relative ${
+      className={`z-[5] bottom-menu bottom-20 right-21 max-sm:bottom-16 max-sm:right-16 relative ${
         isOpen ? 'h-[202px]' : 'h-16'
       }`}>
       <div className='relative flex flex-col-reverse items-center w-full h-full gap-5'>

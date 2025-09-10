@@ -20,24 +20,43 @@ export default function CdWheel({
 
   const phase = useRef(0);
   const phaseVel = useRef(0);
+  
 
   const dir = useMemo(() => cdSettings.DIR.clone(), []);
+
+  const paddedItems: ExtendedCdItem[] = useMemo(() => {
+  const placeholdersNeeded = Math.max(0, 8 - items.length);
+  const placeholders = Array.from({ length: placeholdersNeeded }, (_, i) => ({
+    myCdId: -1000 - i,
+    title: '',
+    artist: '',
+    album: '',
+    releaseDate: '',
+    genres: [],
+    coverUrl: '',
+    youtubeUrl: '',
+    duration: 0,
+    isPlaceholder: true,
+  }));
+  return [...items, ...placeholders];
+}, [items]);
 
   useEffect(() => {
     if (isModalOpen) return; 
 
     const onWheel = (e: WheelEvent) => {
+      if (items.length <= 8) return;
       phaseVel.current += e.deltaY * -0.003;
     };
     window.addEventListener('wheel', onWheel, { passive: true });
     return () => window.removeEventListener('wheel', onWheel);
-  }, [isModalOpen]);
+  }, [isModalOpen, items.length]);
 
   useFrame((_state, dt) => {
     phase.current += phaseVel.current * dt;
     phaseVel.current *= Math.exp(-2.2 * dt);
 
-    const N = items.length;
+    const N = paddedItems.length;
     if (wheel.current) {
       wheel.current.children.forEach((child, i) => {
         const t = wrapCentered(i - phase.current, N);
@@ -48,14 +67,16 @@ export default function CdWheel({
 
     setPhase(phase.current);
   });
+  
 
   return (
+    
       <group
         ref={wheel}
         rotation={cdSettings.WHEEL_ROT}
         position={[-0.5, -0.2, 0]}>
-        {items.map((item: CdItem, i: number) => {
-          const N = items.length;
+        {paddedItems.map((item: CdItem, i: number) => {
+          const N = paddedItems.length;
           const CENTER = (N - 1) * 0.5;
           const base = dir
             .clone()
