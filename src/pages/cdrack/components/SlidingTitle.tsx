@@ -7,45 +7,46 @@ export default function SlidingTitle({
   text: string;
   width: number;
 }) {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const titleRef = useRef(null);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [speed, setSpeed] = useState(10);
 
   useEffect(() => {
-    if (!titleRef.current || !containerRef.current) return;
+    if (!containerRef.current || !textRef.current) return;
 
-    // DOM 업데이트 후 정확한 크기 비교를 위해 setTimeout 사용
-    const titleElement = titleRef.current!;
-    const containerElement = containerRef.current!;
+    const containerWidth = containerRef.current.offsetWidth;
+    const textWidth = textRef.current.scrollWidth;
 
-    // 제목이 부모보다 클 경우 애니메이션 적용
-    if (titleElement.scrollWidth > containerElement.offsetWidth) {
-      setIsAnimating(true);
-      const speed = titleElement.scrollWidth / 70; // 애니메이션 속도 조정
-      titleElement.style.animationDuration = `${speed}s`;
+    if (textWidth > containerWidth) {
+      setShouldAnimate(true);
+      setSpeed(textWidth / 50);
     } else {
-      setIsAnimating(false);
+      setShouldAnimate(false);
     }
-
-    return () => {
-      setIsAnimating(false);
-    };
   }, [text, width]);
 
   return (
     <div
       ref={containerRef}
-      style={{ width: `${width}px` }}
-      className='overflow-hidden whitespace-nowrap items-center h-full relative'>
-      <h1
-        ref={titleRef}
-        className={`text-[#142b4b] text-sm xl:text-lg 2xl:text-xl font-bold inline-block ${
-          isAnimating
-            ? 'animate-slideTitle absolute top-0 right-0 z-[5]'
-            : 'relative'
-        }`}>
-        {text}
-      </h1>
+      style={{ width }}
+      className="overflow-hidden whitespace-nowrap relative h-full"
+    >
+      <div
+        className={`flex ${shouldAnimate ? 'animate-marquee' : ''}`}
+        style={{
+          animationDuration: `${speed}s`,
+        }}
+      >
+        <span ref={textRef} className="pr-8 font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl">
+          {text}
+        </span>
+        {shouldAnimate && (
+          <span className="pr-8 font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl">
+            {text}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
