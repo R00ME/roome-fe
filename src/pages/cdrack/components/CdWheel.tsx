@@ -74,7 +74,7 @@ export default function CdWheel({
       <group
         ref={wheel}
         rotation={cdSettings.WHEEL_ROT}
-        position={[-0.5, -0.2, 0]}>
+        position={[-0.4, -0.3, 0]}>
         {paddedItems.map((item: CdItem, i: number) => {
           const N = paddedItems.length;
           const CENTER = (N - 1) * 0.5;
