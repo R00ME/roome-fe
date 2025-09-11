@@ -56,7 +56,7 @@ export default function CdRackPage() {
 
   return (
     <div className='w-full h-screen'>
-      <div className=' w-full h-screen bg-[#516392cc] backdrop-blur-[35px] '>
+      <div className=' w-full h-screen bg-[#2e3e68cc] backdrop-blur-[35px] '>
         {isEmpty ? (
           <div className='absolute inset-0 flex flex-col items-center justify-center'>
             <div className='mb-6 h-[40px] lg:h-[60px] flex items-center'>
