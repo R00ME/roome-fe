@@ -11,16 +11,18 @@ export default function SlidingTitle({
   const textRef = useRef<HTMLSpanElement>(null);
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [speed, setSpeed] = useState(10);
+  const [textWidth, setTextWidth] = useState(0);
 
   useEffect(() => {
     if (!containerRef.current || !textRef.current) return;
 
     const containerWidth = containerRef.current.offsetWidth;
-    const textWidth = textRef.current.scrollWidth;
+    const tWidth = textRef.current.scrollWidth;
+    setTextWidth(tWidth);
 
-    if (textWidth > containerWidth) {
+    if (tWidth > containerWidth) {
       setShouldAnimate(true);
-      setSpeed(textWidth / 50);
+      setSpeed(tWidth / 50);
     } else {
       setShouldAnimate(false);
     }
@@ -36,13 +38,17 @@ export default function SlidingTitle({
         className={`flex ${shouldAnimate ? 'animate-marquee' : ''}`}
         style={{
           animationDuration: `${speed}s`,
+          width: shouldAnimate ? `${textWidth * 2}px` : "auto",
         }}
       >
-        <span ref={textRef} className="pr-8 font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl">
+        <span
+          ref={textRef}
+          className="px-4 font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl"
+        >
           {text}
         </span>
         {shouldAnimate && (
-          <span className="pr-8 font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl">
+          <span className="px-4 font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl">
             {text}
           </span>
         )}
