@@ -25,7 +25,7 @@ export default function CdWheel({
   const dir = useMemo(() => cdSettings.DIR.clone(), []);
 
   const paddedItems: ExtendedCdItem[] = useMemo(() => {
-  const placeholdersNeeded = Math.max(0, 8 - items.length);
+  const placeholdersNeeded = Math.max(0, 10 - items.length);
   const placeholders = Array.from({ length: placeholdersNeeded }, (_, i) => ({
     myCdId: -1000 - i,
     title: '',
@@ -45,7 +45,7 @@ export default function CdWheel({
     if (isModalOpen) return; 
 
     const onWheel = (e: WheelEvent) => {
-      if (items.length <= 8) return;
+      if (items.length <= 10) return;
       phaseVel.current += e.deltaY * -0.003;
     };
     window.addEventListener('wheel', onWheel, { passive: true });

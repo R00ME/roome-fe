@@ -32,7 +32,10 @@ export default function CdSet({
   const { hoveredCd, setHoveredCd } = useCdStore();
   const hoverTimer = useRef<number>(0);
 
-  const coverTex = useTexture(item.coverUrl); 
+  const dummyTextureUrl =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NgYGD4DwABAgEAff4KsQAAAABJRU5ErkJggg==';
+
+  const coverTex = useTexture(isPlaceholder ? dummyTextureUrl : item.coverUrl);
 
   coverTex.colorSpace = THREE.SRGBColorSpace;
   coverTex.minFilter = THREE.LinearFilter;
@@ -44,8 +47,7 @@ export default function CdSet({
   coverTex.repeat.x = -1;
   coverTex.offset.x = 1;
 
-  const coverMat = useMemo(() =>{
-
+  const coverMat = useMemo(() => {
     if (isPlaceholder) return null;
     return new THREE.MeshStandardMaterial({
       roughness: 0.2,
@@ -55,9 +57,8 @@ export default function CdSet({
       polygonOffsetUnits: 1,
       side: THREE.DoubleSide,
       map: coverTex,
-    })
-  },[coverTex, isPlaceholder],
-  );
+    });
+  }, [coverTex, isPlaceholder]);
 
   const { baseCdPos, slideMax, coverOffset, coverAlignQuat } = useMemo(() => {
     const caseSize = getSize(caseGeom);
