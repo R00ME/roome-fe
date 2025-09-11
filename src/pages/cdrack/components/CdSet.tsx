@@ -32,7 +32,7 @@ export default function CdSet({
   const { hoveredCd, setHoveredCd } = useCdStore();
   const hoverTimer = useRef<number>(0);
 
-  const coverTex = useTexture(item.coverUrl || ''); 
+  const coverTex = useTexture(item.coverUrl); 
 
   coverTex.colorSpace = THREE.SRGBColorSpace;
   coverTex.minFilter = THREE.LinearFilter;
@@ -152,24 +152,6 @@ export default function CdSet({
         castShadow
         receiveShadow={true}
         rotation={cdSettings.SET_ROT}>
-        <mesh
-          ref={cdMesh}
-          geometry={cdGeom}
-          material={
-            cdGeom.groups && cdGeom.groups.length >= 3
-              ? [cdEdgeMat, cdFaceMat, cdFaceMat]
-              : cdFaceMat
-          }
-          position={baseCdPos}
-        />
-        <mesh
-          ref={coverMesh}
-          geometry={coverGeom}
-          material={coverMat}
-          position={axisOffsetVec(caseAxisIndex, coverOffset)}
-          quaternion={coverAlignQuat}
-          receiveShadow={true}
-        />
         {!isPlaceholder && (
           <>
             <mesh
