@@ -11,7 +11,7 @@ interface MiddleProps {
 const MiddleGroup = React.memo(
   ({ handleOnOffCd, cdStateChangeEvent, cdReady }: MiddleProps) => {
     return (
-      <article className='flex flex-col items-center  pl-11 '>
+      <article className='flex flex-col items-center '>
         <button onClick={() => handleOnOffCd(cdStateChangeEvent)}>
           <img
             className='w-11 h-11'
