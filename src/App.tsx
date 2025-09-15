@@ -40,20 +40,26 @@ function App() {
         trackTestEvent(user?.userId?.toString());
       }, 5000);
 
-      // 유입 경로 추적
-      const referrer = document.referrer || 'direct';
-      trackEvent('traffic_source', {
-        custom_user_id: user?.userId?.toString() || 'anonymous',
-        event_category: 'acquisition',
-        source: referrer,
-        medium: referrer.includes('google')
-          ? 'search'
-          : referrer.includes('instagram')
-          ? 'social'
-          : referrer !== 'direct'
-          ? 'referral'
-          : 'direct',
-      });
+      // 유입 경로 추적 (세션 최초 referrer 우선, 세션당 1회)
+      const savedFirstReferrer = sessionStorage.getItem('first_referrer');
+      const referrer = savedFirstReferrer || document.referrer || 'direct';
+      const alreadySent = sessionStorage.getItem('first_referrer_sent') === '1';
+
+      if (!alreadySent) {
+        trackEvent('traffic_source', {
+          custom_user_id: user?.userId?.toString() || 'anonymous',
+          event_category: 'acquisition',
+          source: referrer,
+          medium: referrer.includes('google')
+            ? 'search'
+            : referrer.includes('instagram')
+            ? 'social'
+            : referrer !== 'direct'
+            ? 'referral'
+            : 'direct',
+        });
+        sessionStorage.setItem('first_referrer_sent', '1');
+      }
 
       // 세션 종료 추적
       const startTime = Date.now();
