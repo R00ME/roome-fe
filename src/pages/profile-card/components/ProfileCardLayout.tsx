@@ -27,7 +27,7 @@ export const ProfileCardLayout = ({
         className='fixed inset-0 z-10 flex items-center justify-center'>
         <div
           className={twMerge(
-            '@container relative w-[660px] h-[660px]',
+            '@container relative w-[660px] h-[660px] !max-[440px]:h-[calc(100vh-80px)]',
             containerClassName,
           )}>
           {/* 뒤 배경 */}

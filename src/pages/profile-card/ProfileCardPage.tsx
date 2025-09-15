@@ -147,7 +147,7 @@ const ProfileCardPage = () => {
       {/* 취향 카드 */}
       <div
         aria-label='취향 카드'
-        className='gap-2 w-full item-between'>
+        className='gap-2 w-full item-between max-[440px]:flex-col'>
         <GenreCard
           title='음악 감성'
           genres={profile.musicGenres}
