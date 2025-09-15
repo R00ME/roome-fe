@@ -22,14 +22,7 @@ const LeftGroup = React.memo(
     handleMuteCdVolume,
   }: LeftProps) => {
     return (
-      <article className='flex flex-1 gap-14 items-center h-full'>
-        {/* 앨범 이미지 */}
-        <img
-          className='block h-full aspect-square'
-          src={cdInfo?.coverUrl}
-          alt='CD 앨범 이미지'
-        />
-
+      <article className='flex pl-10 flex-1 gap-14 items-center h-full'>
         {/* 음량 */}
         <div className='flex gap-2 justify-center items-center'>
           {cdReady.isMuted ? (

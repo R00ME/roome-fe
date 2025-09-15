@@ -7,18 +7,7 @@ import { cdSettings } from '../constants/cdSettings';
 import CdWheel from './CdWheel';
 
 export default function CdRackScene(props: CdWheelProps) {
-  const { camera, gl, scene } = useThree();
-
-  useEffect(() => {
-    const pitch = THREE.MathUtils.degToRad(cdSettings.CAM_PITCH);
-    camera.position.set(
-      0,
-      Math.cos(pitch) * cdSettings.CAM_RADIUS * 0.004,
-      Math.sin(pitch) * cdSettings.CAM_RADIUS,
-    );
-    camera.up.set(0, 0, 1);
-    camera.lookAt(0, 0, 0);
-  }, [camera]);
+  const { gl, scene } = useThree();
 
   useEffect(() => {
     const pmrem = new THREE.PMREMGenerator(gl);

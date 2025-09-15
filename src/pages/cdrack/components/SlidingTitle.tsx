@@ -43,7 +43,7 @@ export default function SlidingTitle({
       >
         <span
           ref={textRef}
-          className="px-4 font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl"
+          className="font-bold text-[#142b4b] text-sm xl:text-lg 2xl:text-xl"
         >
           {text}
         </span>

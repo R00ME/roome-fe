@@ -36,10 +36,14 @@ export default function CdPage() {
 
   return (
     <div
-      className={`flex flex-col justify-between w-full min-h-[100vh] bg-center bg-no-repeat bg-cover`}
+      className={`flex flex-col justify-between w-full h-[100vh] bg-center bg-no-repeat bg-cover overflow-y-auto`}
       style={{ backgroundImage: `url(${backgroundIMG})` }}>
       {/* 템플릿, CD이미지, 댓글 */}
-      <div className='flex justify-center items-end gap-22 h-[87vh] px-22  pt-17 pb-19  '>
+      <div
+        className='grid grid-cols-1 
+    md:[grid-template-columns:minmax(220px,0.5fr)_minmax(240px,0.7fr)_minmax(220px,0.5fr)]
+    gap-10 md:gap-20 px-6 pt-10 md:px-30 md:pt-15
+    pb-[calc(18vh-env(safe-area-inset-bottom))]  '>
         <CdTemplate />
         {hasData ? (
           <CdInfo
@@ -55,13 +59,15 @@ export default function CdPage() {
       </div>
 
       {/* 플레이어 */}
-      <section className='sticky bottom-0 left-0 right-0'>
+      <section
+        className='fixed bottom-0 left-0 right-0 mt-30
+        '>
         <CdPlayer
           cdInfo={cdInfo}
           setCdPlaying={onSetCdPlaying}
           setCurrentTime={setCurrentTime}
         />
-        <div className='h-[enc(safe-area-inset-bottom)]'/>
+        <div className='h-[env(safe-area-inset-bottom)]' />
       </section>
     </div>
   );

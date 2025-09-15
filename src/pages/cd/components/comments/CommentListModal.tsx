@@ -28,8 +28,9 @@ const CommentListModal = React.memo(({ onClose }: { onClose: () => void }) => {
             duration: 0.2,
             ease: 'easeOut',
           }}
-          className='w-[662px] h-[690px] rounded-3xl border-2 border-[#FCF7FD] shadow-box  backdrop-blur-[15px] p-4  '>
-          <div className='w-full  h-full bg-[#FCF7FD] rounded-[16px]  backdrop-blur-[15px] py-10 px-27'>
+          className='w-[90vw] max-w-[662px] h-[80vh] max-h-[690px] rounded-3xl border-2 border-[#FCF7FD]
+    shadow-box backdrop-blur-[15px] p-4 overflow-y-auto  '>
+          <div className='w-full  h-full bg-[#FCF7FD] rounded-[16px]  backdrop-blur-[15px] py-10 px-7 md:py-10 md:px-27'>
             <h1 className='text-[#7838AF]  text-2xl font-bold text-center mb-7'>
               댓글 목록
             </h1>

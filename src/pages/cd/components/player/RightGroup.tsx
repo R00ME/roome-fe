@@ -25,7 +25,7 @@ const RightGroup = React.memo(
           />
         </button>
 
-        <button onClick={() => navigate('/')}>
+        <button onClick={() => navigate('/')} className="hidden md:block">
           <img
             className='w-8'
             src={homeIcon}
