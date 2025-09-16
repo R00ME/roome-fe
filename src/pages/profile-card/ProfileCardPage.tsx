@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/store/useUserStore';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { ProfileCardLayout } from './components/ProfileCardLayout';
+import { MobileProfileCard } from './components/MobileProfileCard';
+import { useWindowSize } from '@/hooks/useWindowSize';
 import shareIcon from '@/assets/profile-card/share-icon.svg';
 import pointIcon from '@/assets/toast/coin.png';
 import shareImage from '@/assets/share-thumbnail.png'; // 공유용 썸네일 이미지
@@ -19,6 +21,8 @@ const ProfileCardPage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user } = useUserStore();
+  const { width } = useWindowSize();
+  const isMobile = width <= 640;
   const { profile, updateProfile } = useUserProfile(userId || undefined);
   const { showToast } = useToastStore();
   const [pointBalance, setPointBalance] = useState<number>(0);
@@ -41,7 +45,7 @@ const ProfileCardPage = () => {
       }
     };
 
-      fetchPointBalance();
+    fetchPointBalance();
   }, [userId, navigate, updateProfile]);
 
   const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -108,8 +112,10 @@ const ProfileCardPage = () => {
 
   const isMyProfile = user?.userId === Number(userId);
 
+  const CardShell = isMobile ? MobileProfileCard : ProfileCardLayout;
+
   return (
-    <ProfileCardLayout onClickOutside={handleClickOutside}>
+    <CardShell onClickOutside={handleClickOutside}>
       {/* 포인트 */}
       <button
         onClick={() => navigate(`/point/${userId}`)}
@@ -170,7 +176,7 @@ const ProfileCardPage = () => {
           onProfileUpdate={updateProfile}
         />
       )}
-    </ProfileCardLayout>
+    </CardShell>
   );
 };
 
