@@ -37,7 +37,7 @@ export const ProfileImageEdit = ({
       <img
         src={imageUrl || exProfile}
         alt='사용자 프로필'
-        className='object-cover w-32 h-32 rounded-full'
+        className='object-cover w-32 h-32 rounded-full max-sm:w-16 max-sm:h-16'
       />
       <button
         onClick={handleImageButtonClick}

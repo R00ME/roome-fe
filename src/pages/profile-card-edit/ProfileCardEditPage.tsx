@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import { profileAPI } from '@apis/profile';
 import { useUserStore } from '@/store/useUserStore';
 import { ProfileCardLayout } from '../profile-card/components/ProfileCardLayout';
+import { MobileProfileCard } from '../profile-card/components/MobileProfileCard';
 import { useProfileEdit } from './hooks/useProfileEdit';
 import { ProfileImageEdit } from './components/ProfileImageEdit';
 import { ProfileForm } from './components/ProfileForm';
 import { ProfileActions } from './components/ProfileActions';
 import { useToastStore } from '@/store/useToastStore';
+import { useWindowSize } from '@/hooks/useWindowSize';
 import exProfile from '@assets/rank/exProfile.png';
 
 interface FormData {
@@ -22,6 +24,7 @@ interface FormData {
 const ProfileCardEditPage = () => {
   const navigate = useNavigate();
   const { user } = useUserStore();
+  const { isMobile } = useWindowSize();
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     nickname: '',
@@ -121,17 +124,25 @@ const ProfileCardEditPage = () => {
   };
 
   if (isLoading) {
-    return (
+    const LoadingContent = (
+      <div className='flex justify-center items-center h-full'>
+        <p className='text-lg text-[#3E507D]'>프로필 정보를 불러오는 중...</p>
+      </div>
+    );
+
+    return isMobile ? (
+      <MobileProfileCard onClickOutside={handleClickOutside}>
+        {LoadingContent}
+      </MobileProfileCard>
+    ) : (
       <ProfileCardLayout onClickOutside={handleClickOutside}>
-        <div className='flex justify-center items-center h-full'>
-          <p className='text-lg text-[#3E507D]'>프로필 정보를 불러오는 중...</p>
-        </div>
+        {LoadingContent}
       </ProfileCardLayout>
     );
   }
 
-  return (
-    <ProfileCardLayout onClickOutside={handleClickOutside}>
+  const EditContent = (
+    <>
       <ProfileImageEdit
         imageUrl={formData.imagePreview || (formData.profileImage as string)}
         onImageChange={handleImageChange}
@@ -150,6 +161,16 @@ const ProfileCardEditPage = () => {
         onSubmit={handleSubmit}
         isLoading={isUpdating}
       />
+    </>
+  );
+
+  return isMobile ? (
+    <MobileProfileCard onClickOutside={handleClickOutside}>
+      {EditContent}
+    </MobileProfileCard>
+  ) : (
+    <ProfileCardLayout onClickOutside={handleClickOutside}>
+      {EditContent}
     </ProfileCardLayout>
   );
 };
