@@ -9,9 +9,21 @@ interface HiddenMenuProps {
   isOpen: boolean;
   onClose: () => void;
   buttonRef: React.RefObject<HTMLButtonElement>;
+  isMobile?: boolean;
+  housemateButtonRef?: React.RefObject<HTMLButtonElement>;
+  toggleHousemateModal?: () => void;
+  housemateIcon?: string;
 }
 
-const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
+const HiddenMenu = ({
+  isOpen,
+  onClose,
+  buttonRef,
+  isMobile,
+  housemateButtonRef,
+  toggleHousemateModal,
+  housemateIcon,
+}: HiddenMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { user } = useUserStore();
@@ -42,7 +54,7 @@ const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
             duration: 0.2,
             ease: 'easeOut',
           }}>
-          <ul className='overflow-hidden px-5 py-4 text-lg bg-white rounded-xl shadow-lg'>
+          <ul className='overflow-hidden px-5 py-4 text-lg bg-white rounded-xl shadow-lg max-sm:px-4 max-sm:py-2 max-sm:rounded-xl max-sm:font-sm'>
             <li>
               <Link
                 to={`/room/${user?.userId}`}
@@ -63,6 +75,24 @@ const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
                 내 프로필
               </button>
             </li>
+            {isMobile &&
+              housemateButtonRef &&
+              toggleHousemateModal &&
+              housemateIcon && (
+                <li>
+                  <button
+                    ref={housemateButtonRef}
+                    type='button'
+                    aria-label='하우스메이트'
+                    onClick={() => {
+                      onClose();
+                      toggleHousemateModal();
+                    }}
+                    className='w-full px-4 py-3 text-center border-b border-gray-100 text-[#2E4D99]/50 hover:text-[#2E4D99] transition-colors flex items-center justify-center gap-2'>
+                    하우스메이트
+                  </button>
+                </li>
+              )}
             <li>
               <button
                 onClick={handleLogout}

@@ -13,6 +13,7 @@ import { useUserStore } from '@/store/useUserStore';
 import { useToastStore } from '@/store/useToastStore';
 import { webSocketService } from '@/apis/websocket';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,6 +23,7 @@ const Header = () => {
   const [isNewNotification, setIsNewNotification] = useState(false);
   const location = useLocation();
   const [isConnecting, setIsConnecting] = useState(true);
+  const { isMobile } = useWindowSize();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const housemateButtonRef = useRef<HTMLButtonElement>(null);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
@@ -161,7 +163,9 @@ const Header = () => {
     <>
       <header className='fixed top-0 z-50 items-start pt-10 max-sm:px-6 max-sm:pt-8 w-full pointer-events-none px-21 item-between'>
         {/* 로고 */}
-        <button aria-label='로고' className='pointer-events-auto max-sm:w-24'>
+        <button
+          aria-label='로고'
+          className='pointer-events-auto max-sm:w-24'>
           <Link to='/'>
             <img
               src={logo}
@@ -207,18 +211,20 @@ const Header = () => {
               {isNewNotification.toString()}
             </div>
           </button>
-          <button
-            ref={housemateButtonRef}
-            type='button'
-            aria-label='하우스메이트'
-            onClick={toggleHousemateModal}
-            className='cursor-pointer'>
-            <img
-              src={housemateIcon}
-              alt='하우스메이트'
-              className='w-8 h-8'
-            />
-          </button>
+          {!isMobile && (
+            <button
+              ref={housemateButtonRef}
+              type='button'
+              aria-label='하우스메이트'
+              onClick={toggleHousemateModal}
+              className='cursor-pointer'>
+              <img
+                src={housemateIcon}
+                alt='하우스메이트'
+                className='w-8 h-8'
+              />
+            </button>
+          )}
           <div className='relative pointer-events-auto'>
             <button
               ref={buttonRef}
@@ -238,6 +244,10 @@ const Header = () => {
               isOpen={isMenuOpen}
               onClose={() => setIsMenuOpen(false)}
               buttonRef={buttonRef}
+              isMobile={isMobile}
+              housemateButtonRef={housemateButtonRef}
+              toggleHousemateModal={toggleHousemateModal}
+              housemateIcon={housemateIcon}
             />
           </div>
         </nav>
