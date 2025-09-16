@@ -161,14 +161,14 @@ const Header = () => {
     <>
       <header className='fixed top-0 z-50 items-start pt-10 max-sm:px-6 max-sm:pt-8 w-full pointer-events-none px-21 item-between'>
         {/* 로고 */}
-        <h1 className='pointer-events-auto'>
+        <button aria-label='로고' className='pointer-events-auto max-sm:w-24'>
           <Link to='/'>
             <img
               src={logo}
               alt='logo'
             />
           </Link>
-        </h1>
+        </button>
         {/* 네비게이션 */}
         <nav className='gap-4 pointer-events-auto item-row'>
           <button
