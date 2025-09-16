@@ -17,7 +17,7 @@ interface RecommendedUser {
 }
 
 interface GenreCardProps {
-  title: '음악 감성' | '독서 취향';
+  title: '음악 감성' | '독서 취향' | '취향 키워드';
   genres: string[];
 }
 

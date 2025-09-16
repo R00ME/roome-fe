@@ -118,8 +118,9 @@ const ProfileCardPage = () => {
     <CardShell onClickOutside={handleClickOutside}>
       {/* 포인트 */}
       <button
+        aria-label='포인트 버튼'
         onClick={() => navigate(`/point/${userId}`)}
-        className='flex items-center gap-2 bg-[#B5B5B5]/10 rounded-full px-3 py-1.5 absolute top-10 left-10'>
+        className='flex items-center gap-2 bg-[#B5B5B5]/10 rounded-full px-3 py-1.5 absolute top-10 left-10 max-sm:top-6 max-sm:left-5'>
         <img
           src={pointIcon}
           alt='사용자 현재 포인트'
@@ -132,8 +133,9 @@ const ProfileCardPage = () => {
 
       {/* 공유 버튼 */}
       <button
+        aria-label='공유 버튼'
         onClick={handleShareButtonClick}
-        className='flex items-center gap-2 hover:bg-[#B5B5B5]/10 rounded-full px-1.5 py-1.5 transition-all absolute top-10 right-10'>
+        className='flex items-center gap-2 hover:bg-[#B5B5B5]/10 rounded-full px-1.5 py-1.5 transition-all absolute top-10 right-10 max-sm:top-4 max-sm:right-5'>
         <img
           src={shareIcon}
           alt='공유 버튼'
@@ -154,14 +156,27 @@ const ProfileCardPage = () => {
       <div
         aria-label='취향 카드'
         className='gap-2 w-full item-between'>
-        <GenreCard
-          title='음악 감성'
-          genres={profile.musicGenres}
-        />
-        <GenreCard
-          title='독서 취향'
-          genres={profile.bookGenres}
-        />
+        {isMobile ? (
+          <GenreCard
+            title='취향 키워드'
+            contentClassName='justify-start w-full overflow-x-auto overflow-y-hidden'
+            genres={[
+              ...(profile.musicGenres || []),
+              ...(profile.bookGenres || []),
+            ]}
+          />
+        ) : (
+          <>
+            <GenreCard
+              title='음악 감성'
+              genres={profile.musicGenres}
+            />
+            <GenreCard
+              title='독서 취향'
+              genres={profile.bookGenres}
+            />
+          </>
+        )}
       </div>
 
       {/* 유저 추천 */}

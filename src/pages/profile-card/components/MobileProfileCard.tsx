@@ -28,7 +28,7 @@ export const MobileProfileCard = ({
         className='fixed inset-0 z-10 flex items-center justify-center'>
         <div
           className={twMerge(
-            'relative w-[95vw] max-w-[420px] aspect-[320/430]',
+            'relative w-[95vw] max-w-[420px] aspect-[320/430] mt-20',
             containerClassName,
           )}>
           <ProfileCardBg
@@ -36,7 +36,7 @@ export const MobileProfileCard = ({
           />
           <section
             className={twMerge(
-              'absolute inset-0 flex flex-col gap-4 items-center justify-around p-13',
+              'absolute inset-0 flex flex-col gap-4 items-center justify-around py-10 px-6 max-sm:gap-1',
               className,
             )}>
             {children}
