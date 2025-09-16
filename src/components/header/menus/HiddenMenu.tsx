@@ -33,7 +33,8 @@ const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
       {isOpen && (
         <motion.div
           ref={menuRef}
-          className='absolute w-[184px] right-[170%] top-0 p-2 border-2 border-white bg-white/30 backdrop-blur-lg rounded-2xl font-semibold'
+          aria-label='숨김 메뉴'
+          className='absolute w-[184px] right-[170%] max-sm:right-[120%] top-0 p-2 border-2 border-white bg-white/30 backdrop-blur-lg rounded-2xl font-semibold'
           initial={{ opacity: 0, scale: 0.95, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           exit={{ opacity: 0, scale: 0.95, x: 20 }}
@@ -45,13 +46,19 @@ const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
             <li>
               <Link
                 to={`/room/${user?.userId}`}
+                onClick={onClose}
                 className='inline-block w-full px-4 py-3 text-center border-b border-gray-100 text-[#2E4D99]/50 hover:text-[#2E4D99] transition-colors'>
                 나의 룸
               </Link>
             </li>
             <li>
               <button
-                onClick={() => user && navigate(`/profile/${user.userId}`)}
+                onClick={() => {
+                  onClose();
+                  if (user) {
+                    navigate(`/profile/${user.userId}`);
+                  }
+                }}
                 className='w-full px-4 py-3 text-center border-b border-gray-100  text-[#2E4D99]/50 hover:text-[#2E4D99] transition-colors'>
                 내 프로필
               </button>
