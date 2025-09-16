@@ -90,7 +90,8 @@ export default function DockMenu({
   return (
     <div
       ref={menuRef}
-      className={`bottom-menu bottom-20 right-21 max-sm:bottom-16 max-sm:right-16 drop-shadow-logo relative ${
+      aria-label='테마 및 취향 설정 메뉴 열기'
+      className={`bottom-menu bottom-20 right-21 max-sm:bottom-12 max-sm:right-8 drop-shadow-logo relative ${
         isOpen ? 'h-[202px]' : 'h-16'
       }`}>
       <div className='relative flex flex-col-reverse items-center w-full h-full gap-5'>

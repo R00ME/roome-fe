@@ -30,7 +30,8 @@ export default function CdDockMenu({
   return (
     <div
       ref={menuRef}
-      className={`z-[5] bottom-menu bottom-20 right-21 max-sm:bottom-16 max-sm:right-16 relative ${
+      aria-label='플레이리스트 편집 메뉴 열기'
+      className={`z-[5] bottom-menu bottom-20 right-21 max-sm:bottom-12 max-sm:right-8 relative ${
         isOpen ? 'h-[202px]' : 'h-16'
       }`}>
       <div className='relative flex flex-col-reverse items-center w-full h-full gap-5'>
