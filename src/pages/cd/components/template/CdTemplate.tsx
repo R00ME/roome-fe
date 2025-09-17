@@ -39,9 +39,11 @@ const CdTemplate = React.memo(() => {
 
   return (
     <div
-      // pl-12 pr-5 py-15
-      className='w-[32%]  text-white rounded-3xl border-2   border-[#FCF7FD]
-     bg-[#3E507D1A] backdrop-blur-lg shadow-box h-full flex justify-center items-center  relative  '>
+      className='order-2 md:order-1
+        w-full text-white rounded-3xl border-2 border-[#FCF7FD]
+        bg-[#3E507D1A] backdrop-blur-lg shadow-box
+        flex justify-center items-center relative
+        h-[300px] md:h-full '>
       {isEdit ? (
         <EditTemplate
           questions={questions}
