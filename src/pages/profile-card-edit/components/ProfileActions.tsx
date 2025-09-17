@@ -32,13 +32,13 @@ export const ProfileActions = ({
     <div className='flex flex-col gap-4 items-center'>
       <LayeredButton
         theme='purple'
-        className='py-1.5 px-10'
+        className='py-1.5 px-10 max-sm:py-1 max-sm:px-4 max-sm:text-sm'
         onClick={onSubmit}
         disabled={isLoading}>
         {isLoading ? '수정 중...' : '수정 완료'}
       </LayeredButton>
       <button
-        className='text-sm text-[#3E507D]/30 mt-2'
+        className='text-sm text-[#3E507D]/30 mt-2 max-sm:mt-0'
         onClick={() => setShowWithdrawModal(true)}>
         회원 탈퇴하기
       </button>

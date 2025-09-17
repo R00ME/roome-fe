@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logoutAPI } from '@apis/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUserStore } from '../../../store/useUserStore';
@@ -10,9 +10,21 @@ interface HiddenMenuProps {
   isOpen: boolean;
   onClose: () => void;
   buttonRef: React.RefObject<HTMLButtonElement>;
+  isMobile?: boolean;
+  housemateButtonRef?: React.RefObject<HTMLButtonElement>;
+  toggleHousemateModal?: () => void;
+  housemateIcon?: string;
 }
 
-const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
+const HiddenMenu = ({
+  isOpen,
+  onClose,
+  buttonRef,
+  isMobile,
+  housemateButtonRef,
+  toggleHousemateModal,
+  housemateIcon,
+}: HiddenMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { user } = useUserStore();
@@ -30,24 +42,15 @@ const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
     navigate('/login');
   };
 
-  const handleRoomClick = () => {
-    onClose();
-    navigate(`/room/${user?.userId}`);
-  };
-
-  const handleProfileClick = () => {
-    onClose();
-    if (user) {
-      navigate(`/profile/${user.userId}`);
-    }
-  };
+  // no-op
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           ref={menuRef}
-          className='absolute w-[184px] right-[170%] top-0 p-2 border-2 border-white bg-white/30 backdrop-blur-lg rounded-2xl font-semibold'
+          aria-label='숨김 메뉴'
+          className='absolute w-[184px] right-[170%] max-sm:right-[120%] top-0 p-2 border-2 border-white bg-white/30 backdrop-blur-lg rounded-2xl font-semibold'
           initial={{ opacity: 0, scale: 0.95, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           exit={{ opacity: 0, scale: 0.95, x: 20 }}
@@ -55,21 +58,45 @@ const HiddenMenu = ({ isOpen, onClose, buttonRef }: HiddenMenuProps) => {
             duration: 0.2,
             ease: 'easeOut',
           }}>
-          <ul className='overflow-hidden px-5 py-4 text-lg bg-white rounded-xl shadow-lg'>
+          <ul className='overflow-hidden px-5 py-4 text-lg bg-white rounded-xl shadow-lg max-sm:px-4 max-sm:py-2 max-sm:rounded-xl max-sm:font-sm'>
             <li>
-              <button
-                onClick={handleRoomClick}
-                className='w-full px-4 py-3 text-center border-b border-gray-100 text-[#2E4D99]/50 hover:text-[#2E4D99] transition-colors'>
+              <Link
+                to={`/room/${user?.userId}`}
+                onClick={onClose}
+                className='inline-block w-full px-4 py-3 text-center border-b border-gray-100 text-[#2E4D99]/50 hover:text-[#2E4D99] transition-colors'>
                 나의 룸
-              </button>
+              </Link>
             </li>
             <li>
               <button
-                onClick={handleProfileClick}
+                onClick={() => {
+                  onClose();
+                  if (user) {
+                    navigate(`/profile/${user.userId}`);
+                  }
+                }}
                 className='w-full px-4 py-3 text-center border-b border-gray-100  text-[#2E4D99]/50 hover:text-[#2E4D99] transition-colors'>
                 내 프로필
               </button>
             </li>
+            {isMobile &&
+              housemateButtonRef &&
+              toggleHousemateModal &&
+              housemateIcon && (
+                <li>
+                  <button
+                    ref={housemateButtonRef}
+                    type='button'
+                    aria-label='하우스메이트'
+                    onClick={() => {
+                      onClose();
+                      toggleHousemateModal();
+                    }}
+                    className='w-full px-4 py-3 text-center border-b border-gray-100 text-[#2E4D99]/50 hover:text-[#2E4D99] transition-colors flex items-center justify-center gap-2'>
+                    하우스메이트
+                  </button>
+                </li>
+              )}
             <li>
               <button
                 onClick={handleLogout}

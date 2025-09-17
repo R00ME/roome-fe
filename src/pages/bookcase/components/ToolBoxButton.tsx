@@ -44,9 +44,8 @@ const ToolBoxButton = ({
   return (
     <div
       ref={menuRef}
-      className={`bottom-menu ${
-        isOtherUserBookcase ? 'bottom-20' : 'bottom-20'
-      } right-21 max-sm:bottom-16 max-sm:right-16 drop-shadow-logo ${
+      aria-label='도서 도구 모음 열기'
+      className={`bottom-menu bottom-20 right-21 max-sm:bottom-12 max-sm:right-8 drop-shadow-logo ${
         isOpen && !isOtherUserBookcase ? 'h-[202px]' : 'h-16'
       }`}>
       <div className='flex relative flex-col-reverse gap-5 items-center w-full h-full'>

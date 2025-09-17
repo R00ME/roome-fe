@@ -80,7 +80,7 @@ export const ProfileButtons = ({
     return (
       <LayeredButton
         theme='purple'
-        className='py-1.5 px-8'
+        className='py-1.5 px-8 max-sm:py-1 max-sm:px-4 max-sm:text-sm'
         containerClassName='w-fit'
         onClick={handleEditProfile}>
         프로필 수정
@@ -89,17 +89,17 @@ export const ProfileButtons = ({
   }
 
   return (
-    <div className='gap-10 mt-5 item-middle'>
+    <div className='gap-10 mt-5 item-middle max-sm:gap-5 max-sm:mt-0'>
       <LayeredButton
         theme={isFollowing ? 'gray' : 'red'}
-        className='py-1.5 px-8'
+        className='py-1.5 px-8 max-sm:py-1 max-sm:px-4 max-sm:text-sm'
         containerClassName='w-fit'
         onClick={handleMateAction}>
         메이트 {isFollowing ? '취소' : '맺기'}
       </LayeredButton>
       <LayeredButton
         theme='blue'
-        className='py-1.5 px-8'
+        className='py-1.5 px-8 max-sm:py-1 max-sm:px-4 max-sm:text-sm'
         containerClassName='w-fit'
         onClick={handleRoomVisit}>
         방 구경하기
