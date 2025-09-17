@@ -4,7 +4,7 @@ export default function RankMenu({onOpen}) {
   return (
     <button
       onClick={onOpen}
-      className='group w-16 h-16 bg-white/20 rounded-full border border-white flex items-center justify-center fixed bottom-20 left-21 max-sm:bottom-16 max-sm:left-16 --drop-shadow-logo cursor-pointer hover:scale-105 transition-all duration-200'
+      className='group w-16 h-16 bg-white/20 rounded-full border border-white flex items-center justify-center fixed bottom-20 left-21 max-sm:bottom-12 max-sm:left-8 --drop-shadow-logo cursor-pointer hover:scale-105 transition-all duration-200'
       aria-label='랭킹 보기'>
       <span className='bottom-menu-icon bg-white relative'>
         <img

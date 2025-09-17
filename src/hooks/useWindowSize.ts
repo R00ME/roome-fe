@@ -21,5 +21,7 @@ export const useWindowSize = () => {
     };
   }, []);
 
-  return windowSize;
+  const isMobile = windowSize.width <= 440;
+
+  return { ...windowSize, isMobile };
 };

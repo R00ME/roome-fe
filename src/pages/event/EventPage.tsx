@@ -2,22 +2,31 @@ import backgroundImg from '@assets/roome-background-img.png';
 import gameMachine from '@assets/event/game-machine.svg';
 
 import LayeredButton from '@components/LayeredButton';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { addEventJoin } from '@apis/event';
 import { useToastStore } from '@/store/useToastStore';
 import Loading from '@components/Loading';
 import ResultScreen from './components/ResultScreen';
 import { useFetchEvent } from '@hooks/event/useFetchEvent';
 import { useEventSecurityTracking } from '@/hooks/useEventSecurityTracking';
+import { useNavigate } from 'react-router-dom';
 
 export default function EventPage() {
   const showToast = useToastStore((state) => state.showToast);
+  const navigate = useNavigate();
 
   const [showResult, setShowResult] = useState<boolean | null>(null);
   const [joinStatus, setJoinStatus] = useState<JoinStatus>('idle');
   const { eventInfo, isLoading, isError } = useFetchEvent();
 
   const isJoinDisabled = !eventInfo?.id || joinStatus !== 'idle' || isLoading;
+
+  useEffect(() => {
+    if (isError) {
+      showToast('현재 진행중인 이벤트가 없어요 ૮( ᵕ̩̩ - ᵕ̩̩ c)ა', 'error');
+      navigate(-1);
+    }
+  }, [isError, showToast, navigate]);
 
   // 이벤트 보안 추적 훅
   const {
@@ -62,7 +71,6 @@ export default function EventPage() {
   };
 
   if (isLoading) return <Loading />;
-  if (isError) return <div>{isError}</div>;
 
   return (
     <div

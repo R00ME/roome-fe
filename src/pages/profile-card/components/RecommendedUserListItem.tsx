@@ -16,8 +16,8 @@ const RecommendedUserListItem = ({ user }: RecommendedUserListItemProps) => {
   return (
     <li
       onClick={handleClick}
-      className='flex flex-col items-center w-[80px] h-[100px] py-4 bg-[#FDFCFE] shadow-md rounded-[10px] mb-1 cursor-pointer hover:bg-[#FCF7FD]/80 transition-colors'>
-      <div className='w-10 h-10 mb-2 shrink-0'>
+      className='flex flex-col items-center w-[80px] h-[100px] py-4 bg-[#FDFCFE] shadow-md rounded-[10px] cursor-pointer hover:bg-[#FCF7FD]/80 transition-colors max-sm:w-[60px] max-sm:min-w-[60px] max-sm:h-[75px] max-sm:py-2 justify-left'>
+      <div className='w-10 h-10 mb-2 shrink-0 max-sm:w-8 max-sm:h-8'>
         <img
           src={user.profileImage || exProfile}
           alt={`${user.nickname}님의 프로필`}
