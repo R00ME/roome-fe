@@ -102,26 +102,19 @@ export default function Guestbook({
       onClick={handleClickOutside}
       className='fixed inset-0 z-10 flex items-center justify-center'>
       {isMobile ? (
-        <GuestbookMobile onClickOutside={handleClickOutside}>
-          <span className='flex gap-2 font-bold text-xl'>
-            <p className='text-[#4983EF]'>{ownerName}</p>
-            <p className='text-[#3E507D]'>님의 방명록</p>
-          </span>
-          <GuestbookMessage
-            ownerId={ownerId}
-            messages={guestbookData}
-            userId={user.userId}
-            refetchGuestbook={() => fetchGuestbookData(currentPage)}
-            onDelete={handleDeleteGuestbook}
-          />
-          <GusetbookInput onSubmitMessage={handleSubmitMessage} />
-          <Pagination
-            currentPage={currentPage}
-            totalPage={totalPage}
-            onChangePage={handlePageChange}
-            color='#73A1F7'
-          />
-        </GuestbookMobile>
+        <GuestbookMobile
+          onClickOutside={handleClickOutside}
+          ownerName={ownerName}
+          ownerId={ownerId}
+          userId={user.userId}
+          messages={guestbookData}
+          refetchGuestbook={() => fetchGuestbookData(currentPage)}
+          onDelete={handleDeleteGuestbook}
+          onSubmitMessage={handleSubmitMessage}
+          currentPage={currentPage}
+          totalPage={totalPage}
+          onChangePage={handlePageChange}
+        />
       ) : (
         <div className='@container relative w-[95vw] h-[95vw] max-w-none max-h-none min-w-0 min-h-0 sm:w-[calc(100vw*0.3966)] sm:max-w-[800px] sm:h-[calc(100vw*0.3611)] sm:max-h-[700px] sm:min-w-[600px] sm:min-h-[550px] max-[560px]:h-[100vw] max-[525px]:h-[115vw] max-[480px]:h-[135vw]'>
           {/* 뒤 배경 */}
