@@ -64,7 +64,7 @@ export const initGA = (measurementId: string, userId?: string) => {
         debug_mode: true,
         user_id: String(userId || 'anonymous'),
       });
-      console.log('GA Config 설정 완료:', measurementId, 'User ID:', userId);
+      // console.log('GA Config 설정 완료:', measurementId, 'User ID:', userId);
     }
   };
 };
@@ -93,7 +93,7 @@ export const trackEvent = (
         ...parameters,
         timestamp: new Date().toISOString(),
       });
-      console.log('GA Event tracked (gtag):', eventName, parameters);
+      // console.log('GA Event tracked (gtag):', eventName, parameters);
     } else if (window.dataLayer) {
       // dataLayer에 직접 추가 (fallback)
       window.dataLayer.push({
@@ -101,7 +101,7 @@ export const trackEvent = (
         ...parameters,
         timestamp: new Date().toISOString(),
       });
-      console.log('GA Event tracked (dataLayer):', eventName, parameters);
+      // console.log('GA Event tracked (dataLayer):', eventName, parameters);
     } else {
       console.warn('GA not initialized, event not tracked:', eventName);
     }
@@ -119,7 +119,7 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
       page_path: pagePath,
       page_title: pageTitle,
     });
-    console.log('GA PageView tracked:', pagePath, pageTitle);
+    // console.log('GA PageView tracked:', pagePath, pageTitle);
   }
 };
 

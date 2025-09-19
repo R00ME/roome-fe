@@ -9,7 +9,7 @@ const CdTemplate = React.memo(() => {
   const [templateData, setTemplateData] = useState<TemplateData>(null);
   const myCdId = Number(useParams().cdId);
 
-  // console.log('cdTemplate'); 리렌더링 안됨
+  // // console.log('cdTemplate'); 리렌더링 안됨
 
   const questions = [
     { question: '이 노래를 듣게 된 계기', answer: templateData?.comment1 },

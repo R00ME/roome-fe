@@ -27,12 +27,12 @@ const QuoteSection = memo(
       id='section-quote'
       className='mb-6'>
       <h2
-        className='mb-2 text-2xl font-semibold'
+        className='mb-2 text-2xl font-semibold max-sm:text-xl'
         style={{ color: colors.primary }}>
         인상 깊은 구절
       </h2>
       <p
-        className='text-lg whitespace-pre-wrap'
+        className='text-lg whitespace-pre-wrap max-sm:text-base'
         style={{ color: colors.secondary }}>
         {content}
       </p>
@@ -52,12 +52,12 @@ const EmotionSection = memo(
       id='section-emotion'
       className='mb-6'>
       <h2
-        className='mb-2 text-2xl font-semibold'
+        className='mb-2 text-2xl font-semibold max-sm:text-xl'
         style={{ color: colors.primary }}>
         그 때 나의 감정
       </h2>
       <p
-        className='text-lg whitespace-pre-wrap'
+        className='text-lg whitespace-pre-wrap max-sm:text-base'
         style={{ color: colors.secondary }}>
         {content}
       </p>
@@ -77,12 +77,12 @@ const ReasonSection = memo(
       id='section-reason'
       className='mb-6'>
       <h2
-        className='mb-2 text-2xl font-semibold'
+        className='mb-2 text-2xl font-semibold max-sm:text-xl'
         style={{ color: colors.primary }}>
         책을 선택하게 된 계기
       </h2>
       <p
-        className='text-lg whitespace-pre-wrap'
+        className='text-lg whitespace-pre-wrap max-sm:text-base'
         style={{ color: colors.secondary }}>
         {content}
       </p>
@@ -102,12 +102,12 @@ const DiscussionSection = memo(
       id='section-discussion'
       className='mb-6'>
       <h2
-        className='mb-2 text-2xl font-semibold'
+        className='mb-2 text-2xl font-semibold max-sm:text-xl'
         style={{ color: colors.primary }}>
         다른 사람과 나누고 싶은 대화 주제
       </h2>
       <p
-        className='text-lg whitespace-pre-wrap'
+        className='text-lg whitespace-pre-wrap max-sm:text-base'
         style={{ color: colors.secondary }}>
         {content}
       </p>
@@ -174,7 +174,7 @@ export const ReviewContent = ({
             section.scrollIntoView({ behavior: 'smooth' });
           }
         }}
-        className='gap-2 px-5 py-1.5 text-lg border-2 rounded-full item-middle'
+        className='gap-2 px-5 py-1.5 text-lg border-2 rounded-full item-middle max-sm:text-base max-sm:px-4 max-sm:py-1'
         style={{
           borderColor: colors.primary,
           color: colors.primary,

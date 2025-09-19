@@ -69,7 +69,7 @@ export class WebSocketService {
 
   private attemptReconnectIfNeeded(): void {
     if (this.connectionStatus === 'DISCONNECTED') {
-      // // console.log('연결이 끊어진 상태에서 사용자 활동 감지. 재연결 시도');
+      // // // console.log('연결이 끊어진 상태에서 사용자 활동 감지. 재연결 시도');
       this.connect();
     }
   }
@@ -88,18 +88,18 @@ export class WebSocketService {
 
   private async handleConnectionError(): Promise<void> {
     if (this.isManualLogout) {
-      // // console.log('명시적 로그아웃 상태: 재연결 시도 무시');
+      // // // console.log('명시적 로그아웃 상태: 재연결 시도 무시');
       return;
     }
 
     if (this.reconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
-      // // console.log('최대 재연결 시도 횟수 초과');
+      // // // console.log('최대 재연결 시도 횟수 초과');
       this.cleanupConnection();
       return;
     }
 
     this.reconnectAttempts++;
-    // console.log(
+    // // console.log(
     //   `재연결 시도 ${this.reconnectAttempts}/${this.MAX_RECONNECT_ATTEMPTS}`,
     // );
 
@@ -152,14 +152,14 @@ export class WebSocketService {
       onDisconnect: this.handleDisconnect.bind(this),
       onStompError: this.handleStompError.bind(this),
       onWebSocketError: this.handleWebSocketError.bind(this),
-      // debug: (msg: string) => // console.log('STOMP Debug:', msg),
+      // debug: (msg: string) => // // console.log('STOMP Debug:', msg),
     });
 
     await this.client.activate();
   }
 
   private handleConnect(): void {
-    console.log('웹소켓 연결 성공');
+    // console.log('웹소켓 연결 성공');
     this.connectionStatus = 'CONNECTED';
     this.reconnectAttempts = 0;
     this.setupSubscriptions();
@@ -169,7 +169,7 @@ export class WebSocketService {
   }
 
   private handleDisconnect(): void {
-    console.log('웹소켓 연결 해제');
+    // console.log('웹소켓 연결 해제');
     if (!this.isManualLogout) {
       this.handleConnectionError();
     }

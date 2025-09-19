@@ -64,18 +64,18 @@ const Header = () => {
     // 3. 웹소켓 연결
     const connectWebSocket = async () => {
       if (!accessToken) {
-        console.log('웹소켓 연결 실패: 토큰이 없음');
+        // console.log('웹소켓 연결 실패: 토큰이 없음');
         setIsConnecting(false);
         return;
       }
 
-      console.log('웹소켓 연결 시도 시작');
+      // console.log('웹소켓 연결 시도 시작');
       setIsConnecting(true);
 
       try {
         await webSocketService.connect();
       } catch (error) {
-        console.log('웹소켓 연결 실패:', error);
+        // console.log('웹소켓 연결 실패:', error);
         showToast('알림 서비스 연결에 실패했습니다.', 'error');
         setIsConnecting(false);
       }

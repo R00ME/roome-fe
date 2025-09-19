@@ -14,13 +14,13 @@ export const BookInfo = memo(
     <div className='flex flex-col gap-2'>
       <div className='flex flex-col gap-4'>
         <span
-          className='text-xl font-medium'
+          className='text-xl font-medium max-sm:text-lg'
           style={{ color: `${colors.primary}` }}>
           {publishedDate?.split('-')[0]}
         </span>
         <div className='flex items-end w-full gap-4 max-[1200px]:flex-col max-[1200px]:items-start'>
           <h2
-            className='text-4xl font-bold'
+            className='text-4xl font-bold max-sm:text-3xl'
             style={{ color: colors.primary }}>
             {bookTitle}
           </h2>

@@ -22,12 +22,12 @@ function App() {
       }
 
       initGA(measurementId, user?.userId?.toString());
-      console.log(
-        'Google Analytics 초기화 완료:',
-        measurementId,
-        'User ID:',
-        user?.userId,
-      );
+      // console.log(
+      //   'Google Analytics 초기화 완료:',
+      //   measurementId,
+      //   'User ID:',
+      //   user?.userId,
+      // );
 
       // 세션 시작 추적
       trackEvent('session_start', {
