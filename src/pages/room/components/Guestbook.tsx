@@ -33,7 +33,13 @@ export default function Guestbook({
   const fetchGuestbookData = useCallback(
     async (page: number) => {
       try {
-        const response = await guestbookAPI.getGuestbook(ownerId, page, 2);
+        // 모바일에서는 1개, 데스크톱에서는 2개
+        const pageSize = isMobile ? 1 : 2;
+        const response = await guestbookAPI.getGuestbook(
+          ownerId,
+          page,
+          pageSize,
+        );
         setGuestbookData(response.guestbook || []);
         setTotalPage(response.pagination?.totalPages);
       } catch (error) {
@@ -41,7 +47,7 @@ export default function Guestbook({
         setGuestbookData([]);
       }
     },
-    [ownerId],
+    [ownerId, isMobile],
   );
 
   useEffect(() => {
@@ -49,6 +55,11 @@ export default function Guestbook({
     startFeatureTracking(FEATURE_NAMES.GUESTBOOK, user?.userId?.toString());
     fetchGuestbookData(currentPage);
   }, [fetchGuestbookData, currentPage, startFeatureTracking, user?.userId]);
+
+  // 화면 크기 변경 시 페이지 사이즈가 바뀌면 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [isMobile]);
 
   const handleSubmitMessage = async (guestMessage: string) => {
     if (guestMessage.trim() === '') return;
