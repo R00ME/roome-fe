@@ -129,7 +129,7 @@ const BookReviewDisplay = ({
       />
 
       <article
-        className='absolute flex flex-col w-full gap-4 rounded-tl-[80px] top-[70%] min-h-[30%] px-24 py-16 overflow-x-hidden max-[1200px]:px-16 max-[1200px]:py-12'
+        className='absolute flex flex-col w-full gap-4 rounded-tl-[80px] top-[70%] min-h-[30%] px-24 py-16 overflow-x-hidden max-[1200px]:px-16 max-[1200px]:py-12 max-sm:px-8 max-sm:py-8 max-sm:rounded-tl-[40px]'
         style={{
           backgroundColor: `${colors.surface}`,
           scrollBehavior: 'smooth',
