@@ -1,4 +1,4 @@
-import backgroundIMG from '@/assets/roome-background-img.png';
+import backgroundIMG from '/images/roome-background-img.webp';
 import Loading from '@components/Loading';
 import { useFetchCdInfo } from '@hooks/cd/useFetchCdInfo';
 import React, { useEffect, useMemo, useState } from 'react';

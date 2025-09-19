@@ -16,6 +16,13 @@ const tips = [
 export default function CdHoverLabel() {
   const [randomTip, setRandomTip] = useState('');
   const hoveredCd = useCdStore((set) => set.hoveredCd);
+  const setHoveredCd = useCdStore((set) => set.setHoveredCd);
+
+  useEffect(() => {
+    setHoveredCd(null);
+
+    return () => setHoveredCd(null);
+  }, [setHoveredCd]);
 
   useEffect(() => {
     if (hoveredCd) {
