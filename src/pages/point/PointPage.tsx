@@ -9,11 +9,13 @@ import { motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
+import { useWindowSize } from '@/hooks/useWindowSize';
 import PointHistory from './components/PointHistory';
 
 export default function PointPage() {
   const navigate = useNavigate();
   const [pointBalance, setPointBalance] = useState(0);
+  const { isMobile } = useWindowSize();
 
   const userId = Number(useParams().userId);
   const myUserId = useUserStore((state) => state.user).userId;
@@ -89,11 +91,16 @@ export default function PointPage() {
         onClick={handleClickOutside}
         className='fixed inset-0 z-10 flex items-center justify-center'>
         {/* 영수증 */}
-        <div className='relative w-[501px] h-[730px]'>
+        <div
+          className={`relative ${
+            isMobile
+              ? 'w-[min(95vw,420px)] aspect-[400/650]'
+              : 'w-[400px] aspect-[400/650]'
+          }`}>
           <div
             style={{ backgroundImage: `url(${receipt})` }}
-            className='w-full h-full bg-contain bg-no-repeat bg-center flex flex-col items-center  gap-10 '>
-            <h1 className='mt-10 text-[#3E507D] text-[30px] font-bold'>
+            className='w-full h-full bg-contain bg-no-repeat bg-center flex flex-col items-center gap-4 p-10'>
+            <h1 className=' text-[#3E507D] text-3xl font-bold py-4'>
               Point Receipt
             </h1>
 
@@ -109,7 +116,7 @@ export default function PointPage() {
               />
             )}
 
-            <div className='mb-8 w-[70%]'>
+            <div className='w-full'>
               <div className='flex justify-between items-center mb-6 '>
                 <p className='text-[#162C63] font-medium text-sm'>
                   포인트 잔고

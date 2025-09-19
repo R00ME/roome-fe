@@ -11,9 +11,9 @@ const PointHistory = forwardRef<HTMLDivElement, PointHistoryProps>(
   ({ data, isFetching }, ref) => {
     return (
       <section
-        className='translate-y-5 w-[70%] h-[480px] overflow-y-auto  scrollbar   
+        className='w-full overflow-y-auto scrollbar   
         border-t-2 border-b-2 border-dashed border-[#B7C7EA] 
-      flex flex-col gap-7  pt-6 pr-2'>
+      gap-7 pt-6 pr-2'>
         {/* 날짜별 적립, 차감 */}
         {data?.pages.map((page: Points, index: number) => (
           <React.Fragment key={index}>
@@ -32,7 +32,7 @@ const PointHistory = forwardRef<HTMLDivElement, PointHistoryProps>(
                       <span className='text-sm text-[#3E507D]'>
                         {point.type}
                       </span>
-                      <span className='ml-20 text-[#162C63]'>
+                      <span className='ml-15 text-[#162C63] max-sm:ml-10'>
                         {PointReason[point.reason]}
                       </span>
                       <span

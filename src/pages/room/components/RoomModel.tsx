@@ -4,6 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as THREE from 'three';
 import { getPointBalance } from '../../../apis/point';
 import Furnitures from '../../../components/room-models/Furnitures';
 import { RoomLighting } from '../../../components/room-models/RoomLighting';
@@ -106,7 +107,7 @@ export default function RoomModel({
           camera={CAMERA_CONFIG}>
           <RoomLighting />
           <directionalLight
-            position={[10, 30,10]}
+            position={[10, 30, 10]}
             intensity={1.5}
             castShadow
             shadow-mapSize-width={1024}
@@ -164,9 +165,15 @@ export default function RoomModel({
           </Suspense>
           <OrbitControls
             enableRotate={false}
-            enablePan={false}
+            enableZoom={true}
+            enablePan={true}
             minDistance={5}
             maxDistance={12}
+            mouseButtons={{ LEFT: THREE.MOUSE.PAN }}
+            touches={{
+              ONE: THREE.TOUCH.PAN,
+              TWO: THREE.TOUCH.DOLLY_PAN,
+            }}
           />
         </Canvas>
       </motion.div>
