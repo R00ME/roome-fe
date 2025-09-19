@@ -49,7 +49,7 @@ const BookCasePage = () => {
 
         const response = await bookAPI.getBookCaseList(Number(userId), 45);
 
-        // console.log('API Response:', response);
+        // // console.log('API Response:', response);
 
         if (response?.myBooks) {
           const formattedBooks = response.myBooks.map(
@@ -77,7 +77,7 @@ const BookCasePage = () => {
             }),
           );
 
-          // console.log('Formatted DataList Items:', dataListFormat);
+          // // console.log('Formatted DataList Items:', dataListFormat);
 
           setBooks(formattedBooks);
           setDataListItems(dataListFormat);

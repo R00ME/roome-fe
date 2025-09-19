@@ -6,7 +6,6 @@ import naver from '@assets/login/naver-logo.svg';
 import SocialLoginButton from './SocialLoginButton';
 
 export default function SocialLogin() {
-
   const handleKakaoLogin = () => {
     window.location.replace(
       `${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`,
@@ -23,7 +22,7 @@ export default function SocialLogin() {
     window.location.replace(
       `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`,
     );
-    console.log('리다이렉트 완료')
+    // console.log('리다이렉트 완료')
   };
 
   return (
