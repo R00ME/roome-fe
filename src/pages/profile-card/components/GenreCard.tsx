@@ -32,7 +32,7 @@ const GenreCard = ({
             <span
               key={`${genre}-${index}`}
               className={twMerge(
-                'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-lg px-2 py-1 min-w-15 item-middle font-medium item-middle text-center whitespace-nowrap flex-shrink-0',
+                'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-full px-2 py-1 min-w-15 item-middle font-medium item-middle text-center whitespace-nowrap flex-shrink-0',
                 chipClassName,
               )}>
               {genre}
@@ -41,7 +41,7 @@ const GenreCard = ({
         ) : (
           <span
             className={twMerge(
-              'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-lg px-2 py-1 min-w-15 item-middle font-medium item-middle text-center whitespace-nowrap flex-shrink-0',
+              'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-full px-2 py-1 min-w-15 item-middle font-medium item-middle text-center whitespace-nowrap flex-shrink-0',
               chipClassName,
             )}>
             딱 맞는 취향을 찾는 중
