@@ -157,29 +157,29 @@ export default function HiveRooms({
           maxDistance={14}
           mouseButtons={{ LEFT: THREE.MOUSE.PAN }}
           touches={{
-            ONE: THREE.TOUCH.PAN, 
-            TWO: THREE.TOUCH.DOLLY_PAN, 
+            ONE: THREE.TOUCH.PAN,
+            TWO: THREE.TOUCH.DOLLY_PAN,
           }}
         />
       </Canvas>
-      <div
-        className='absolute bottom-22 left-1/2 transform -translate-x-1/2 font-medium'
-        style={{
-          padding: '8px 20px',
-          background: 'rgba(47, 71, 131, 0.4)',
-          backdropFilter: 'blur(10px)',
-          color: 'white',
-          borderRadius: '40px',
-          fontSize: '14px',
-          pointerEvents: 'none',
-          whiteSpace: 'nowrap',
-          opacity: hoveredRoom !== null ? 1 : 0,
-          transition: 'opacity 0.2s ease-in-out',
-        }}>
-        {hoveredRoom !== null
-          ? `✊🏻 똑똑! ${rooms[hoveredRoom]?.nickname}의 방에 들어가실래요?`
-          : ''}
-      </div>
+      {hoveredRoom !== null && (
+        <div
+          className='absolute bottom-22 left-1/2 transform -translate-x-1/2 font-medium'
+          style={{
+            padding: '8px 20px',
+            background: 'rgba(47, 71, 131, 0.4)',
+            backdropFilter: 'blur(10px)',
+            color: 'white',
+            borderRadius: '40px',
+            fontSize: '14px',
+            pointerEvents: 'none',
+            whiteSpace: 'nowrap',
+            opacity: hoveredRoom !== null ? 1 : 0,
+            transition: 'opacity 0.2s ease-in-out',
+          }}>
+          {`✊🏻 똑똑! ${rooms[hoveredRoom]?.nickname}의 방에 들어가실래요?`}
+        </div>
+      )}
     </div>
   );
 }
