@@ -75,8 +75,8 @@ export default function CdPage() {
       className={`relative w-full h-screen bg-center bg-no-repeat bg-cover overflow-x-hidden 
       `}
       style={{ backgroundImage: `url(${backgroundIMG})` }}>
-      <section className='flex flex-col items-center justify-center gap-10 
-                        min-h-screen px-4 py-10'>
+      <section className='flex flex-col items-center justify-center gap-10 md:gap-1
+                        min-h-[100vh] px-4 py-10 '>
 
           {/* Control Bar  */}
           <div className='w-full sm:w-[80%] lg:w-[70%] max-w-md h-10'>

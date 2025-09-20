@@ -38,7 +38,7 @@ export const CdInfo = React.memo(
         <article
           className='
             relative 
-            w-[90%] sm:w-3/5 md:w-1/3 lg:w-2/5
+            w-[90%] sm:w-3/5 md:w-1/3
             aspect-square 
             mx-auto
         '>
