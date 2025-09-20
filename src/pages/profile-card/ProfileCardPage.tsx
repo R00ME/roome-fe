@@ -120,13 +120,13 @@ const ProfileCardPage = () => {
       <button
         aria-label='포인트 버튼'
         onClick={() => navigate(`/point/${userId}`)}
-        className='flex items-center gap-2 bg-[#B5B5B5]/10 rounded-full px-3 py-1.5 absolute top-10 left-10 max-sm:top-6 max-sm:left-5'>
+        className='flex items-center gap-2 rounded-full px-3 py-1.5 absolute top-10 left-10 max-sm:top-6 max-sm:left-5 bg-gray-100 hover:bg-gray-300 transition-colors duration-200'>
         <img
           src={pointIcon}
           alt='사용자 현재 포인트'
           className='w-4 h-4'
         />
-        <span className='text-[#162C63] text-xs'>
+        <span className='text-[#162C63] text-xs pointer-events-none'>
           {pointBalance.toLocaleString('ko-KR')}P
         </span>
       </button>

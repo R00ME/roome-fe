@@ -27,14 +27,14 @@ export const MobileSearchItemDetails = ({
       exit={{ height: 0, opacity: 0 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
       className={`${theme.searchItemBg} border-t border-gray-200/30`}>
-      <div className='p-4 flex flex-col sm:flex-row gap-4'>
+      <div className='p-4 flex flex-col sm:flex-row gap-4 sm:justify-center'>
         {/* 이미지 */}
         <div className='flex-shrink-0 mx-auto sm:mx-0'>
-          <div className='relative w-24 h-32 sm:w-20 sm:h-28'>
+          <div className='relative w-24 sm:w-20'>
             <img
               src={item.imageUrl}
-              alt={item.title}
-              className='object-cover w-full h-full rounded-lg book-shadow'
+              alt={type === 'BOOK' ? '도서 표지 이미지' : '앨범 커버 이미지'}
+              className='object-contain w-full h-full rounded-lg book-shadow'
             />
             <button
               onClick={handleAddClick}
@@ -49,7 +49,7 @@ export const MobileSearchItemDetails = ({
         </div>
 
         {/* 상세 정보 */}
-        <div className='flex-1 flex flex-col gap-2 text-center sm:text-left'>
+        <div className='flex flex-col gap-2 text-center sm:text-left w-fit'>
           <h4
             className={`font-bold ${theme.searchResultText} text-base sm:text-lg`}>
             {item.title}

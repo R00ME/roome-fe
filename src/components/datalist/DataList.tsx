@@ -141,6 +141,7 @@ const DataList = React.memo(
               isLoadingMore={isLoadingMore}
               observerRef={observerRef}
               onItemSelect={handleItemSelect}
+              onClose={onClose}
             />
           </div>
         </motion.div>

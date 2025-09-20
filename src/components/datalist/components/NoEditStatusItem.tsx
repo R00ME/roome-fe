@@ -13,10 +13,12 @@ export default function NoEditStatusItem({
   data,
   isBook,
   userId,
+  onClose,
 }: {
   data: DataListInfo;
   isBook: boolean;
   userId: number;
+  onClose?: () => void;
 }) {
   const { user } = useUserStore();
   const theme = DATA_LIST_THEMES[isBook ? 'book' : 'cd'];
@@ -34,49 +36,49 @@ export default function NoEditStatusItem({
   };
 
   return (
-    <li
-      className={classNames(
-        'flex justify-between items-center rounded-xl',
-        theme.itemBgColor,
-        isMobile ? 'pl-4 pr-3 py-3' : 'pl-7 pr-4 py-4.5',
-      )}>
-      <div className='flex flex-col gap-2 flex-1 min-w-0'>
-        <div className={classNames('flex items-center gap-2', theme.subColor)}>
-          <h4
-            className={classNames(
-              'font-semibold truncate',
-              isMobile ? 'text-base' : 'text-[18px]',
-            )}>
-            {truncateTitle(data.title, TITLE_MAX_LENGTH)}
-          </h4>
-          <span className={classNames(isMobile ? 'text-xs' : 'text-[14px]')}>
-            {data.artist || truncateTitle(data.author, AUTHOR_MAX_LENGTH)}
-          </span>
-        </div>
-        <div>
-          <span
-            className={classNames(
-              theme.subTextColor,
-              isMobile ? 'text-xs' : 'text-sm',
-            )}>
-            {data.released_year.split('-')[0]}
-            {isBook
-              ? ` | ${data.publisher}`
-              : ` | ${truncateTitle(data.album, TITLE_MAX_LENGTH)}`}
-          </span>
-        </div>
-      </div>
+    <li>
       <Link
         to={isBook ? getBookPath() : `/cd/${data.id}/user/${userId}`}
-        className='hover:translate-x-1 all-200-eio flex-shrink-0 ml-2'>
-        <img
-          className={classNames(
-            'cursor-pointer',
-            isMobile ? 'w-6 h-6' : 'w-8 h-8',
-          )}
-          src={isBook ? book_go_btn : cd_play_btn}
-          alt={`이동하기 버튼`}
-        />
+        onClick={onClose}
+        className={classNames(
+          'flex justify-between items-center rounded-xl cursor-pointer group',
+          theme.itemBgColor,
+          isMobile ? 'pl-4 pr-3 py-3' : 'pl-7 pr-4 py-4.5',
+        )}>
+        <div className='flex flex-col gap-2 flex-1 min-w-0'>
+          <div
+            className={classNames('flex items-center gap-2', theme.subColor)}>
+            <h4
+              className={classNames(
+                'font-semibold truncate',
+                isMobile ? 'text-base' : 'text-[18px]',
+              )}>
+              {truncateTitle(data.title, TITLE_MAX_LENGTH)}
+            </h4>
+            <span className={classNames(isMobile ? 'text-xs' : 'text-[14px]')}>
+              {data.artist || truncateTitle(data.author, AUTHOR_MAX_LENGTH)}
+            </span>
+          </div>
+          <div>
+            <span
+              className={classNames(
+                theme.subTextColor,
+                isMobile ? 'text-xs' : 'text-sm',
+              )}>
+              {data.released_year.split('-')[0]}
+              {isBook
+                ? ` | ${data.publisher}`
+                : ` | ${truncateTitle(data.album, TITLE_MAX_LENGTH)}`}
+            </span>
+          </div>
+        </div>
+        <button className='flex-shrink-0 ml-2 group-hover:translate-x-1 transition-transform duration-200'>
+          <img
+            className={classNames(isMobile ? 'w-6 h-6' : 'w-8 h-8')}
+            src={isBook ? book_go_btn : cd_play_btn}
+            alt={`이동하기 버튼`}
+          />
+        </button>
       </Link>
     </li>
   );
