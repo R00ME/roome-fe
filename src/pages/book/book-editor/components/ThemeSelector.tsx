@@ -16,7 +16,7 @@ const ThemeSelector = memo(
     ];
 
     return (
-      <div className='flex gap-4'>
+      <div className='flex gap-4 p-1'>
         {themes.map(({ type, ringColor }) => (
           <button
             key={type}

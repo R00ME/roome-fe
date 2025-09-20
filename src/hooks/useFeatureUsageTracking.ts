@@ -22,14 +22,14 @@ export const useFeatureUsageTracking = () => {
       const startTime = Date.now();
       startTimesRef.current.set(featureName, startTime);
 
-      console.log(
-        '🚀 기능 사용 시작:',
-        featureName,
-        'User:',
-        userId,
-        'Start Time:',
-        startTime,
-      );
+      // console.log(
+      //   '🚀 기능 사용 시작:',
+      //   featureName,
+      //   'User:',
+      //   userId,
+      //   'Start Time:',
+      //   startTime,
+      // );
     },
     [],
   );
@@ -45,14 +45,14 @@ export const useFeatureUsageTracking = () => {
       const endTime = Date.now();
       const duration = startTime ? endTime - startTime : 0;
 
-      console.log(
-        '✅ 기능 완료:',
-        featureName,
-        'Duration:',
-        duration + 'ms',
-        'Data:',
-        additionalData,
-      );
+      // console.log(
+      //   '✅ 기능 완료:',
+      //   featureName,
+      //   'Duration:',
+      //   duration + 'ms',
+      //   'Data:',
+      //   additionalData,
+      // );
 
       // 완료 시 한 번에 모든 데이터 전송 (백오피스 통합용)
       trackEvent(`${featureName}_usage`, {

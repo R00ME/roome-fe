@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 export const CdInfo = React.memo(
   ({ cdInfo, cdPlaying }: { cdInfo: CDInfo; cdPlaying: boolean }) => {
     const textLength = cdInfo?.title.length;
-    // console.log('cdInfo'); props의 상태가 변할때만 리렌더링
+    // // console.log('cdInfo'); props의 상태가 변할때만 리렌더링
 
     useEffect(() => {
       const link = document.createElement('link');
@@ -18,8 +18,7 @@ export const CdInfo = React.memo(
       };
     }, []);
     return (
-      <section
-        className='order-1 md:order-2 flex flex-col h-full items-center justify-center gap-4 md:gap-6'>
+      <section className='order-1 md:order-2 flex flex-col h-full items-center justify-center gap-4 md:gap-6'>
         <article className='text-white flex flex-col gap-1.5 text-center '>
           <span className='2xl:text-2xl  text-xl font-semibold opacity-70'>
             {cdInfo?.artist}

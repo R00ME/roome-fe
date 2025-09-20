@@ -104,16 +104,16 @@ export const SearchResult = ({
           return;
         }
 
-        // console.log('request body', cdData);
+        // // console.log('request body', cdData);
         const result = await addCdToMyRack(cdData);
-        // console.log('response body', result);
+        // // console.log('response body', result);
 
         onSelect({ ...item, youtubeUrl, duration, id: result.myCdId });
         showToast('랙에 cd가 추가되었어요!', 'success');
         onClose();
       }
     } catch (error) {
-      // console.log(error.response?.data?.response);
+      // // console.log(error.response?.data?.response);
 
       if (
         // 이건 정해진 문구라 못바꿈
