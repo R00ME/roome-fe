@@ -99,13 +99,17 @@ export default function useCdRackData(
 
       try {
         const res = await addCdToMyRack(cdData);
-        setItems((prev) => [...prev, res]);
+        if(res){
+          setItems((prev) => [...prev, res]);
+          // window.location.reload();
+        }
       } catch (err) {
         console.error('🚨 CD 추가 실패 (rollback):', err);
-        fetchPage(null); 
+        // window.location.reload();
+
       }
     },
-    [setOptimisticItems, optimisticItems, fetchPage],
+    [setOptimisticItems, optimisticItems],
   );
 
   const deleteCd = useCallback(
@@ -120,8 +124,7 @@ export default function useCdRackData(
         setItems((prev) => prev.filter((cd) => !myCdIds.includes(cd.myCdId)));
         showToast('성공적으로 음악이 삭제 되었어요!', 'success');
 
-        setNextCursor(null);
-        setHasMore(true);
+        await fetchPage(null);
       } catch (err) {
         console.error('🚨 CD 삭제 실패 (rollback):', err);
         showToast('다시 시도해주세요', 'error');

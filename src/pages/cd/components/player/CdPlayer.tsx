@@ -2,15 +2,15 @@ import { useCallback, useMemo, useState } from 'react';
 
 import ModalBackground from '@components/ModalBackground';
 import DataList from '@components/datalist/DataList';
-import YouTube from 'react-youtube';
-import { useParams } from 'react-router-dom';
-import { useFetchSearchCdLists } from '@hooks/cd/useFetchSearchCdLists';
-import { useYouTubeEvents } from '@hooks/cd/useYoutubeEvent';
 import { useCdPlayerState } from '@hooks/cd/useCdPlayerState';
+import { useFetchSearchCdLists } from '@hooks/cd/useFetchSearchCdLists';
 import { useYoutubeControls } from '@hooks/cd/useYoutubeControls';
-import Progressbar from './Progressbar';
+import { useYouTubeEvents } from '@hooks/cd/useYoutubeEvent';
+import { useParams } from 'react-router-dom';
+import YouTube from 'react-youtube';
 import LeftGroup from './LeftGroup';
 import MiddleGroup from './MiddleGroup';
+import Progressbar from './Progressbar';
 import RightGroup from './RightGroup';
 
 export default function CdPlayer({
@@ -88,7 +88,7 @@ export default function CdPlayer({
 
   const handleFetchMoreDatas = useCallback(() => {
     setCursor(cdRackInfo.nextCursor);
-  }, [cdRackInfo]);
+  }, [cdRackInfo, setCursor]);
 
   return (
     <>
@@ -114,7 +114,15 @@ export default function CdPlayer({
         onReady={handleYouTubeReady}
         onStateChange={handleYouTubeStateChange}
       />
-      <section className='w-full h-[13vh] shrink-0 backdrop-blur-[20px] bg-white/10  '>
+      <section
+        className='w-full h-full shrink-0
+    relative
+    rounded-lg md:rounded-xl
+    border border-white/20
+    bg-gradient-to-br from-white/20 via-white/10 to-transparent
+    backdrop-blur-2xl
+    shadow-[0_8px_32px_rgba(0,0,0,0.25)]
+    overflow-hidden'>
         {/* 진행 바 */}
         <Progressbar
           cdPlayer={cdPlayer}
@@ -123,7 +131,7 @@ export default function CdPlayer({
           handleChangeTime={handleChangeTime}
         />
 
-        <section className='flex relative items-center pr-10 w-full h-full'>
+        <section className='flex items-center justify-between px-4 sm:px-6 md:px-8 pb-4.5 pt-3 w-full h-full relative z-10'>
           {/* 왼쪽 그룹: 앨범 이미지와 음량 조절 */}
           <LeftGroup
             volume={VOLUME}
@@ -147,6 +155,12 @@ export default function CdPlayer({
             setIsCdListOpen={setIsCdListOpen}
           />
         </section>
+        <div className='
+          absolute inset-0
+          bg-gradient-to-tr from-white/30 via-transparent to-white/10
+          opacity-50
+          rounded-2xl pointer-events-none'
+        />
       </section>
     </>
   );
