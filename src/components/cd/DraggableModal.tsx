@@ -26,7 +26,7 @@ export default function DraggableModal({
 
   return (
     <ModalPortal>
-      <div className='fixed inset-0 z-[9999] flex items-end md:items-center justify-center'>
+      <div className='fixed inset-0 z-[80] flex items-end md:items-center justify-center'>
         {isMobile ? (
           // === 모바일: 바텀시트 ===
           <div
@@ -45,8 +45,8 @@ export default function DraggableModal({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             className='relative pointer-events-auto 
-            max-w-[80%] min-h-[120px] md:min-h-[140px] 
-               backdrop-blur-2xl bg-gradient-to-b from-[#ffffff]/10 to-[#b1bad5]/40
+              max-w-[80%] min-h-[120px] md:min-h-[140px] 
+              backdrop-blur-2xl bg-gradient-to-b from-[#ffffff]/10 to-[#b1bad5]/40
               border border-white/20 rounded-2xl shadow-xl p-6'>
             <div className='flex justify-between items-center mb-2'>
               <button

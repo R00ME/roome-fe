@@ -1,9 +1,16 @@
 import { useCallback, useState } from 'react';
+import DraggableModal from '../../../../components/cd/DraggableModal';
 import CommentListButton from './CommentListButton';
 import CommentListModal from './CommentListModal';
 import VisibleCommentList from './VisibleCommentList';
 
-export default function CdComment({ currentTime }: { currentTime: number }) {
+export default function CdComment({
+  currentTime,
+  onClose,
+}: {
+  currentTime: number;
+  onClose: () => void;
+}) {
   const [isCommentListOpen, setIsCommentListOpen] = useState(false);
 
   const handleCloseModal = useCallback(() => {
@@ -11,17 +18,18 @@ export default function CdComment({ currentTime }: { currentTime: number }) {
   }, []);
 
   return (
-    <>
-      <div
-        className='h-full rounded-3xl border-2 border-[#FCF7FD] bg-[#3E507D40] shadow-box backdrop-blur-lg relative order-3 md:order-3 w-full  mx-auto md:mx-0'>
+    <DraggableModal onClose={onClose}>
+      <div className='relative min-w-70 min-h-100 h-[50vh]  w-full flex flex-col gap-8 justify-between'>
         {/* 댓글 목록 보기 버튼 */}
-        <CommentListButton setCommentListOpen={setIsCommentListOpen} />
-        <div className='flex flex-col gap-6 justify-end items-end px-7 pt-14 pb-6 w-full h-full'>
+        <div className='absolute -top-8 right-1 flex gap-3'>
+          <CommentListButton setCommentListOpen={setIsCommentListOpen} />
+        </div>
+        <div className=' flex flex-col gap-6 h-full'>
           {/* 댓글 목록 */}
           <VisibleCommentList currentTime={currentTime} />
         </div>
+        {isCommentListOpen && <CommentListModal onClose={handleCloseModal} />}
       </div>
-      {isCommentListOpen && <CommentListModal onClose={handleCloseModal} />}
-    </>
+    </DraggableModal>
   );
 }

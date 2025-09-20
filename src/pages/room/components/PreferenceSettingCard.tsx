@@ -34,14 +34,14 @@ export default function PreferenceSettingCard({
         <div className='flex flex-row items-center gap-4 md:gap-6 lg:gap-8 xl:gap-9'>
           <img
             src={thumbnail}
-            className='hidden md:block w-24 md:w-34 drop-shadow-logo'
+            className='hidden md:block w-24 md:w-30 drop-shadow-logo'
             alt={`${title}`}
           />
           <div className='flex flex-col items-start gap-3 md:gap-4'>
             {/* 가구명 & 레벨 */}
             <header>
               <div className='flex flex-row items-baseline gap-2'>
-                <p className='font-bold md:text-xl lg:text-2xl text-[#162C63]'>
+                <p className='font-bold md:text-lg lg:text-xl text-[#162C63]'>
                   {title}
                 </p>
                 <p className='font-semibold text-[#3E507D]'>Lv.{level}</p>
@@ -52,7 +52,7 @@ export default function PreferenceSettingCard({
             </header>
 
             {/* 현황 */}
-            <ul className='list-disc text-[#162C63] font-medium text-xs md:text-sm lg:text-base '>
+            <ul className='list-disc text-[#162C63] font-medium text-xs md:text-sm '>
               <li className='ml-3 md:ml-4'>
                 {isMusic ? '현재 저장한 음악' : '현재 저장한 도서'}{' '}
                 <strong>{savedCount}</strong>
@@ -65,7 +65,7 @@ export default function PreferenceSettingCard({
             </ul>
 
             {/* 취향 키워드 */}
-            <div className='hidden lg:flex flex-wrap items-center gap-2 font-medium mt-1 ml-[-5px] text-[10px] md:text-xs min-w-[180px]'>
+            <div className='hidden lg:flex flex-wrap items-center gap-2 font-medium mt-1 ml-[-5px]  min-w-[180px]'>
               {genres.length > 0 ? (
                 genres.map((genre) => {
                   const isLongText = genre.length >= 3;
@@ -73,7 +73,7 @@ export default function PreferenceSettingCard({
                   <span
                   key={genre}
                   className={`px-1.5 py-0.5 bg-[#4E7ACF]/10 rounded-full text-[#4E7ACF] ${
-                    isLongText ? 'line-clamp-2 break-words' : ''}`}>
+                    isLongText ? 'line-clamp-2 break-words text-[8px] md:text-[10px]' : 'text-[10px] md:text-xs'}`}>
                     {genre}
                   </span>
                 )
