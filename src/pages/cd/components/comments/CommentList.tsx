@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { formatDate } from '@utils/dateFormat';
 
 import trashIcon from '@assets/cd/trash-icon.svg';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function CommentList({
   isSearching,
@@ -18,6 +19,8 @@ export default function CommentList({
   setCdComments: React.Dispatch<React.SetStateAction<CdComment[]>>;
 }) {
   const { showToast } = useToastStore();
+
+  const queryClient = useQueryClient();
 
   const myUserId = useUserStore((state) => state.user).userId;
   const userId = Number(useParams().userId);
@@ -37,6 +40,7 @@ export default function CommentList({
         prevComments.filter((comment) => comment.id !== commentId),
       );
       await deleteCdComment(myCdId, commentId);
+      queryClient.invalidateQueries({ queryKey: ['cdComments', myCdId] });
       showToast('댓글이 삭제되었어요!', 'success');
     } catch (error) {
       setCdComments(previousComments);

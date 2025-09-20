@@ -15,34 +15,33 @@ interface LeftProps {
 const LeftGroup = React.memo(
   ({
     volume,
-    cdInfo,
     cdReady,
     cdStateChangeEvent,
     handleChangeCdVolume,
     handleMuteCdVolume,
   }: LeftProps) => {
     return (
-      <article className='flex pl-10 flex-1 gap-14 items-center h-full'>
+      <article className='flex flex-1 items-center h-full'>
         {/* 음량 */}
         <div className='flex gap-2 justify-center items-center'>
           {cdReady.isMuted ? (
             <button
-              className='w-8 h-8'
+              className='w-6 aspect-auto'
               onClick={() =>
                 handleChangeCdVolume(cdStateChangeEvent, `${volume}`)
               }>
               <img
-                className='w-8 h-8 cursor-pointer'
+                className='w-6 aspect-auto cursor-pointer'
                 src={muteIcon}
                 alt='음량 아이콘'
               />
             </button>
           ) : (
             <button
-              className='w-6 h-6'
+              className='w-4 aspect-auto'
               onClick={() => handleMuteCdVolume(cdStateChangeEvent)}>
               <img
-                className='w-6 h-6 cursor-pointer'
+                className='w-4 aspect-auto cursor-pointer'
                 src={soundIcon}
                 alt='음량 아이콘'
               />

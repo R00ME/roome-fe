@@ -1,5 +1,5 @@
 import login_logo from '@assets/login/login-logo.svg';
-import background_img from '@assets/roome-background-img.png';
+import background_img from '/images/roome-background-img.webp';
 import SocialLogin from './components/SocialLogin';
 
 export default function LoginPage() {
@@ -27,7 +27,7 @@ export default function LoginPage() {
             src={login_logo}
             alt='RoomE'
           />
-          <SocialLogin/>
+          <SocialLogin />
         </div>
       </div>
     </div>

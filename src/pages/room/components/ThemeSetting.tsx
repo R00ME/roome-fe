@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { roomAPI } from '../../../apis/room';
 import ConfirmModal from '../../../components/ConfirmModal';
 import { useClickOutside } from '../../../hooks/useClickOutside';
+import {
+  FEATURE_NAMES,
+  useFeatureUsageTracking,
+} from '../../../hooks/useFeatureUsageTracking';
 import { useToastStore } from '../../../store/useToastStore';
 import { useUserStore } from '../../../store/useUserStore';
-import {
-  useFeatureUsageTracking,
-  FEATURE_NAMES,
-} from '../../../hooks/useFeatureUsageTracking';
 import ThemeSettingCard from './ThemeSettingCard';
 
 export default function ThemeSetting({
@@ -106,30 +106,34 @@ export default function ThemeSetting({
     <div className='flex flex-col items-center justify-end w-full min-h-screen'>
       <div
         ref={modalRef}
-        className='setting-gradient flex items-start 2xl:items-center justify-center 2xl:gap-10 gap-8 w-full h-[330px] 2xl:h-[418px] 2xl:pt-0 pt-10'>
-        {Object.keys(themeData).map((theme) => {
-          const isLocked = !unlockedThemes.includes(theme);
-          // // console.log('테마 상태:', { theme, isLocked, selected: selectedTheme === theme });
-          return (
-            <ThemeSettingCard
-              key={theme}
-              theme={theme as 'BASIC' | 'FOREST' | 'MARINE'}
-              isSelected={selectedTheme === theme}
-              isLocked={isLocked}
-              onClick={() => {
-                if (isLocked) {
-                  handleLockedClick(theme as 'BASIC' | 'FOREST' | 'MARINE');
-                } else {
-                  trackFeatureCompletion(
-                    FEATURE_NAMES.THEME,
-                    user?.userId?.toString(),
-                  );
-                  onThemeSelect(theme as 'BASIC' | 'FOREST' | 'MARINE');
-                }
-              }}
-            />
-          );
-        })}
+        className='setting-gradient w-full 
+    h-auto md:h-[330px] 2xl:h-[418px] 
+    pt-6 md:pt-10 2xl:pt-0
+    flex justify-center items-start md:items-center overflow-y-auto md:overflow-visible'>
+        <div className='flex flex-col md:flex-row mb-10 md:mb-25 gap-2 md:gap-10 bottom-[calc(env(safe-area-inset-bottom)+80px)]'>
+          {Object.keys(themeData).map((theme) => {
+            const isLocked = !unlockedThemes.includes(theme);
+            return (
+              <ThemeSettingCard
+                key={theme}
+                theme={theme as 'BASIC' | 'FOREST' | 'MARINE'}
+                isSelected={selectedTheme === theme}
+                isLocked={isLocked}
+                onClick={() => {
+                  if (isLocked) {
+                    handleLockedClick(theme as 'BASIC' | 'FOREST' | 'MARINE');
+                  } else {
+                    trackFeatureCompletion(
+                      FEATURE_NAMES.THEME,
+                      user?.userId?.toString(),
+                    );
+                    onThemeSelect(theme as 'BASIC' | 'FOREST' | 'MARINE');
+                  }
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
       {showConfirmModal && pendingTheme && (
         <ConfirmModal

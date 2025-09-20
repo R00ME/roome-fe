@@ -12,6 +12,7 @@ import CdHoverLabel from './components/CdHoverLabel';
 import CdRack from './components/CdRack';
 import useCdRackData from './hooks/useCdRackData';
 
+
 export default function CdRackPage() {
   const { userId: myUserId } = useUserStore().user;
   const { userId } = useParams();
@@ -31,6 +32,7 @@ export default function CdRackPage() {
   const [resetDockMenuState, setResetDockMenuState] = useState(false);
   const phase = useCdStore((set) => set.phase);
   const isModalOpen = activeSettings === 'add' || activeSettings === 'delete';
+  
 
   useEffect(() => {
     if (phase > items.length - 3 && hasMore && !isFetchingMore) {

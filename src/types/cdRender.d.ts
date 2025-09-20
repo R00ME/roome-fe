@@ -38,4 +38,5 @@ interface CdWheelProps {
   caseAxisIndex: Axis;
   rightLocal?: THREE.Vector3;
   isModalOpen?: boolean;
+  onLoaded?: () => void; 
 }
