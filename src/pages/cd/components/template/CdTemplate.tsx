@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import NotEditTemplate from './NotEditTemplate';
-import EditTemplate from './EditTemplate';
 import { getCdTemplate } from '@apis/cd';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import DraggableModal from '../../../../components/cd/DraggableModal';
+import EditTemplate from './EditTemplate';
+import NotEditTemplate from './NotEditTemplate';
 
-const CdTemplate = React.memo(() => {
+const CdTemplate = React.memo(({ onClose }: { onClose: () => void }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [templateData, setTemplateData] = useState<TemplateData>(null);
   const myCdId = Number(useParams().cdId);
-
-  // // console.log('cdTemplate'); 리렌더링 안됨
 
   const questions = [
     { question: '이 노래를 듣게 된 계기', answer: templateData?.comment1 },
@@ -30,7 +29,7 @@ const CdTemplate = React.memo(() => {
         const templateData = await getCdTemplate(myCdId);
         setTemplateData(templateData);
       } catch (error) {
-        // console.error(error, '템플릿을 작성해주세요!');
+        console.error(error, '템플릿을 작성해주세요!');
         setTemplateData(null);
       }
     };
@@ -38,12 +37,7 @@ const CdTemplate = React.memo(() => {
   }, [myCdId]);
 
   return (
-    <div
-      className='order-2 md:order-1
-        w-full text-white rounded-3xl border-2 border-[#FCF7FD]
-        bg-[#3E507D1A] backdrop-blur-lg shadow-box
-        flex justify-center items-center relative
-        h-[300px] md:h-full '>
+    <DraggableModal zIndex={80}  onClose={onClose}>
       {isEdit ? (
         <EditTemplate
           questions={questions}
@@ -59,7 +53,7 @@ const CdTemplate = React.memo(() => {
           onToggleEdit={() => setIsEdit(!isEdit)}
         />
       )}
-    </div>
+    </DraggableModal>
   );
 });
 

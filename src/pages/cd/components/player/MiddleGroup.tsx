@@ -14,7 +14,7 @@ const MiddleGroup = React.memo(
       <article className='flex flex-col items-center '>
         <button onClick={() => handleOnOffCd(cdStateChangeEvent)}>
           <img
-            className='w-11 h-11'
+            className='w-5 md:w-7 aspect-auto'
             src={cdReady.isPlaying ? pauseSong : playSong}
             alt='노래 일시정지 버튼'
           />

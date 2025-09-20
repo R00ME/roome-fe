@@ -18,92 +18,38 @@ export default function HiveRooms({
   const [isLoading, setIsLoading] = useState(true);
   const [loadedRooms, setLoadedRooms] = useState(new Set());
   const [hoveredRoom, setHoveredRoom] = useState<number | null>(null);
-  const [clickedRoom, setClickedRoom] = useState<number | null>(null);
   const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(
-    null,
-  );
-  const dragThreshold = 4;
+  const startPos = useRef<{ x: number; y: number } | null>(null);
+  const tapThreshold = 8;
 
-  const handleMouseDown = useCallback(
-    (e: MouseEvent) => {
-      if (e.button === 0) {
-        setStartPos({ x: e.clientX, y: e.clientY });
-        setClickedRoom(hoveredRoom);
-        setIsDragging(false);
-        if (canvasRef.current) canvasRef.current.style.cursor = 'grab';
+  const handlePointerDown = (e: React.PointerEvent) => {
+    startPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handlePointerUp = (e: React.PointerEvent, roomIndex: number) => {
+    if (!startPos.current) return;
+    const dx = e.clientX - startPos.current.x;
+    const dy = e.clientY - startPos.current.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < tapThreshold) {
+      const room = rooms[roomIndex];
+      if (room?.userId) {
+        navigate(`/room/${room.userId}`);
       }
-    },
-    [hoveredRoom, canvasRef],
-  );
+    }
+    startPos.current = null;
+  };
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (startPos && canvasRef.current) {
-        const dx = e.clientX - startPos.x;
-        const dy = e.clientY - startPos.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance > dragThreshold && !isDragging) {
-          setIsDragging(true);
-          canvasRef.current.style.cursor = 'grabbing';
-        }
-      }
-    },
-    [startPos, isDragging, dragThreshold, canvasRef],
-  );
-
-  const handleMouseUp = useCallback(
-    (e: MouseEvent) => {
-      if (e.button === 0 && startPos && canvasRef.current) {
-        if (!isDragging && clickedRoom !== null) {
-          const room = rooms[clickedRoom];
-          if (room?.userId) {
-            navigate(`/room/${room.userId}`);
-          }
-        }
-        setIsDragging(false);
-        setStartPos(null);
-        canvasRef.current.style.cursor = 'default';
-      }
-    },
-    [clickedRoom, isDragging, navigate, rooms, startPos, canvasRef],
-  );
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    canvas.addEventListener('mousedown', handleMouseDown);
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseup', handleMouseUp);
-    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-
-    return () => {
-      canvas.removeEventListener('mousedown', handleMouseDown);
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseup', handleMouseUp);
-      canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
-    };
-  }, [handleMouseDown, handleMouseMove, handleMouseUp]);
-
-  const handlePointerOver = useCallback(
-    (index: number) => {
-      if (!isDragging) {
-        setHoveredRoom(index);
-      }
-    },
-    [isDragging],
-  );
+  const handlePointerOver = useCallback((index: number) => {
+    setHoveredRoom(index);
+  }, []);
 
   const handlePointerOut = useCallback(() => {
-    if (!isDragging) {
-      setHoveredRoom(null);
-    }
-  }, [isDragging]);
+    setHoveredRoom(null);
+  }, []);
 
   const handleModelLoaded = useCallback((roomId: string) => {
     setLoadedRooms((prev) => {
@@ -140,8 +86,11 @@ export default function HiveRooms({
           <group
             key={index}
             position={position}
+            onPointerDown={handlePointerDown}
+            onPointerUp={(e) => handlePointerUp(e, index)}
             onPointerOver={() => handlePointerOver(index)}
             onPointerOut={handlePointerOut}>
+            
             <HiveRoomModel
               room={room}
               position={position}
@@ -157,29 +106,29 @@ export default function HiveRooms({
           maxDistance={14}
           mouseButtons={{ LEFT: THREE.MOUSE.PAN }}
           touches={{
-            ONE: THREE.TOUCH.PAN, 
-            TWO: THREE.TOUCH.DOLLY_PAN, 
+            ONE: THREE.TOUCH.PAN,
+            TWO: THREE.TOUCH.DOLLY_PAN,
           }}
         />
       </Canvas>
-      <div
-        className='absolute bottom-22 left-1/2 transform -translate-x-1/2 font-medium'
-        style={{
-          padding: '8px 20px',
-          background: 'rgba(47, 71, 131, 0.4)',
-          backdropFilter: 'blur(10px)',
-          color: 'white',
-          borderRadius: '40px',
-          fontSize: '14px',
-          pointerEvents: 'none',
-          whiteSpace: 'nowrap',
-          opacity: hoveredRoom !== null ? 1 : 0,
-          transition: 'opacity 0.2s ease-in-out',
-        }}>
-        {hoveredRoom !== null
-          ? `✊🏻 똑똑! ${rooms[hoveredRoom]?.nickname}의 방에 들어가실래요?`
-          : ''}
-      </div>
+      {hoveredRoom !== null && (
+        <div
+          className='absolute bottom-22 left-1/2 transform -translate-x-1/2 font-medium z-30'
+          style={{
+            padding: '8px 20px',
+            background: 'rgba(47, 71, 131, 0.4)',
+            backdropFilter: 'blur(10px)',
+            color: 'white',
+            borderRadius: '40px',
+            fontSize: '14px',
+            pointerEvents: 'none',
+            whiteSpace: 'nowrap',
+            opacity: hoveredRoom !== null ? 1 : 0,
+            transition: 'opacity 0.2s ease-in-out',
+          }}>
+          {`✊🏻 똑똑! ${rooms[hoveredRoom]?.nickname}의 방에 들어가실래요?`}
+        </div>
+      )}
     </div>
   );
 }
