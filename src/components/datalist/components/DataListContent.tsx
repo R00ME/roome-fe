@@ -16,6 +16,7 @@ interface DataListContentProps {
   isLoadingMore: boolean;
   observerRef: React.RefObject<HTMLDivElement>;
   onItemSelect: (id: string) => void;
+  onClose?: () => void;
 }
 
 export const DataListContent: React.FC<DataListContentProps> = ({
@@ -29,6 +30,7 @@ export const DataListContent: React.FC<DataListContentProps> = ({
   isLoadingMore,
   observerRef,
   onItemSelect,
+  onClose,
 }) => {
   const { width } = useWindowSize();
   const isMobile = width <= 640;
@@ -67,6 +69,7 @@ export const DataListContent: React.FC<DataListContentProps> = ({
                 data={data}
                 isBook={type === 'book'}
                 userId={userId}
+                onClose={onClose}
               />
             );
           })}

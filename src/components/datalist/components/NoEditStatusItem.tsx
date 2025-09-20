@@ -13,10 +13,12 @@ export default function NoEditStatusItem({
   data,
   isBook,
   userId,
+  onClose,
 }: {
   data: DataListInfo;
   isBook: boolean;
   userId: number;
+  onClose?: () => void;
 }) {
   const { user } = useUserStore();
   const theme = DATA_LIST_THEMES[isBook ? 'book' : 'cd'];
@@ -68,6 +70,7 @@ export default function NoEditStatusItem({
       </div>
       <Link
         to={isBook ? getBookPath() : `/cd/${data.id}/user/${userId}`}
+        onClick={onClose}
         className='hover:translate-x-1 all-200-eio flex-shrink-0 ml-2'>
         <img
           className={classNames(
