@@ -76,7 +76,7 @@ export default function CdPage() {
       `}
       style={{ backgroundImage: `url(${backgroundIMG})` }}>
       <section className='flex flex-col items-center justify-center gap-10 
-                        min-h-screen px-4 py-10 md:py-20'>
+                        min-h-screen px-4 py-10'>
 
           {/* Control Bar  */}
           <div className='w-full sm:w-[80%] lg:w-[70%] max-w-md h-10'>
@@ -112,7 +112,7 @@ export default function CdPage() {
       </section>
 
       {/* 모달 */}
-      <div className=' w-full h-full'>
+      <div className=' w-full'>
         {openModals.includes('review') && (
           <div
             className='w-[95%] sm:w-[70%] lg:w-[400px] h-[75%] md:h-[80%] 

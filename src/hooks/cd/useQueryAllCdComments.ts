@@ -6,7 +6,7 @@ export const useQueryAllCdComments = () => {
   const myCdId = Number(useParams().cdId);
 
   const { data: cdComments } = useQuery<CdComment[]>({
-    queryKey: [`cdComments ${myCdId}`],
+    queryKey: ['cdComments', myCdId],
     queryFn: async () => {
       const result = await getCdCommentAll(myCdId);
       return result || [];

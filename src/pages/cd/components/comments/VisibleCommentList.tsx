@@ -15,7 +15,7 @@ export default function VisibleCommentList({
     : [];
 
   return (
-    <div className='flex flex-col gap-6 justify-end items-end pt-14 w-full h-full'>
+    <div className='flex flex-col gap-6 justify-end items-end pt-3 w-full h-full'>
       <ul className='flex overflow-hidden flex-col gap-4 justify-end items-end'>
         {/* 댓글  */}
         {visibleCdComments.map((comment: CdComment, index: number) => (
