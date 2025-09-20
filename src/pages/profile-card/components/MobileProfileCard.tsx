@@ -25,7 +25,7 @@ export const MobileProfileCard = ({
         exit={{ y: '100vh', opacity: 0 }}
         transition={{ type: 'spring', stiffness: 130, damping: 18 }}
         onClick={onClickOutside}
-        className='fixed inset-0 z-10 flex items-center justify-center'>
+        className='fixed inset-0 z-[99] flex items-center justify-center'>
         <div
           className={twMerge(
             'relative w-[95vw] max-w-[420px] aspect-[320/430] mt-20',

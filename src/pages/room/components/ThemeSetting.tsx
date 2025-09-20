@@ -109,7 +109,7 @@ export default function ThemeSetting({
         className='setting-gradient flex items-start 2xl:items-center justify-center 2xl:gap-10 gap-8 w-full h-[330px] 2xl:h-[418px] 2xl:pt-0 pt-10'>
         {Object.keys(themeData).map((theme) => {
           const isLocked = !unlockedThemes.includes(theme);
-          // console.log('테마 상태:', { theme, isLocked, selected: selectedTheme === theme });
+          // // console.log('테마 상태:', { theme, isLocked, selected: selectedTheme === theme });
           return (
             <ThemeSettingCard
               key={theme}

@@ -22,13 +22,17 @@ const GenreCard = ({
         className,
       )}>
       <h4 className='font-semibold text-[#224DBA] text-sm'>{title}</h4>
-      <div className={twMerge('flex gap-2', contentClassName)}>
+      <div
+        className={twMerge(
+          'flex gap-2 overflow-x-auto flex-nowrap',
+          contentClassName,
+        )}>
         {genres.length > 0 ? (
           genres.map((genre, index) => (
             <span
               key={`${genre}-${index}`}
               className={twMerge(
-                'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-full px-2 py-1 min-w-15 item-middle font-medium item-middle text-center break-keep',
+                'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-full px-2 py-1 min-w-15 item-middle font-medium item-middle text-center whitespace-nowrap flex-shrink-0',
                 chipClassName,
               )}>
               {genre}
@@ -37,7 +41,7 @@ const GenreCard = ({
         ) : (
           <span
             className={twMerge(
-              'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-full px-2 py-1 min-w-15 item-middle font-medium item-middle text-center',
+              'text-xs text-[#3E507D] bg-[#73A1F7]/20 rounded-full px-2 py-1 min-w-15 item-middle font-medium item-middle text-center whitespace-nowrap flex-shrink-0',
               chipClassName,
             )}>
             딱 맞는 취향을 찾는 중

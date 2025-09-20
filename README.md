@@ -3,8 +3,9 @@
 <br/>
 
 - 프로젝트 기간 : 2025.02.06 ~ 2025.03.14
-- 리팩토링 기간 : 2025.05.20 ~ 진행중
+- 리팩토링 기간 : 2025.05.20 ~ 2025.09.19
 - 배포 URL : [roome.io.kr](https://www.roome.io.kr)
+- [1차 개발 레포](https://github.com/prgrms-web-devcourse-final-project/WEB2_3_CUBE_FE)
 
 
 <hr/>
@@ -40,14 +41,41 @@
 
 <br />
 
-## FE_팀 구성원
-|<img src="https://avatars.githubusercontent.com/u/155376060?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165476198?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/96560273?v=4" width="150" height="150"/>|
-|:-:|:-:|:-:|
-|권윤슬<br/>[@miseullang](https://github.com/miseullang)|최보아 <br/>[@swallowedB](https://github.com/swallowedB)|김현우<br/>[@Hyuunw00](https://github.com/Hyuunw00)|
-| Team-Lead / Dev | Design / Dev | Clerk / Dev |
-| 도서 페이지 <br> 프로필 카드 <br> 결제 페이지 <br> 알림/친구목록 <br> (!) 반응형 리팩토링 | 메인/룸 페이지 <br> 방명록 <br> 랭킹 <br> 로딩/가이드 애니메이션 <br> (!) 로그인 리팩토링 | 로그인 <br> 음악 페이지 <br> 포인트 <br> 이벤트 |
+## RoomE_팀 FE 구성원
+|<img src="https://avatars.githubusercontent.com/u/155376060?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165476198?v=4" width="150" height="150"/>|
+|:-:|:-:|
+|권윤슬<br/>[@miseullang](https://github.com/miseullang)|최보아 <br/>[@swallowedB](https://github.com/swallowedB)|
+| 담당 기능 | 담당 기능 |
+| 도서 페이지 <br> 프로필 <br> 결제 <br> 알림/친구목록 <br> ✨ 반응형 리팩토링 <br> ✨ 도서 리팩토링 | 메인/룸 페이지 <br> 방명록 <br> 랭킹 <br> ✨ CD 랙 리팩토링 <br> ✨ 로그인 리팩토링 |
 
 <br />
+
+## 🔧 리팩토링 내역
+
+- **소셜 로그인 보안 강화**
+  - **토큰 저장 방식 변경**: 기존 쿠키 저장 → 클라이언트 JS 인메모리 저장으로 전환하여 XSS/CSRF 공격 표면 최소화
+  - **백엔드 중계 구조 도입**: 소셜 OAuth Access Token을 백엔드에서 1차 수신 후, 자체 임시 토큰을 발급  
+    → 클라이언트는 해당 임시 토큰을 다시 백엔드와 교환해 최종 JWT 획득
+
+- **모바일 환경 최적화**
+  - 반응형 UI/UX 적용
+  - 다양한 화면 크기 및 기기에서 레이아웃 호환성 개선
+
+- **결제 시스템 제거**
+  - 상용화 전 고려 사항으로 기존 결제 기능 제거
+  - 포인트 관련 기능은 이벤트/활동 기반으로 대체
+
+- **성능 최적화**
+  - 컴포넌트 렌더링 최적화
+  - 불필요한 리렌더링 방지 및 코드 스플리팅 적용
+  - 리소스 사용량 최소화 및 사용자 경험 향상
+ 
+- **CD Rack**
+  - 기존 2D 스와이퍼 기반 UI를 3D CD Case & Rack 구조로 전환  
+  - 스크롤/휠 이벤트를 활용해 CD가 선반에서 회전·이동하는 인터랙션 구현  
+  - React Three Fiber 기반으로 몰입감 있는 3D 전환 효과 제공 
+
+<br/>
 
 ## ✅ 주요 기능
 
@@ -102,28 +130,6 @@
 
 ### 9. 결제 기능
 - 포인트 충전을 통해 서비스 범위 확장
-
-<br/>
-
-## 🔧 리팩토링 내역
-
-- **소셜 로그인 보안 강화**
-  - OAuth 흐름 검증 및 토큰 관리 개선
-  - 사용자 정보 보호 및 인증 안정성 향상
-
-- **모바일 환경 최적화**
-  - 반응형 UI/UX 적용
-  - 다양한 화면 크기 및 기기에서 레이아웃 호환성 개선
-
-- **결제 시스템 제거**
-  - 상용화 전 고려 사항으로 기존 결제 기능 제거
-  - 포인트 관련 기능은 이벤트/활동 기반으로 대체
-
-- **성능 최적화**
-  - 컴포넌트 렌더링 최적화
-  - 불필요한 리렌더링 방지 및 코드 스플리팅 적용
-  - 리소스 사용량 최소화 및 사용자 경험 향상
-
 
 <br/>
 
