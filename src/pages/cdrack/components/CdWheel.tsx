@@ -46,7 +46,7 @@ export default function CdWheel({
     if (isModalOpen) return;
 
     const onWheel = (e: WheelEvent) => {
-      if (items.length <= 10) return;
+      // if (items.length <= 10) return;
       phaseVel.current += e.deltaY * -0.003;
     };
 
