@@ -19,8 +19,8 @@ export const CdInfo = React.memo(
     }, []);
     return (
       <section
-        className='order-1 md:order-2 flex flex-col w-[70%] gap-8
-  items-center justify-center relative'>
+        className='flex flex-col w-full md:w-[70%] gap-8 mb-10
+  items-center justify-center '>
         <article className='mt-8 text-white flex flex-col gap-1.5 text-center '>
           <span className='text-base sm:text-lg lg:text-xl 2xl:text-2xl font-semibold opacity-70'>
             {cdInfo?.artist}
@@ -38,8 +38,7 @@ export const CdInfo = React.memo(
         <article
           className='
             relative 
-            w-[70%] sm:w-[60%] md:w-[50%] lg:w-[40%] 
-            max-w-[320px] sm:max-w-[380px] md:max-w-[420px] lg:max-w-[480px]
+            w-[90%] sm:w-3/5 md:w-1/3 lg:w-2/5
             aspect-square 
             mx-auto
         '>

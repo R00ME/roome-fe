@@ -1,11 +1,11 @@
 type CdControlBarProps = {
   onTabClick: (key: string) => void;
-  activeModal: string | null;
+  openModals: string[];
 };
 
 export default function CdControlBar({
   onTabClick,
-  activeModal,
+  openModals,
 }: CdControlBarProps) {
   const tabs = [
     { name: '서평 감상', key: 'review' },
@@ -22,7 +22,7 @@ export default function CdControlBar({
       flex items-center justify-between
       p-1.5'>
       {tabs.map((tab) => {
-        const isActive = activeModal === tab.key;
+        const isActive = openModals.includes(tab.key);
         return (
           <button
             key={tab.key}

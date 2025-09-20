@@ -37,7 +37,7 @@ const CdTemplate = React.memo(({ onClose }: { onClose: () => void }) => {
   }, [myCdId]);
 
   return (
-    <DraggableModal onClose={onClose}>
+    <DraggableModal zIndex={80}  onClose={onClose}>
       {isEdit ? (
         <EditTemplate
           questions={questions}
