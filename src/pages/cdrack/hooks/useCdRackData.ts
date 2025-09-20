@@ -18,8 +18,7 @@ export default function useCdRackData(
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const inFlight = useRef(false);
-    const { showToast } = useToastStore();
-  
+  const { showToast } = useToastStore();
 
   useEffect(() => {
     setItems([]);
@@ -35,7 +34,11 @@ export default function useCdRackData(
         if (cursor == null) setInitialLoading(true);
         else setIsFetchingMore(true);
 
-        const res: CDRackInfo = await getCdRack(targetUserId, pageSize, cursor ?? undefined);
+        const res: CDRackInfo = await getCdRack(
+          targetUserId,
+          pageSize,
+          cursor ?? undefined,
+        );
         const list: CDRackItem[] = res?.data ?? [];
         const mapped: CdItem[] = list.map((cd) => ({
           myCdId: cd.myCdId,
@@ -57,7 +60,7 @@ export default function useCdRackData(
 
         const nc = res.nextCursor;
         setNextCursor(nc !== 0 ? nc : null);
-        setHasMore(nc !== 0 && mapped.length > 0);
+        setHasMore(nc !== 0 && mapped.length > 0 && list.length >= pageSize);
       } catch (error) {
         console.error('🚨 CD 데이터 패칭에 실패했습니다. :', error);
       } finally {
@@ -96,36 +99,41 @@ export default function useCdRackData(
 
       try {
         const res = await addCdToMyRack(cdData);
-        setItems((prev) => [...prev, res]);
+        if(res){
+          setItems((prev) => [...prev, res]);
+          // window.location.reload();
+        }
       } catch (err) {
         console.error('🚨 CD 추가 실패 (rollback):', err);
-        fetchPage(undefined);
+        // window.location.reload();
+
       }
     },
-    [setOptimisticItems, optimisticItems, fetchPage],
+    [setOptimisticItems, optimisticItems],
   );
 
-const deleteCd = useCallback(
-  async (myCdIds: number[]) => {
-    setOptimisticItems(
-      optimisticItems.filter((cd) => !myCdIds.includes(cd.myCdId))
-    );
+  const deleteCd = useCallback(
+    async (myCdIds: number[]) => {
+      setOptimisticItems(
+        optimisticItems.filter((cd) => !myCdIds.includes(cd.myCdId)),
+      );
 
-    try {
-      await deleteCdsFromMyRack(myCdIds);
+      try {
+        await deleteCdsFromMyRack(myCdIds);
 
-      setItems((prev) => prev.filter((cd) => !myCdIds.includes(cd.myCdId)));
-      showToast('성공적으로 음악이 삭제 되었어요!', 'success');
+        setItems((prev) => prev.filter((cd) => !myCdIds.includes(cd.myCdId)));
+        showToast('성공적으로 음악이 삭제 되었어요!', 'success');
 
-    } catch (err) {
-      console.error("🚨 CD 삭제 실패 (rollback):", err);
-      showToast('다시 시도해주세요', 'error');
+        await fetchPage(null);
+      } catch (err) {
+        console.error('🚨 CD 삭제 실패 (rollback):', err);
+        showToast('다시 시도해주세요', 'error');
 
-      fetchPage(undefined);
-    }
-  },
-  [setOptimisticItems, optimisticItems, fetchPage, showToast]
-);
+        fetchPage(null);
+      }
+    },
+    [setOptimisticItems, optimisticItems, fetchPage, showToast],
+  );
 
   const isLoading = initialLoading || isFetchingMore;
 

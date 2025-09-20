@@ -1,4 +1,4 @@
-import backgroundImg from '@assets/roome-background-img.png';
+import backgroundImg from '/images/roome-background-img.webp';
 import gameMachine from '@assets/event/game-machine.svg';
 
 import LayeredButton from '@components/LayeredButton';

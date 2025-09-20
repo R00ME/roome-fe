@@ -16,10 +16,10 @@ import RoomPage from '../pages/room/RoomPage';
 // import PaymentSuccessPage from '@pages/payment/PaymentSuccessPage';
 // import PaymentFailPage from '@pages/payment/PaymentFailPage';
 // import RefundPage from '@pages/payment/RefundPage';
-import OnboardingPage from '@pages/onboarding/OnboardingPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import OAuthCallback from '@pages/login/components/OAuthCallback';
 import ExtraInfo from '@pages/login/ExtraInfo';
+import OnboardingPage from '@pages/onboarding/OnboardingPage';
 import TempPage from '@pages/temp/TempPage';
 
 const Router = () => {
@@ -90,6 +90,10 @@ const Router = () => {
             path='/event'
             element={<EventPage />}
           />
+          <Route
+            path='/cd/:cdId/user/:userId'
+            element={<CdPage />}
+          />
         </Route>
 
         {/* 내 서평 보기/작성/수정 */}
@@ -101,10 +105,6 @@ const Router = () => {
         <Route
           path='/book/:bookId/user/:userId'
           element={<BookPage />}
-        />
-        <Route
-          path='/cd/:cdId/user/:userId'
-          element={<CdPage />}
         />
         <Route
           path='*'

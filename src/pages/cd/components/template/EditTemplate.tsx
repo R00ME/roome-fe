@@ -60,41 +60,68 @@ export default function EditTemplate({
 
   return (
     <>
-      <form className=' overflow-auto h-full w-full px-7 py-13   '>
-        <div className='flex items-center gap-2 absolute top-5 right-6 '>
+      <form className='relative h-full w-full flex flex-col gap-8 px-3 py-2'>
+        <div className='absolute -top-10 right-6 flex gap-3'>
+          {/* 취소 버튼 */}
           <button
             type='button'
             onClick={onToggleEdit}
-            className='  2xl:right-24 rounded-md text-[10px] 2xl:text-[12px] font-semibold
-          bg-white text-[#162C63] drop-shadow-logo   px-4 py-1.5  hover:opacity-80'>
+            className='
+              rounded-lg text-sm font-semibold
+              px-5 py-2
+              bg-white/20 backdrop-blur-lg
+              border border-white/40
+              text-white shadow-inner
+              hover:bg-white/30 hover:text-[#162C63]
+              transition-all duration-300
+            '>
             취소
           </button>
 
+          {/* 저장 버튼 */}
           <button
             type='button'
             onClick={templateData ? handleUpdateTemplate : handleSubmitTemplate}
-            className=' rounded-md text-[10px] 2xl:text-[12px] font-semibold
-          bg-white text-[#162C63] drop-shadow-logo  px-4 py-1.5 hover:opacity-80'>
+            className='
+              rounded-lg text-sm font-semibold
+              px-5 py-2
+              bg-gradient-to-r from-[#a18cd1]/60 to-[#fbc2eb]/60
+              backdrop-blur-xl
+              border border-white/40
+              text-white shadow-md
+              hover:from-[#a18cd1]/80 hover:to-[#fbc2eb]/80
+              hover:scale-105
+              transition-all duration-300
+            '>
             저장
           </button>
         </div>
 
-        <section className='flex flex-col justify-between items-center gap-14  overflow-auto h-full pr-3 pb-4 scrollbar scrollbar-white'>
+        <section
+          className='
+    grid gap-8 overflow-y-auto scrollbar-none pr-2
+    grid-cols-1 md:grid-cols-2
+  '>
           {questions.map((q, index) => (
             <article
               key={index}
-              className='w-full max-w-[395px] flex flex-col gap-5'>
-              <h3 className='  text-base  lg:text-lg  2xl:text-xl min-w-[200px]  font-bold border-b-2 border-[#FFFFFF33] pb-3 '>
+              className='flex flex-col gap-4 p-6 rounded-2xl 
+      bg-[#3d3a5f]/10 backdrop-blur-xl border border-white/20 shadow-inner'>
+              <h3 className='text-base lg:text-lg font-bold text-white drop-shadow-sm'>
                 {q.question}
               </h3>
               <textarea
                 ref={setTextAreaRef(index)}
                 name={`comment ${index + 1}`}
-                maxLength={40}
+                maxLength={200}
                 defaultValue={`${q.answer || ''}`}
-                className='text-[16px] w-full h-[120px] text-white/70 resize-none rounded-[14px] bg-[#EDE6EE4D] 
-            drop-shadow-logo border-2 border-white outline-0 px-5 py-4  '
-              />
+                className='w-full min-h-[120px] md:min-h-[140px] 
+                   rounded-xl resize-none
+                  px-4 py-3 text-base text-white/80 placeholder-white/40
+                  bg-[#43405c]/10 border border-white/30 backdrop-blur-sm
+                  focus:outline-none focus:ring-2 focus:ring-pink-300
+                  shadow-inner'
+                  />
             </article>
           ))}
         </section>

@@ -5,7 +5,7 @@ import { paymentAPI } from '@apis/payment';
 import { useUserStore } from '@/store/useUserStore';
 import AlertModal from '@components/AlertModal';
 
-import backgroundIMG from '@/assets/roome-background-img.png';
+import backgroundIMG from '/images/roome-background-img.webp';
 import oops from '@assets/error/oops.svg';
 import doubleArrow from '@/assets/error/double-arrow-icon.svg';
 

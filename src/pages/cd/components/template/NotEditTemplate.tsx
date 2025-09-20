@@ -31,43 +31,70 @@ export default function NotEditTemplate({
     }
   };
 
-  if (!templateData)
+  const answeredQuestions = questions.filter(
+    (q) => q.answer && q.answer.trim().length > 0,
+  );
+
+  if (!templateData || answeredQuestions.length === 0)
     return (
       <EmptyTemplate
         questions={questions}
         onToggleEdit={onToggleEdit}
       />
     );
+  
   return (
-    <section className='overflow-auto h-full w-full px-7  pb-13 '>
+    <section className="relative min-h-100 max-h-[70vh] h-full w-full flex flex-col gap-8 px-2 py-3">
       {userId === myUserId && (
-        <div className='flex items-center gap-2 absolute top-5  right-6'>
+        <div className="absolute -top-10 right-1 flex gap-3">
           <button
             onClick={onToggleEdit}
-            className='  rounded-md  text-[10px] 2xl:text-[12px] font-semibold
-         bg-white text-[#162C63] px-4 py-1.5  hover:opacity-80'>
+            className="rounded-md text-xs font-semibold
+            px-3 py-1.5
+            bg-white/20 backdrop-blur-lg
+            border border-white/40 text-white shadow-inner
+            hover:bg-white/30 hover:text-[#162C63]
+            transition-all duration-300"
+          >
             수정
           </button>
 
+          {/* 삭제 버튼 */}
           <button
-            type='button'
+            type="button"
             onClick={handleDeleteTemplate}
-            className=' rounded-md text-[10px] 2xl:text-[12px] font-semibold
-         bg-white text-[#162C63]    px-4 py-1.5 hover:opacity-80'>
+            className="rounded-md text-xs font-semibold
+            px-3 py-1.5
+            bg-gradient-to-r from-red-400/70 to-pink-500/70
+            backdrop-blur-xl border border-white/30
+            text-white shadow-md
+            hover:from-red-400 hover:to-pink-500
+            hover:scale-105 transition-all duration-300"
+          >
             삭제
           </button>
         </div>
       )}
 
-      <section className='flex flex-col justify-around items-center overflow-auto h-full  scrollbar scrollbar-white'>
-        {questions.map((q, index) => (
+      <section 
+        className="flex flex-col gap-4 overflow-y-auto scrollbar-none pr-2 "
+        >
+        {questions
+          .filter((q) => q.answer && q.answer.trim().length > 0)
+          .map((q, index) => (
           <article
             key={index}
-            className='w-full flex flex-col gap-5'>
-            <h3 className='text-base lg:text-lg 2xl:text-xl min-w-[200px]  font-bold border-b-2 border-[#FFFFFF33] pb-3  '>
+            className="w-full min-w-60 max-w-75
+            flex flex-col gap-3 px-6 py-3 rounded-xl
+            bg-[#302c51]/40 backdrop-blur-xl
+            border border-white/20 shadow-lg
+            "
+          >
+            <h3 className="text-sm md:text-base font-bold text-white "
+            >
               {q.question}
             </h3>
-            <p className=' overflow-auto scrollbar scrollbar-white  text-sm 2xl:text-base w-full text-white/70  drop-shadow-logo  '>
+            <p className="text-xs md:text-sm text-white/70 leading-relaxed whitespace-pre-line">
               {q.answer}
             </p>
           </article>

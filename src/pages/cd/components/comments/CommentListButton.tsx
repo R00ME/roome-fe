@@ -9,11 +9,10 @@ const CommentListButton = React.memo(
   }) => {
     return (
       <button
-        className='absolute top-5 left-6'
         type='button'
         onClick={() => setCommentListOpen(true)}>
         <img
-          className='hover:opacity-50'
+          className='hover:opacity-50 w-6 aspect-auto'
           src={commentEdit}
           alt='댓글 목록 버튼'
         />
