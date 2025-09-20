@@ -12,6 +12,7 @@ import CdHoverLabel from './components/CdHoverLabel';
 import CdRack from './components/CdRack';
 import useCdRackData from './hooks/useCdRackData';
 
+
 export default function CdRackPage() {
   const { userId: myUserId } = useUserStore().user;
   const { userId } = useParams();

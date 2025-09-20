@@ -14,6 +14,7 @@ export default function CdWheel({
   caseAxisIndex,
   rightLocal,
   isModalOpen,
+  onLoaded,
 }: CdWheelProps) {
   const wheel = useRef<THREE.Group>(null);
   const setPhase = useCdStore((set) => set.setPhase);
@@ -37,8 +38,9 @@ export default function CdWheel({
       duration: 0,
       isPlaceholder: true,
     }));
+    if(onLoaded) onLoaded();
     return [...items, ...placeholders];
-  }, [items]);
+  }, [items, onLoaded]);
 
   useEffect(() => {
     if (isModalOpen) return;
