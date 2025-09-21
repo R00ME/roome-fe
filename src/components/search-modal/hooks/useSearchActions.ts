@@ -100,12 +100,12 @@ export const useSearchActions = ({
       } else {
         if (error.response?.status === 500) {
           showToast(
-            'CD가 추가되었지만 일시적인 오류가 발생했습니다. 새로고침해주세요.',
-            'success',
+            'CD 추가 중 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+            'error',
           );
           setTimeout(() => {
             navigate(-1);
-          }, 1000);
+          }, 600);
           return;
         }
         showToast(

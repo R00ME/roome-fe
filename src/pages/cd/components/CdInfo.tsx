@@ -47,7 +47,7 @@ export const CdInfo = React.memo(
               className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[6] w-[70%] ${
                 cdPlaying && 'animate-spin'
               }`}
-              src={cdInfo.coverUrl}
+              src={cdInfo.coverUrl || '/images/default-cd-cover.png'}
               alt='앨범 커버'
               style={{
                 WebkitMaskImage: `url(${cd})`,
