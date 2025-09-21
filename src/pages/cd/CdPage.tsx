@@ -55,8 +55,11 @@ export default function CdPage() {
 
   if (cdLoading || rackLoading) return <Loading />;
 
+  // 디버깅용 로그
+  console.log('CdPage render:', { cdLoading, rackLoading, cdError, cdInfo });
+
   // 에러 발생 시 풀백 화면
-  if (cdError) {
+  if (cdError || (!cdLoading && !cdInfo)) {
     return (
       <div className='w-full h-screen main-background flex items-center justify-center'>
         <div className='text-center'>
@@ -66,7 +69,9 @@ export default function CdPage() {
           <h2 className='text-xl font-bold text-[#3E507D] mb-2'>
             CD를 불러올 수 없어요
           </h2>
-          <p className='text-sm text-[#3E507D]/70 mb-6'>{cdError}</p>
+          <p className='text-sm text-[#3E507D]/70 mb-6'>
+            {cdError || 'CD 정보를 찾을 수 없습니다.'}
+          </p>
           <button
             onClick={() => navigate(-1)}
             className='px-6 py-2 bg-[#4983EF] text-white rounded-lg hover:bg-[#3A6BC7] transition-colors'>
