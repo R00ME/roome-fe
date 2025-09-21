@@ -21,6 +21,7 @@ export const useFetchCdInfo = () => {
       } catch (error) {
         console.error('CD 정보 로딩 실패:', error);
         setError('CD 정보를 불러오는데 실패했습니다.');
+        setCdInfo(null);
       } finally {
         setIsLoading(false);
       }

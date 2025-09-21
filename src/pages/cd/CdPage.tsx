@@ -59,7 +59,7 @@ export default function CdPage() {
   console.log('CdPage render:', { cdLoading, rackLoading, cdError, cdInfo });
 
   // 에러 발생 시 풀백 화면
-  if (cdError || (!cdLoading && !cdInfo)) {
+  if (cdError) {
     return (
       <div className='w-full h-screen main-background flex items-center justify-center'>
         <div className='text-center'>
@@ -83,6 +83,30 @@ export default function CdPage() {
   }
 
   const hasData = Boolean(cdInfo);
+
+  // cdInfo가 없는 경우 처리
+  if (!cdInfo && !cdLoading) {
+    return (
+      <div className='w-full h-screen main-background flex items-center justify-center'>
+        <div className='text-center'>
+          <div className='mb-4'>
+            <ExclamationTriangleIcon className='w-24 h-24 mx-auto text-[#3E507D]/50' />
+          </div>
+          <h2 className='text-xl font-bold text-[#3E507D] mb-2'>
+            CD를 찾을 수 없어요
+          </h2>
+          <p className='text-sm text-[#3E507D]/70 mb-6'>
+            해당 CD가 존재하지 않거나 삭제되었습니다.
+          </p>
+          <button
+            onClick={() => navigate(-1)}
+            className='px-6 py-2 bg-[#4983EF] text-white rounded-lg hover:bg-[#3A6BC7] transition-colors'>
+            뒤로가기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleTabClick = (key: string) => {
     const isMobile = window.innerWidth < 768;
