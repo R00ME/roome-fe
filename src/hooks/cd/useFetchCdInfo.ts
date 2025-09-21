@@ -6,6 +6,7 @@ export const useFetchCdInfo = () => {
   const [cdInfo, setCdInfo] = useState<CDInfo | null>(null);
   const [isCdPlaying, setIsCdPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const myCdId = Number(useParams().cdId);
   const userId = Number(useParams().userId);
@@ -19,6 +20,7 @@ export const useFetchCdInfo = () => {
         setIsCdPlaying(false);
       } catch (error) {
         console.error(error);
+        setError('CD 정보를 불러오는데 실패했습니다.');
       } finally {
         setIsLoading(false);
       }
@@ -30,6 +32,7 @@ export const useFetchCdInfo = () => {
     cdInfo,
     isCdPlaying,
     isLoading,
+    error,
     userId,
     setIsCdPlaying,
   };
