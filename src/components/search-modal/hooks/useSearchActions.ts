@@ -99,7 +99,13 @@ export const useSearchActions = ({
         setIsUpgradeModalOpen(true);
       } else {
         if (error.response?.status === 500) {
-          navigate(-1);
+          showToast(
+            'CD가 추가되었지만 일시적인 오류가 발생했습니다. 새로고침해주세요.',
+            'success',
+          );
+          setTimeout(() => {
+            navigate(-1);
+          }, 1000);
           return;
         }
         showToast(
