@@ -60,6 +60,8 @@ export default function CdWheel({
 
     const onTouchMove = (e: TouchEvent) => {
       if (e.touches.length === 1) {
+        e.preventDefault(); 
+        
         const currentY = e.touches[0].clientY;
         const deltaY = currentY - touchStartY;
         touchStartY = currentY;
@@ -72,7 +74,7 @@ export default function CdWheel({
 
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', onWheel);

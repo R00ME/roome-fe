@@ -171,7 +171,19 @@ const BookCasePage = () => {
 
   // 책을 각 줄에 분배하는 함수
   const distributeBooks = () => {
-    if (books.length <= 45) {
+    if (books.length <= 2) {
+      // 2권 이하일 때는 두 번째 줄에 먼저 추가
+      const totalRows = 3;
+      const rows = Array(totalRows)
+        .fill(null)
+        .map(() => []);
+
+      books.forEach((book) => {
+        rows[1].push(book);
+      });
+
+      return rows;
+    } else if (books.length <= 45) {
       // 45권 이하일 때는 3줄에 균등 분배
       const totalRows = 3;
       const baseCount = Math.floor(books.length / totalRows);
@@ -181,9 +193,9 @@ const BookCasePage = () => {
       return Array(totalRows)
         .fill(null)
         .map((_, index) => {
-          // 마지막 줄에 나머지 책들을 모두 추가
+          // 중간 줄(두 번째 줄)에 나머지 책들을 모두 추가
           const currentRowCount =
-            index === totalRows - 1 ? baseCount + remainder : baseCount;
+            index === 1 ? baseCount + remainder : baseCount;
 
           const row = books.slice(currentIndex, currentIndex + currentRowCount);
           currentIndex += currentRowCount;
