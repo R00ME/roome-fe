@@ -19,7 +19,7 @@ export const useFetchCdInfo = () => {
         setCdInfo(result);
         setIsCdPlaying(false);
       } catch (error) {
-        console.error(error);
+        console.error('CD 정보 로딩 실패:', error);
         setError('CD 정보를 불러오는데 실패했습니다.');
       } finally {
         setIsLoading(false);
