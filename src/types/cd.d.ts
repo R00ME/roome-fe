@@ -157,3 +157,16 @@ interface CdDeleteModalProps {
   onClose: () => void;
   onDelete: (ids: number[]) => void;
 }
+
+interface RawCDInfo {
+  id: number;
+  title: string;
+  artist: string;
+  album_title: string;
+  date: string;
+  duration: number;
+  genres: string[];
+  imageUrl: string;
+  type: string;
+  youtubeUrl: string;
+}
