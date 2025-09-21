@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { bookAPI } from '@/apis/book';
 import { addCdToMyRack, getYoutubeUrl, upgradeCdLevel } from '@/apis/cd';
 import { useUserStore } from '@/store/useUserStore';
@@ -20,6 +21,7 @@ export const useSearchActions = ({
   onSelect,
   onSuccess,
 }: UseSearchActionsProps) => {
+  const navigate = useNavigate();
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const { showToast } = useToastStore();
@@ -96,6 +98,10 @@ export const useSearchActions = ({
       ) {
         setIsUpgradeModalOpen(true);
       } else {
+        if (error.response?.status === 500) {
+          navigate(-1);
+          return;
+        }
         showToast(
           error.response?.data?.message || '오류가 발생했어요.',
           'error',
