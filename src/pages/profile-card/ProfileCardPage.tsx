@@ -159,7 +159,12 @@ const ProfileCardPage = () => {
         {isMobile ? (
           <GenreCard
             title='취향 키워드'
-            contentClassName='justify-start w-full overflow-x-auto overflow-y-hidden'
+            contentClassName={
+              [...(profile.musicGenres || []), ...(profile.bookGenres || [])]
+                .length === 0
+                ? 'w-full overflow-x-auto overflow-y-hidden justify-center'
+                : 'w-full overflow-x-auto overflow-y-hidden justify-start'
+            }
             genres={[
               ...(profile.musicGenres || []),
               ...(profile.bookGenres || []),

@@ -36,7 +36,7 @@ export const MobileProfileCard = ({
           />
           <section
             className={twMerge(
-              'absolute inset-0 flex flex-col gap-4 items-center justify-around py-10 px-6 max-sm:gap-1',
+              'absolute inset-0 flex flex-col gap-4 items-center justify-start py-10 px-6 max-sm:gap-1',
               className,
             )}>
             {children}
