@@ -73,13 +73,16 @@ export const useSearchActions = ({
           releaseDate: item.date,
         };
 
+        console.log('CD 데이터:', cdData);
+
         if (
           !youtubeUrl ||
           !duration ||
           !cdData.title ||
           !cdData.artist ||
           !cdData.album ||
-          !cdData.releaseDate
+          !cdData.releaseDate ||
+          !cdData.coverUrl
         ) {
           setIsAlertModalOpen(true);
           return;
