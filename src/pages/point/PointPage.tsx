@@ -134,7 +134,7 @@ export default function PointPage() {
                 </div>
               </div>
 
-              <div className='flex flex-col items-center gap-2'>
+              {/* <div className='flex flex-col items-center gap-2'>
                 <LayeredButton
                   theme='blue'
                   containerClassName='w-fit'
@@ -149,7 +149,7 @@ export default function PointPage() {
                   onClick={() => navigate('/payment/refund')}>
                   포인트 환불하기
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
