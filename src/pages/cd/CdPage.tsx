@@ -2,6 +2,7 @@ import Loading from '@components/Loading';
 import { useFetchCdInfo } from '@hooks/cd/useFetchCdInfo';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import ModalBackground from '../../components/ModalBackground';
 import DataList from '../../components/datalist/DataList';
 import { useFetchSearchCdLists } from '../../hooks/cd/useFetchSearchCdLists';
@@ -22,6 +23,7 @@ export default function CdPage() {
     cdInfo,
     isCdPlaying,
     isLoading: cdLoading,
+    error: cdError,
     userId,
     setIsCdPlaying,
   } = useFetchCdInfo();
@@ -53,6 +55,28 @@ export default function CdPage() {
 
   if (cdLoading || rackLoading) return <Loading />;
 
+  // 에러 발생 시 풀백 화면
+  if (cdError) {
+    return (
+      <div className='w-full h-screen main-background flex items-center justify-center'>
+        <div className='text-center'>
+          <div className='mb-4'>
+            <ExclamationTriangleIcon className='w-24 h-24 mx-auto text-[#3E507D]/50' />
+          </div>
+          <h2 className='text-xl font-bold text-[#3E507D] mb-2'>
+            CD를 불러올 수 없어요
+          </h2>
+          <p className='text-sm text-[#3E507D]/70 mb-6'>{cdError}</p>
+          <button
+            onClick={() => navigate(-1)}
+            className='px-6 py-2 bg-[#4983EF] text-white rounded-lg hover:bg-[#3A6BC7] transition-colors'>
+            뒤로가기
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const hasData = Boolean(cdInfo);
 
   const handleTabClick = (key: string) => {
@@ -75,40 +99,40 @@ export default function CdPage() {
       className={`relative w-full h-screen bg-center bg-no-repeat bg-cover overflow-x-hidden 
       `}
       style={{ backgroundImage: `url(${backgroundIMG})` }}>
-      <section className='flex flex-col items-center justify-center gap-10 md:gap-1
+      <section
+        className='flex flex-col items-center justify-center gap-10 md:gap-1
                         min-h-[100vh] px-4 py-10 '>
+        {/* Control Bar  */}
+        <div className='w-full sm:w-[80%] lg:w-[70%] max-w-md h-10'>
+          <CdControlBar
+            onTabClick={handleTabClick}
+            openModals={openModals}
+          />
+        </div>
 
-          {/* Control Bar  */}
-          <div className='w-full sm:w-[80%] lg:w-[70%] max-w-md h-10'>
-            <CdControlBar
-              onTabClick={handleTabClick}
-              openModals={openModals}
+        {/* CD Info  */}
+        <div className='flex items-center justify-center w-full'>
+          {hasData ? (
+            <CdInfo
+              cdInfo={cdInfo!}
+              cdPlaying={isCdPlaying}
             />
-          </div>
+          ) : (
+            <div className='rounded-xl bg-black/30 p-6 text-center text-white'>
+              CD 정보를 불러오지 못했어요. 잠시 후 다시 시도해주세요.
+            </div>
+          )}
+        </div>
 
-          {/* CD Info  */}
-          <div className='flex items-center justify-center w-full'>
-            {hasData ? (
-              <CdInfo
-                cdInfo={cdInfo!}
-                cdPlaying={isCdPlaying}
-              />
-            ) : (
-              <div className='rounded-xl bg-black/30 p-6 text-center text-white'>
-                CD 정보를 불러오지 못했어요. 잠시 후 다시 시도해주세요.
-              </div>
-            )}
-          </div>
+        {/* 재생바 */}
 
-          {/* 재생바 */}
-
-          <div className='w-full sm:w-[70%] md:w-[40%] '>
-            <CdPlayer
-              cdInfo={cdInfo}
-              setCdPlaying={onSetCdPlaying}
-              setCurrentTime={setCurrentTime}
-            />
-          </div>
+        <div className='w-full sm:w-[70%] md:w-[40%] '>
+          <CdPlayer
+            cdInfo={cdInfo}
+            setCdPlaying={onSetCdPlaying}
+            setCurrentTime={setCurrentTime}
+          />
+        </div>
       </section>
 
       {/* 모달 */}
