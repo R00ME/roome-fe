@@ -5,6 +5,7 @@ import {
   getCdRack,
 } from '../../../apis/cd';
 import { useToastStore } from '../../../store/useToastStore';
+import { mapToPostCDInfo } from '../../../utils/cdMapper';
 
 export default function useCdRackData(
   targetUserId: number | null,
@@ -82,31 +83,30 @@ export default function useCdRackData(
   }, [fetchPage, nextCursor, hasMore]);
 
   const addCd = useCallback(
-    async (cdData: PostCDInfo) => {
+    async (rawCd: RawCDInfo) => {
+      const payload = mapToPostCDInfo(rawCd);
+
       const tempItem: CdItem = {
         myCdId: Date.now(),
-        coverUrl: cdData.coverUrl,
-        title: cdData.title,
-        artist: cdData.artist,
-        album: cdData.album,
-        genres: cdData.genres ?? [],
-        releaseDate: cdData.releaseDate ?? '',
-        youtubeUrl: cdData.youtubeUrl ?? '',
-        duration: cdData.duration ?? 0,
+        coverUrl: payload.coverUrl,
+        title: payload.title,
+        artist: payload.artist,
+        album: payload.album,
+        genres: payload.genres ?? [],
+        releaseDate: payload.releaseDate ?? '',
+        youtubeUrl: payload.youtubeUrl ?? '',
+        duration: payload.duration ?? 0,
       };
 
       setOptimisticItems([...optimisticItems, tempItem]);
 
       try {
-        const res = await addCdToMyRack(cdData);
-        if(res){
-          setItems((prev) => [...prev, res]);
-          // window.location.reload();
+        const res = await addCdToMyRack(payload);
+        if (res?.data) {
+          setItems((prev) => [...prev, res.data]);
         }
       } catch (err) {
         console.error('🚨 CD 추가 실패 (rollback):', err);
-        // window.location.reload();
-
       }
     },
     [setOptimisticItems, optimisticItems],
