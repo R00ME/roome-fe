@@ -94,7 +94,11 @@ export default function useCdRackData(
         showToast('유효하지 않은 CD예요.', 'error');
         return;
       }
-      const payload = mapToPostCDInfo(rawCd);
+      const payload = mapToPostCDInfo({
+      ...rawCd,
+      youtubeUrl,
+      duration,
+    });
 
       const tempId = Date.now();
       const tempItem: CdItem = {
@@ -117,7 +121,6 @@ export default function useCdRackData(
           setOptimisticItems((prev) =>
             prev.map((item) => (item.myCdId === tempId ? res.data : item)),
           );
-          setItems((prev) => [...prev, res.data]);
         }
       } catch (err) {
         console.error('🚨 CD 추가 실패 (rollback):', err);
@@ -126,7 +129,7 @@ export default function useCdRackData(
         );
       }
     },
-    [setOptimisticItems],
+    [setOptimisticItems, showToast],
   );
 
   const deleteCd = useCallback(
