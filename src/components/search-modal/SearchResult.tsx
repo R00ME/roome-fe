@@ -2,7 +2,7 @@ import { bookAPI } from '@/apis/book';
 import addIcon from '@/assets/add-icon.svg';
 import { SEARCH_THEME } from '@/constants/searchTheme';
 import { toKoreanDate } from '@utils/dateFormat';
-import { addCdToMyRack, getYoutubeUrl, upgradeCdLevel } from '@apis/cd';
+import { upgradeCdLevel } from '@apis/cd';
 import { useUserStore } from '@/store/useUserStore';
 import { useToastStore } from '@/store/useToastStore';
 import AlertModal from '@components/AlertModal';
@@ -73,39 +73,7 @@ export const SearchResult = ({
           genres: response.genreNames,
         });
       } else if (type === 'CD') {
-        // CD 추가 요청 로직
-
-        const { youtubeUrl, duration } = await getYoutubeUrl(
-          item.title,
-          item.artist,
-        );
-
-        const cdData: PostCDInfo = {
-          title: item.title,
-          artist: item.artist,
-          album: item.album_title,
-          genres: item.genres,
-          coverUrl: item.imageUrl,
-          youtubeUrl: youtubeUrl,
-          duration: duration,
-          releaseDate: item.date,
-        };
-
-        // CD를 추가할 수 없는 경우
-        if (
-          !youtubeUrl ||
-          !duration ||
-          !cdData.title ||
-          !cdData.artist ||
-          !cdData.album ||
-          !cdData.releaseDate
-        ) {
-          setIsAlertModalOpen(true);
-          return;
-        }
-
-        onSelect({ ...item, youtubeUrl, duration });
-        showToast('랙에 cd가 추가되었어요!', 'success');
+        onSelect(item);
         onClose();
       }
     } catch (error) {

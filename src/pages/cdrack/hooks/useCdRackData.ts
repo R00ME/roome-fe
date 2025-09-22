@@ -99,7 +99,7 @@ export default function useCdRackData(
         duration: payload.duration ?? 0,
       };
 
-      setOptimisticItems([...optimisticItems, tempItem]);
+      setOptimisticItems((prev) => [...prev, tempItem]);
 
       try {
         const res = await addCdToMyRack(payload);
@@ -116,13 +116,13 @@ export default function useCdRackData(
         );
       }
     },
-    [setOptimisticItems, optimisticItems],
+    [setOptimisticItems],
   );
 
   const deleteCd = useCallback(
     async (myCdIds: number[]) => {
-      setOptimisticItems(
-        optimisticItems.filter((cd) => !myCdIds.includes(cd.myCdId)),
+      setOptimisticItems((prev) =>
+        prev.filter((cd) => !myCdIds.includes(cd.myCdId)),
       );
 
       try {
@@ -139,7 +139,7 @@ export default function useCdRackData(
         fetchPage(null);
       }
     },
-    [setOptimisticItems, optimisticItems, fetchPage, showToast],
+    [setOptimisticItems, fetchPage, showToast],
   );
 
   const isLoading = initialLoading || isFetchingMore;
