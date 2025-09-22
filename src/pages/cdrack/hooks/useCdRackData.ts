@@ -139,7 +139,7 @@ export default function useCdRackData(
         fetchPage(null);
       }
     },
-    [setOptimisticItems, optimisticItems, fetchPage, showToast],
+    [setOptimisticItems, fetchPage, showToast],
   );
 
   const isLoading = initialLoading || isFetchingMore;
