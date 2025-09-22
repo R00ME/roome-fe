@@ -104,11 +104,7 @@ export const SearchResult = ({
           return;
         }
 
-        // // console.log('request body', cdData);
-        const result = await addCdToMyRack(cdData);
-        // // console.log('response body', result);
-
-        onSelect({ ...item, youtubeUrl, duration, id: result.myCdId });
+        onSelect({ ...item, youtubeUrl, duration });
         showToast('랙에 cd가 추가되었어요!', 'success');
         onClose();
       }
