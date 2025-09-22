@@ -86,8 +86,9 @@ export default function useCdRackData(
     async (rawCd: RawCDInfo) => {
       const payload = mapToPostCDInfo(rawCd);
 
+      const tempId = Date.now();
       const tempItem: CdItem = {
-        myCdId: Date.now(),
+        myCdId: tempId,
         coverUrl: payload.coverUrl,
         title: payload.title,
         artist: payload.artist,
@@ -103,10 +104,16 @@ export default function useCdRackData(
       try {
         const res = await addCdToMyRack(payload);
         if (res?.data) {
+          setOptimisticItems((prev) =>
+            prev.map((item) => (item.myCdId === tempId ? res.data : item)),
+          );
           setItems((prev) => [...prev, res.data]);
         }
       } catch (err) {
         console.error('🚨 CD 추가 실패 (rollback):', err);
+        setOptimisticItems((prev) =>
+          prev.filter((item) => item.myCdId !== tempId),
+        );
       }
     },
     [setOptimisticItems, optimisticItems],
