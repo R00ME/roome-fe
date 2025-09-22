@@ -3,6 +3,7 @@ import {
   addCdToMyRack,
   deleteCdsFromMyRack,
   getCdRack,
+  getYoutubeUrl,
 } from '../../../apis/cd';
 import { useToastStore } from '../../../store/useToastStore';
 import { mapToPostCDInfo } from '../../../utils/cdMapper';
@@ -84,6 +85,15 @@ export default function useCdRackData(
 
   const addCd = useCallback(
     async (rawCd: RawCDInfo) => {
+      const { youtubeUrl, duration } = await getYoutubeUrl(
+        rawCd.title,
+        rawCd.artist,
+      );
+
+      if (!youtubeUrl || !duration) {
+        showToast('유효하지 않은 CD예요.', 'error');
+        return;
+      }
       const payload = mapToPostCDInfo(rawCd);
 
       const tempId = Date.now();
