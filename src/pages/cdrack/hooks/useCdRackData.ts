@@ -3,8 +3,10 @@ import {
   addCdToMyRack,
   deleteCdsFromMyRack,
   getCdRack,
+  getYoutubeUrl,
 } from '../../../apis/cd';
 import { useToastStore } from '../../../store/useToastStore';
+import { mapToPostCDInfo } from '../../../utils/cdMapper';
 
 export default function useCdRackData(
   targetUserId: number | null,
@@ -82,40 +84,55 @@ export default function useCdRackData(
   }, [fetchPage, nextCursor, hasMore]);
 
   const addCd = useCallback(
-    async (cdData: PostCDInfo) => {
+    async (rawCd: RawCDInfo) => {
+      const { youtubeUrl, duration } = await getYoutubeUrl(
+        rawCd.title,
+        rawCd.artist,
+      );
+
+      if (!youtubeUrl || !duration) {
+        showToast('유효하지 않은 CD예요.', 'error');
+        return;
+      }
+      const payload = mapToPostCDInfo(rawCd);
+
+      const tempId = Date.now();
       const tempItem: CdItem = {
-        myCdId: Date.now(),
-        coverUrl: cdData.coverUrl,
-        title: cdData.title,
-        artist: cdData.artist,
-        album: cdData.album,
-        genres: cdData.genres ?? [],
-        releaseDate: cdData.releaseDate ?? '',
-        youtubeUrl: cdData.youtubeUrl ?? '',
-        duration: cdData.duration ?? 0,
+        myCdId: tempId,
+        coverUrl: payload.coverUrl,
+        title: payload.title,
+        artist: payload.artist,
+        album: payload.album,
+        genres: payload.genres ?? [],
+        releaseDate: payload.releaseDate ?? '',
+        youtubeUrl: payload.youtubeUrl ?? '',
+        duration: payload.duration ?? 0,
       };
 
-      setOptimisticItems([...optimisticItems, tempItem]);
+      setOptimisticItems((prev) => [...prev, tempItem]);
 
       try {
-        const res = await addCdToMyRack(cdData);
-        if(res){
-          setItems((prev) => [...prev, res]);
-          // window.location.reload();
+        const res = await addCdToMyRack(payload);
+        if (res?.data) {
+          setOptimisticItems((prev) =>
+            prev.map((item) => (item.myCdId === tempId ? res.data : item)),
+          );
+          setItems((prev) => [...prev, res.data]);
         }
       } catch (err) {
         console.error('🚨 CD 추가 실패 (rollback):', err);
-        // window.location.reload();
-
+        setOptimisticItems((prev) =>
+          prev.filter((item) => item.myCdId !== tempId),
+        );
       }
     },
-    [setOptimisticItems, optimisticItems],
+    [setOptimisticItems],
   );
 
   const deleteCd = useCallback(
     async (myCdIds: number[]) => {
-      setOptimisticItems(
-        optimisticItems.filter((cd) => !myCdIds.includes(cd.myCdId)),
+      setOptimisticItems((prev) =>
+        prev.filter((cd) => !myCdIds.includes(cd.myCdId)),
       );
 
       try {
@@ -132,7 +149,7 @@ export default function useCdRackData(
         fetchPage(null);
       }
     },
-    [setOptimisticItems, optimisticItems, fetchPage, showToast],
+    [setOptimisticItems, fetchPage, showToast],
   );
 
   const isLoading = initialLoading || isFetchingMore;
