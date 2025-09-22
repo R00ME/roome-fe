@@ -116,20 +116,21 @@ export default function useCdRackData(
       setOptimisticItems((prev) => [...prev, tempItem]);
 
       try {
-        const res = await addCdToMyRack(payload);
-        if (res?.data) {
-          setOptimisticItems((prev) =>
-            prev.map((item) => (item.myCdId === tempId ? res.data : item)),
-          );
-        }
+        await addCdToMyRack(payload);
+        
+        await fetchPage(null);
+        showToast('CD가 추가되었어요!', 'success');
       } catch (err) {
         console.error('🚨 CD 추가 실패 (rollback):', err);
+
         setOptimisticItems((prev) =>
           prev.filter((item) => item.myCdId !== tempId),
         );
+
+        showToast('추가에 실패했어요.', 'error');
       }
     },
-    [setOptimisticItems, showToast],
+    [setOptimisticItems, showToast, fetchPage],
   );
 
   const deleteCd = useCallback(
