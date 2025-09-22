@@ -11,6 +11,7 @@ import CdDockMenu from './components/CdDockMenu';
 import CdHoverLabel from './components/CdHoverLabel';
 import CdRack from './components/CdRack';
 import useCdRackData from './hooks/useCdRackData';
+import { mapToRawCd } from '../../utils/cdMapper';
 
 
 export default function CdRackPage() {
@@ -97,7 +98,7 @@ export default function CdRackPage() {
             title='CD 랙에 담을 음악 찾기'
             onClose={handleCloseSettings}
             type='CD'
-            onSelect={(cdItem) => addCd(cdItem)}
+            onSelect={(cdItem) => addCd(mapToRawCd(cdItem))}
           />
         )}
         {activeSettings === 'delete' && (
