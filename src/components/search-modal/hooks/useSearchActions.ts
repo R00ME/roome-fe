@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { bookAPI } from '@/apis/book';
 import { addCdToMyRack, getYoutubeUrl, upgradeCdLevel } from '@/apis/cd';
+import { mapToPostCDInfo, mapToRawCd } from '@/utils/cdMapper';
 import { useUserStore } from '@/store/useUserStore';
 import { useToastStore } from '@/store/useToastStore';
 import { BookType } from '@/types/book';
@@ -56,40 +57,38 @@ export const useSearchActions = ({
           genres: response.genreNames,
         });
       } else {
-        // CD 추가 로직
         const { youtubeUrl, duration } = await getYoutubeUrl(
           item.title,
           item.artist,
         );
 
-        const cdData: PostCDInfo = {
-          title: item.title,
-          artist: item.artist,
-          album: item.album_title,
-          genres: item.genres,
-          coverUrl: item.imageUrl,
-          youtubeUrl: youtubeUrl,
-          duration: duration,
-          releaseDate: item.date,
-        };
-
-        console.log('CD 데이터:', cdData);
+        const raw = { ...mapToRawCd(item), youtubeUrl, duration } as RawCDInfo;
+        const payload = mapToPostCDInfo(raw);
 
         if (
-          !youtubeUrl ||
-          !duration ||
-          !cdData.title ||
-          !cdData.artist ||
-          !cdData.album ||
-          !cdData.releaseDate ||
-          !cdData.coverUrl
+          !payload.youtubeUrl ||
+          !payload.duration ||
+          !payload.title ||
+          !payload.artist ||
+          !payload.album ||
+          !payload.releaseDate ||
+          !payload.coverUrl
         ) {
           setIsAlertModalOpen(true);
           return;
         }
 
-        const result = await addCdToMyRack(cdData);
-        onSelect({ ...item, youtubeUrl, duration, id: result.myCdId });
+        const result = await addCdToMyRack(payload);
+        const myCdId = (result && (result.myCdId ?? result.data?.myCdId)) as
+          | number
+          | undefined;
+
+        onSelect({
+          ...item,
+          youtubeUrl: payload.youtubeUrl,
+          duration: payload.duration,
+          id: myCdId != null ? String(myCdId) : item.id,
+        });
         showToast('랙에 cd가 추가되었어요!', 'success');
         onClose();
       }
