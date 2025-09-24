@@ -5,7 +5,9 @@ import OverviewSection from './components/overview/OverviewSection';
 
 const OnboardingPage = () => {
   return (
-    <div className='jalnan w-full h-screen overflow-y-auto overflow-x-hidden'>
+    <div
+      id='onboarding-scroll'
+      className='jalnan w-full h-screen overflow-y-auto overflow-x-hidden'>
       <HeroSection />
       <OverviewSection />
       <CtaSection />
