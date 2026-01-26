@@ -1,7 +1,6 @@
 import { prepareModelTemplate } from '@pages/main/utils/prepareModelTemplate';
 import { Center, useGLTF } from '@react-three/drei';
 import { useEffect, useMemo } from 'react';
-import * as THREE from 'three';
 
 export default function HiveRoomModel({
   room,
@@ -23,10 +22,6 @@ export default function HiveRoomModel({
     if (!scene) return;
 
     scene.position.set(...position);
-    const box = new THREE.Box3().setFromObject(scene);
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-
     onModelLoaded(room.roomId);
   }, [scene, room.roomId, position, onModelLoaded]);
 
