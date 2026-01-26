@@ -134,6 +134,7 @@ export default function HiveRoomsScene({
             onPointerOut={onPointerOut}>
             <HiveRoomModel
               room={room}
+              position={position}
               onModelLoaded={onModelLoaded}
             />
           </group>
